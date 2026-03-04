@@ -20,7 +20,7 @@ namespace Webzine.Entity
         /// Obtient ou définit le nom de l'artiste.
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string Nom { get; set; }
 
         /// <summary>
         /// Obtient ou définit la biographie de l'artiste.
