@@ -21,7 +21,7 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
     <PackageReference Include="NLog.Targets.Loki" Version="2.4.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.2" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
