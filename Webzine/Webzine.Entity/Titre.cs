@@ -47,6 +47,9 @@
         [Required]
         public int CompteurLecture { get; set; }
 
+        [Required]
+        public int CompteurLike { get; set; }
+
         public ICollection<Commentaire> Commentaires { get; set; }
 
         public ICollection<Style> Styles { get; set; }
