@@ -32,6 +32,9 @@
         public string Chronique { get; set; }
 
         [Required]
+        public string ImageJaquette { get; set; }
+
+        [Required]
         [MaxLength(255)]
         public string Lien { get; set; }
 
@@ -44,10 +47,8 @@
         [Required]
         public TimeOnly Duree { get; set; }
 
-        [Required]
         public int CompteurLecture { get; set; }
 
-        [Required]
         public int CompteurLike { get; set; }
 
         public ICollection<Commentaire> Commentaires { get; set; }
