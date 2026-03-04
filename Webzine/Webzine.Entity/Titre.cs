@@ -51,6 +51,9 @@
 
         public int CompteurLike { get; set; }
 
+        [ForeignKey("Album")]
+        public int ArtisteId { get; set; }
+
         public ICollection<Commentaire> Commentaires { get; set; }
 
         public ICollection<Style> Styles { get; set; }
