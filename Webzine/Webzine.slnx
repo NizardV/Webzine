@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="Webzine.Business.Contracts/Webzine.Business.Contracts.csproj" />
+  <Project Path="Webzine.Business/Webzine.Business.csproj" />
+  <Project Path="Webzine.Documentation/Webzine.Documentation.csproj" />
+  <Project Path="Webzine.EntitiesContext/Webzine.EntitiesContext.csproj" />
+  <Project Path="Webzine.Entity.Tests/Webzine.Entity.Tests.csproj" />
+  <Project Path="Webzine.Entity/Webzine.Entity.csproj" />
+  <Project Path="Webzine.Repository.Contracts/Webzine.Repository.Contracts.csproj" />
+  <Project Path="Webzine.Repository/Webzine.Repository.csproj" />
+  <Project Path="Webzine.WebApplication/Webzine.WebApplication.csproj" />
+</Solution>
