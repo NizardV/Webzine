@@ -1,0 +1,105 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fr" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Webzine</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Webzine</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Administration">Administration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Contact">Contact</a>
+                        </li>
+                    </ul>
+
+                    <form class="d-flex" role="search" method="get" action="/Recherche">
+                        <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="Trouver un artiste / titre" aria-label="Search" />
+                        <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container-fluid mt-4 flex-grow-1">
+        <div class="row g-4">
+            <div class="col-12 col-lg-9">
+                @RenderBody()
+            </div>
+            <aside class="col-12 col-lg-3">
+                <div class="mb-4">
+                    <h3 class="h4">A propos</h3>
+                    <p class="text-muted small mb-0">Retrouvez les dernières pépites sur notre webzine.</p>
+                </div>
+
+                <div>
+                    <h3 class="h4">Styles</h3>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a class="link-primary text-decoration-none" href="#">Acid house</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Ambient</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Deep house</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Disco</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Downtempo</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Drum n bass</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Dub techno</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Electro</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Electro disco</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Electro hip hop</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Electro pop</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Funky club house</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">House</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">House, italo-disco</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Italo-disco</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Jazz</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Lounge</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Modern classic</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Modern jazz</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Nu-disco</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Samba</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Soundtrack</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Synth pop</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Synth wave</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Tech house</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Techno</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Techno, acid</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Techno, ambient</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Techno, electro</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Tribal house</a></li>
+                        <li><a class="link-primary text-decoration-none" href="#">Trip hop</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="bg-light mt-4 mt-auto">
+        <div class="container-fluid py-3">
+            <div class="text-muted small">© ASP.NET Core - DIIAGE 2025 - 2026</div>
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
