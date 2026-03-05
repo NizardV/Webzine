@@ -28,5 +28,29 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             return Ok(style);
         }
+
+        // Affiche le formulaire d'édition pré-rempli
+        [HttpGet]
+        [Route("style/edit/{id}")]
+        public IActionResult Edit(int id) {
+            var style = LocalStylesFactory.CreerStyles().FirstOrDefault(s => s.IdStyle == id);
+
+            if (style == null) { 
+                return NotFound();
+            }
+
+            return View(style);
+        }
+
+        [HttpPost]
+        [Route("style/edit/{id}")]
+        public IActionResult Edit(int id, Style style)
+        {
+            if (id != style.IdStyle)
+            {
+                return BadRequest();
+            }
+            return Ok(style);
+        }
     }
 }

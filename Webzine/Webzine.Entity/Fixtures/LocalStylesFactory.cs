@@ -18,15 +18,15 @@ namespace Webzine.Entity.Fixtures
         {
             var styles = new List<Style>();
 
-            styles.Add(new Style { Id = 1, Libelle = "Acid house" });
-            styles.Add(new Style { Id = 2, Libelle = "Ambient" });
-            styles.Add(new Style { Id = 3, Libelle = "Cosmic" });
-            styles.Add(new Style { Id = 4, Libelle = "Deep house" });
-            styles.Add(new Style { Id = 5, Libelle = "Disco" });
-            styles.Add(new Style { Id = 6, Libelle = "Downtempo" });
-            styles.Add(new Style { Id = 7, Libelle = "Drum n bass" });
-            styles.Add(new Style { Id = 8, Libelle = "Dub techno" });
-            styles.Add(new Style { Id = 9, Libelle = "Electro" });
+            styles.Add(new Style { IdStyle = 1, Libelle = "Acid house" });
+            styles.Add(new Style { IdStyle = 2, Libelle = "Ambient" });
+            styles.Add(new Style { IdStyle = 3, Libelle = "Cosmic" });
+            styles.Add(new Style { IdStyle = 4, Libelle = "Deep house" });
+            styles.Add(new Style { IdStyle = 5, Libelle = "Disco" });
+            styles.Add(new Style { IdStyle = 6, Libelle = "Downtempo" });
+            styles.Add(new Style { IdStyle = 7, Libelle = "Drum n bass" });
+            styles.Add(new Style { IdStyle = 8, Libelle = "Dub techno" });
+            styles.Add(new Style { IdStyle = 9, Libelle = "Electro" });
 
             return styles;
         }

@@ -16,7 +16,7 @@ namespace Webzine.Entity
         /// Identifiant unique du style en base de données.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public int IdStyle { get; set; }
 
         /// <summary>
         /// Nom ou libellé affichable du style.
