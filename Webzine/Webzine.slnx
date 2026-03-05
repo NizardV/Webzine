@@ -3,7 +3,7 @@
   <Project Path="Webzine.Business/Webzine.Business.csproj" />
   <Project Path="Webzine.Documentation/Webzine.Documentation.csproj" />
   <Project Path="Webzine.EntitiesContext/Webzine.EntitiesContext.csproj" />
-  <Project Path="Webzine.Entity.Tests/Webzine.Entity.Tests.csproj" />
+  <Project Path="Webzine.Entity.Tests/Webzine.Entity.Tests.csproj" Id="029c647d-c47b-40e3-b75b-30de14fed18a" />
   <Project Path="Webzine.Entity/Webzine.Entity.csproj" />
   <Project Path="Webzine.Repository.Contracts/Webzine.Repository.Contracts.csproj" />
   <Project Path="Webzine.Repository/Webzine.Repository.csproj" />

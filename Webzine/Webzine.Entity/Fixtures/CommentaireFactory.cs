@@ -11,25 +11,25 @@ namespace Webzine.Repository.Factories
         {
             return [
                 new Commentaire{
-                    Id = 1,
-                    Libelle = "C'est un super article !",
-                    Pseudo = "Jean Dupont",
+                    IdCommentaire = 1,
+                    Contenu = "C'est un super article !",
+                    Auteur = "Jean Dupont",
                     DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                    TitreId = 1,
+                    IdTitre = 1,
                 },
                 new Commentaire{
-                    Id = 2,
-                    Libelle = "Super chanson !",
-                    Pseudo = "Michel",
+                    IdCommentaire = 2,
+                    Contenu = "Super chanson !",
+                    Auteur = "Michel",
                     DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                    TitreId = 2,
+                    IdTitre = 2,
                 },
                 new Commentaire{
-                    Id = 3,
-                    Libelle = "Cette chanson me rappelle mon enfance",
-                    Pseudo = "xxxGamerxxx",
+                    IdCommentaire = 3,
+                    Contenu = "Cette chanson me rappelle mon enfance",
+                    Auteur = "xxxGamerxxx",
                     DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                    TitreId = 3,
+                    IdTitre = 3,
                 }
                 ];
         }
