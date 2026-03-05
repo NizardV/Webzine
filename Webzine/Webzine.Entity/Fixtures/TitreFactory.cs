@@ -51,16 +51,48 @@
 
             titres.Add(new Titre
             {
-                Id = 8,
+                IdTitre = 6,
+                Libelle = "Techno Boulevard",
+                Chronique = "Kick sec, hats incisifs, montée progressive: techno fonctionnelle.",
+                UrlJaquette = "jaquette-techno-boulevard.jpg",
+                UrlEcoute = "https://example.com/titres/techno-boulevard",
+                DateCreation = DateTime.Now.AddDays(-4),
+                DateSortie = DateTime.Now.AddDays(-1),
+                NbLectures = 733,
+                NbLikes = 89,
+                IdArtiste = 5,
+                Commentaires = new List<Commentaire>(),
+                Styles = new List<Style>(),
+            });
+
+            titres.Add(new Titre
+            {
+                IdTitre = 7,
+                Libelle = "Nu-Disco Sunrise",
+                Chronique = "Claps, cordes et groove solaire: un nu-disco sans complexe.",
+                UrlJaquette = "jaquette-nu-disco-sunrise.jpg",
+                UrlEcoute = "https://example.com/titres/nu-disco-sunrise",
+                DateCreation = DateTime.Now.AddMonths(-3).AddDays(2),
+                DateSortie = DateTime.Now.AddMonths(-3).AddDays(5),
+                NbLectures = 312,
+                NbLikes = 41,
+                IdArtiste = 1,
+                Commentaires = new List<Commentaire>(),
+                Styles = new List<Style>(),
+            });
+
+            titres.Add(new Titre
+            {
+                IdTitre = 8,
                 Libelle = "Drum'n'Bass Postcard",
                 Chronique = "Breaks rapides et sub massif, mais avec une mélodie catchy.",
-                ImageJaquette = "jaquette-dnb-postcard.jpg",
-                Lien = "https://example.com/titres/dnb-postcard",
+                UrlJaquette = "jaquette-dnb-postcard.jpg",
+                UrlEcoute = "https://example.com/titres/dnb-postcard",
                 DateCreation = DateTime.Now.AddDays(-40),
                 DateSortie = DateTime.Now.AddDays(-35),
-                CompteurLecture = 1280,
-                CompteurLike = 156,
-                ArtisteId = 6,
+                NbLectures = 1280,
+                NbLikes = 156,
+                IdArtiste = 6,
                 Commentaires = new List<Commentaire>(),
                 Styles = new List<Style>(),
             });
@@ -72,4 +104,5 @@
         {
             return GetTitres().FirstOrDefault(t => t.IdTitre == id);
         }
+    }
 }
