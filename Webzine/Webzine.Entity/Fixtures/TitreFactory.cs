@@ -49,6 +49,22 @@
                 Styles = new List<Style>(),
             });
 
+            titres.Add(new Titre
+            {
+                Id = 8,
+                Libelle = "Drum'n'Bass Postcard",
+                Chronique = "Breaks rapides et sub massif, mais avec une mélodie catchy.",
+                ImageJaquette = "jaquette-dnb-postcard.jpg",
+                Lien = "https://example.com/titres/dnb-postcard",
+                DateCreation = DateTime.Now.AddDays(-40),
+                DateSortie = DateTime.Now.AddDays(-35),
+                CompteurLecture = 1280,
+                CompteurLike = 156,
+                ArtisteId = 6,
+                Commentaires = new List<Commentaire>(),
+                Styles = new List<Style>(),
+            });
+
             return titres;
         }
 
