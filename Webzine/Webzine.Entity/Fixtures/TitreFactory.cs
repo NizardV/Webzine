@@ -7,17 +7,9 @@
     /// </summary>
     public class TitreFactory
     {
-        /// <summary>
-        /// Créer une liste d'instances de la classe Titre avec des données d'exemple.
-        /// </summary>
-        /// <returns>
-        /// Liste d'instances de la classe Titre créée.
-        /// </returns>
-        public static List<Titre> GetTitres()
+        private readonly ICollection<Titre> titres = new List<Titre>()
         {
-            var titres = new List<Titre>();
-
-            titres.Add(new Titre
+            new Titre
             {
                 IdTitre = 1,
                 Libelle = "Titre 1",
@@ -31,9 +23,8 @@
                 IdArtiste = 1,
                 Commentaires = new List<Commentaire>(),
                 Styles = new List<Style>(),
-            });
-
-            titres.Add(new Titre
+            },
+            new Titre
             {
                 IdTitre = 2,
                 Libelle = "Titre 2",
@@ -47,62 +38,26 @@
                 IdArtiste = 1,
                 Commentaires = new List<Commentaire>(),
                 Styles = new List<Style>(),
-            });
+            },
+        };
 
-            titres.Add(new Titre
-            {
-                IdTitre = 6,
-                Libelle = "Techno Boulevard",
-                Chronique = "Kick sec, hats incisifs, montée progressive: techno fonctionnelle.",
-                UrlJaquette = "jaquette-techno-boulevard.jpg",
-                UrlEcoute = "https://example.com/titres/techno-boulevard",
-                DateCreation = DateTime.Now.AddDays(-4),
-                DateSortie = DateTime.Now.AddDays(-1),
-                NbLectures = 733,
-                NbLikes = 89,
-                IdArtiste = 5,
-                Commentaires = new List<Commentaire>(),
-                Styles = new List<Style>(),
-            });
-
-            titres.Add(new Titre
-            {
-                IdTitre = 7,
-                Libelle = "Nu-Disco Sunrise",
-                Chronique = "Claps, cordes et groove solaire: un nu-disco sans complexe.",
-                UrlJaquette = "jaquette-nu-disco-sunrise.jpg",
-                UrlEcoute = "https://example.com/titres/nu-disco-sunrise",
-                DateCreation = DateTime.Now.AddMonths(-3).AddDays(2),
-                DateSortie = DateTime.Now.AddMonths(-3).AddDays(5),
-                NbLectures = 312,
-                NbLikes = 41,
-                IdArtiste = 1,
-                Commentaires = new List<Commentaire>(),
-                Styles = new List<Style>(),
-            });
-
-            titres.Add(new Titre
-            {
-                IdTitre = 8,
-                Libelle = "Drum'n'Bass Postcard",
-                Chronique = "Breaks rapides et sub massif, mais avec une mélodie catchy.",
-                UrlJaquette = "jaquette-dnb-postcard.jpg",
-                UrlEcoute = "https://example.com/titres/dnb-postcard",
-                DateCreation = DateTime.Now.AddDays(-40),
-                DateSortie = DateTime.Now.AddDays(-35),
-                NbLectures = 1280,
-                NbLikes = 156,
-                IdArtiste = 6,
-                Commentaires = new List<Commentaire>(),
-                Styles = new List<Style>(),
-            });
-
-            return titres;
+        /// <summary>
+        /// Retourne une liste de titres préconfigurés. Cette méthode peut être utilisée pour obtenir des instances de Titre
+        /// </summary>
+        /// <returns>Liste de titres</returns>
+        public static ICollection<Titre> GetTitres()
+        {
+            return new TitreFactory().titres;
         }
 
+        /// <summary>
+        /// Retourne un titre spécifique en fonction de son identifiant. Cette méthode peut être utilisée pour obtenir une instance de Titre.
+        /// </summary>
+        /// <param name="id">Identifiant du titre</param>
+        /// <returns>Titre</returns>
         public static Titre? GetTitreById(int id)
         {
-            return GetTitres().FirstOrDefault(t => t.IdTitre == id);
+            return new TitreFactory().titres.FirstOrDefault(t => t.IdTitre == id);
         }
     }
 }

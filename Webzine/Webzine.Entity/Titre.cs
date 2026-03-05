@@ -88,6 +88,7 @@
 
         [ForeignKey("Artiste")]
         public int IdArtiste { get; set; }
+
         public Artiste Artiste { get; set; }
 
         [Required]

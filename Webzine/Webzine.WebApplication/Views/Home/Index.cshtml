@@ -1,1 +1,3 @@
-﻿<p>Coucou</p>
+﻿@{
+    Context.Response.Redirect(Url.Action("Home", "Home") ?? "/");
+}
