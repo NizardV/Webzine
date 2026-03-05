@@ -19,40 +19,48 @@
         /// Identifiant unique du titre en base de données, utilisé comme clé primaire.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public int IdTitre { get; set; }
 
         /// <summary>
         /// Libellé du titre, qui doit être fourni et ne peut pas dépasser 255 caractères.
         /// </summary>
         [Required]
-        [MaxLength(255)]
+        [MaxLength(200)]
+        [MinLength(1)]
+        [Display(Name = "Titre")]
         public string Libelle { get; set; }
 
         /// <summary>
         /// Chronique du titre, qui doit être fournie et ne peut pas dépasser 255 caractères.
         /// </summary>
         [Required]
-        [MaxLength(255)]
+        [MaxLength(4000)]
+        [MinLength(10)]
         public string Chronique { get; set; }
 
         /// <summary>
         /// Image de jaquette du titre, qui doit être fournie et représente le visuel associé au titre.
         /// </summary>
         [Required]
-        public string ImageJaquette { get; set; }
+        [Display(Name = "Jaquette de l'album")]
+        [MaxLength(250)]
+        public string UrlJaquette { get; set; }
 
         /// <summary>
         /// Lien vers le son du titre, qui doit être fourni et ne peut pas dépasser 255 caractères.
         /// </summary>
         [Required]
-        [MaxLength(255)]
-        public string Lien { get; set; }
+        [MaxLength(250)]
+        [MinLength(13)]
+        [Display(Name = "URL d'écoute")]
+        public string UrlEcoute { get; set; }
 
         /// <summary>
         /// Date de création du titre,
         /// qui doit être fournie et représente la date à laquelle le titre a été créé ou ajouté à la base de données.
         /// </summary>
         [Required]
+        [Display(Name = "Date de création")]
         public DateTime DateCreation { get; set; }
 
         /// <summary>
@@ -60,31 +68,30 @@
         /// qui doit être fournie et représente la date à laquelle le titre a été publié ou rendu disponible au public.
         /// </summary>
         [Required]
+        [Display(Name = "Date de sortie")]
         public DateTime DateSortie { get; set; }
 
         /// <summary>
         /// Durée du titre, qui doit être fournie et représente la durée totale du titre musical.
         /// </summary>
         [Required]
+        [Display(Name = "Durée en secondes")]
         public TimeOnly Duree { get; set; }
 
-        /// <summary>
-        /// Compteur de lecture du titre qui représente le nombre de fois que le titre a été écouté ou lu.
-        /// </summary>
-        public int CompteurLecture { get; set; }
+        [Required]
+        [Display(Name = "Nombre de lectures")]
+        public int NbLectures { get; set; }
 
-        /// <summary>
-        /// Compteur de like du titre qui représente le nombre de fois que le titre a été aimé ou apprécié par les utilisateurs.
-        /// </summary>
-        public int CompteurLike { get; set; }
+        [Required]
+        [Display(Name = "Nombre de likes")]
+        public int NbLikes { get; set; }
 
-        /// <summary>
-        /// Obtient ou définit l'identifiant unique de l'artiste associé à l'album.
-        /// </summary>
-        /// <remarks>Cette propriété est utilisée comme clé étrangère pour établir la relation entre un
-        /// album et son artiste dans la base de données.</remarks>
         [ForeignKey("Artiste")]
-        public int ArtisteId { get; set; }
+        public int IdArtiste { get; set; }
+        public Artiste Artiste { get; set; }
+
+        [Required]
+        public string Album { get; set; } = string.Empty;
 
         /// <summary>
         /// Obtient ou définit la collection de commentaires associés à l'entité.

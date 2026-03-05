@@ -20,6 +20,9 @@ namespace Webzine.Entity
         /// Obtient ou définit le nom de l'artiste.
         /// </summary>
         [Required]
+        [MaxLength(50)]
+        [MinLength(2)]
+        [Display(Name= "Nom de l'artiste")]
         public string Nom { get; set; }
 
         /// <summary>
