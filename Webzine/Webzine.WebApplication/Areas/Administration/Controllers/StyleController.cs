@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices.JavaScript;
 using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 
@@ -52,5 +53,28 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             }
             return Ok(style);
         }
+
+        [HttpGet]
+        [Route("style/delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            var style = LocalStylesFactory.CreerStyles().FirstOrDefault(s => s.IdStyle == id);
+
+            if (style == null)
+            {
+                return NotFound();
+            }
+
+            return View(style);
+        }
+
+        [HttpPost]
+        [Route("style/delete/{id}")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
