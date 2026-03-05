@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Webzine.Entity.Style>
+
+<div class="mb-4">
+    <h4>A propos</h4>
+    <p class="text-muted">Retrouvez les dernières pépites sur notre webzine.</p>
+</div>
+
+<div>
+    <h4>Styles</h4>
+    <ul class="list-unstyled ms-3">
+        @foreach (var style in Model)
+        {
+            <li class="mb-1">
+                &bull; <a href="#" class="text-decoration-none">@style.Libelle</a>
+            </li>
+        }
+    </ul>
+</div>
