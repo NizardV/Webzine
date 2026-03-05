@@ -1,3 +1,14 @@
-﻿@{
+﻿@model Webzine.WebApplication.ViewModels.ArtisteModel
+@{
     Layout = "_Layout";
 }
+
+<h1>@Model.Artiste.Nom</h1>
+<p>@Model.Artiste.Biographie</p>
+
+<h2>Titres</h2>
+<!--tableau d'affichage des titres-->
+    @foreach (var t in Model.Titres)
+    {
+        @t.Libelle
+    }

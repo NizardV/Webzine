@@ -24,37 +24,48 @@ namespace Webzine.Entity.Fixtures
 
             titres.Add(new Titre
             {
-                Id = 1,
+
+                IdTitre = 1,
                 Libelle = "Titre 1",
                 Chronique = "Chronique du titre 1",
-                ImageJaquette = "image1.jpg",
-                Lien = "https://example.com/titre1",
+                UrlJaquette = "image1.jpg",
+                UrlEcoute = "https://example.com/titre1",
                 DateCreation = DateTime.Now,
                 DateSortie = DateTime.Now.AddMonths(1),
-                CompteurLecture = 0,
-                CompteurLike = 0,
-                ArtisteId = 1,
+                NbLectures = 0,
+                NbLikes = 0,
+                IdArtiste = 1,
                 Commentaires = new List<Commentaire>(),
                 Styles = new List<Style>(),
             });
 
             titres.Add(new Titre
             {
-                Id = 2,
+                IdTitre = 2,
                 Libelle = "Titre 2",
                 Chronique = "Chronique du titre 2",
-                ImageJaquette = "image2.jpg",
-                Lien = "https://example.com/titre2",
+                UrlJaquette = "image2.jpg",
+                UrlEcoute = "https://example.com/titre2",
                 DateCreation = DateTime.Now,
                 DateSortie = DateTime.Now.AddMonths(2),
-                CompteurLecture = 0,
-                CompteurLike = 0,
-                ArtisteId = 1,
+                NbLectures = 0,
+                NbLikes = 0,
+                IdArtiste = 1,
                 Commentaires = new List<Commentaire>(),
                 Styles = new List<Style>(),
             });
 
             return titres;
+        }
+
+        /// <summary>
+        /// Récupérer une liste de titres associés à un artiste spécifique en fonction de l'identifiant de l'artiste.
+        /// </summary>
+        /// <param name="idArtiste">L'identifiant de l'artiste</param>
+        /// <returns>Liste de titres fait par l'artiste en paramètre</returns>
+        public static List<Titre> TrouverParIdArtiste(int idArtiste)
+        {
+            return CreerTitres().Where(t => t.IdArtiste == idArtiste).ToList();
         }
     }
 }
