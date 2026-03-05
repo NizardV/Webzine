@@ -8,19 +8,27 @@ namespace Webzine.Entity
     public class Commentaire
     {
         [Key]
-        public int Id { get; set; }
+        public int IdCommentaire { get; set; }
 
         [Required]
-        [MaxLength(20)]
-        public string Pseudo { get; set; } = string.Empty;
+        [Display(Name = "Nom")]
+        [MaxLength(30)]
+        [MinLength(2)]
+        public string Auteur { get; set; } = string.Empty;
 
         [Required]
+        [Display(Name = "Date de création")]
         public DateOnly DateCreation { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        [MaxLength(200)]
-        public string Libelle { get; set; } = string.Empty;
+        [MaxLength(1000)]
+        [MinLength(10)]
+        [Required]
+        [Display(Name = "Commentaire")]
+        public string Contenu { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(Titre.Id))]
-        public int TitreId { get; set; }
+        [ForeignKey(nameof(Titre.IdTitre))]
+        public int IdTitre { get; set; }
+        [Required]
+        public Titre Titre { get; set; }
     }
 }

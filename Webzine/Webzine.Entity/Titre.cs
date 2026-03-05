@@ -15,44 +15,62 @@
         /// Gets or sets l'identifiant unique du titre en base de données.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public int IdTitre { get; set; }
 
         /// <summary>
         /// Gets or sets le libellé ou nom du titre, qui doit être fourni et ne peut pas dépasser 255 caractères.
         /// </summary>
         [Required]
-        [MaxLength(255)]
+        [MaxLength(200)]
+        [MinLength(1)]
+        [Display(Name = "Titre")]
         public string Libelle { get; set; }
 
         /// <summary>
         /// Gets or sets la chronique ou description du titre, qui doit être fournie et ne peut pas dépasser 255 caractères.
         /// </summary>
         [Required]
-        [MaxLength(255)]
+        [MaxLength(4000)]
+        [MinLength(10)]
         public string Chronique { get; set; }
 
         [Required]
-        public string ImageJaquette { get; set; }
+        [Display(Name = "Jaquette de l'album")]
+        [MaxLength(250)]
+        public string UrlJaquette { get; set; }
 
         [Required]
-        [MaxLength(255)]
-        public string Lien { get; set; }
+        [MaxLength(250)]
+        [MinLength(13)]
+        [Display(Name = "URL d'écoute")]
+        public string UrlEcoute { get; set; }
 
         [Required]
+        [Display(Name = "Date de création")]
         public DateTime DateCreation { get; set; }
 
         [Required]
+        [Display(Name = "Date de sortie")]
         public DateTime DateSortie { get; set; }
 
         [Required]
+        [Display(Name = "Durée en secondes")]
         public TimeOnly Duree { get; set; }
 
-        public int CompteurLecture { get; set; }
+        [Required]
+        [Display(Name = "Nombre de lectures")]
+        public int NbLectures { get; set; }
 
-        public int CompteurLike { get; set; }
+        [Required]
+        [Display(Name = "Nombre de likes")]
+        public int NbLikes { get; set; }
 
-        [ForeignKey("Album")]
-        public int ArtisteId { get; set; }
+        [ForeignKey("Artiste")]
+        public int IdArtiste { get; set; }
+        public Artiste Artiste { get; set; }
+
+        [Required]
+        public string Album { get; set; } = string.Empty;
 
         public ICollection<Commentaire> Commentaires { get; set; }
 
