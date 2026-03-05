@@ -1,11 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-namespace Webzine.WebApplication.Controllers
+﻿namespace Webzine.WebApplication.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Webzine.Entity.Fixtures;
+    using Webzine.WebApplication.ViewModels;
+
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        /// <summary>
+        /// Retourne la vue principale de l'application.
+        /// </summary>
+        /// <returns>Un objet IActionResult qui rend la vue associée à la page d'accueil.</returns>
+        public IActionResult Home()
         {
-            return View();
+            ListeTitreModel model = new ListeTitreModel
+            {
+                Titres = TitreFactory.GetTitres(),
+            };
+
+            return this.View(model);
         }
     }
 }
