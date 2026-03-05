@@ -1,7 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
-// Ajoute le support des contrôleurs et des vues (indispensable pour MVC)
-builder.Services.AddControllersWithViews();
+// Ajoute les services n�cessaires pour permettfre l'utilisation des
+// controllers avec des vues.
+builder.Services.AddControllersWithViews()
+    // Ajoute la compilation des vues lors de l'ex�cution de l'application.
+    // Cela nous �vite de recompiler l'application � chaque modification de vue.
+    // N�cessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
+    .AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
@@ -20,5 +25,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// C'est cette ligne qui maintient le serveur web allumé !
 app.Run();

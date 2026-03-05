@@ -22,6 +22,9 @@ namespace Webzine.Entity
         /// Nom ou libellé affichable du style.
         /// </summary>
         [Required]
+        [Display(Name = "Libellé")]
+        [MaxLength(50)]
+        [MinLength(2)]
         public string Libelle { get; set; } = string.Empty;
 
         /// <summary>
