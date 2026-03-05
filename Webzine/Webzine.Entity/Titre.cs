@@ -83,7 +83,7 @@
         /// </summary>
         /// <remarks>Cette propriété est utilisée comme clé étrangère pour établir la relation entre un
         /// album et son artiste dans la base de données.</remarks>
-        [ForeignKey("Album")]
+        [ForeignKey("Artiste")]
         public int ArtisteId { get; set; }
 
         /// <summary>

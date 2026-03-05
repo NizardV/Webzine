@@ -14,7 +14,7 @@ namespace Webzine.Entity
         /// Obtient ou définit l'identifiant de l'artiste.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public int IdArtiste { get; set; }
 
         /// <summary>
         /// Obtient ou définit le nom de l'artiste.

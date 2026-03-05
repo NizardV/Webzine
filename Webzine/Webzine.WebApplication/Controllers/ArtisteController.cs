@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity.Fixtures;
 
 namespace Webzine.WebApplication.Controllers
 {
@@ -11,11 +12,9 @@ namespace Webzine.WebApplication.Controllers
         /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
         /// </summary>
         /// <returns>Une Vue</returns>
-        public IActionResult Artiste(string nom)
+        public IActionResult DetailsArtiste(string nom)
         {
-
-
-
+            var artiste = ArtisteFactory.TrouverParNom();
             return View();
         }
     }
