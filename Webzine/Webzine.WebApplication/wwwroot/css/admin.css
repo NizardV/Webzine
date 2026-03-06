@@ -1,0 +1,57 @@
+/* Lightweight admin tweaks to match the mockup tables */
+
+.table.admin-table {
+    font-size: 0.88rem;
+    width: 100%;
+}
+
+.table.admin-table thead th {
+    padding: 0.35rem 0.5rem;
+    font-weight: 600;
+}
+
+.table.admin-table tbody td {
+    padding: 0.25rem 0.5rem;
+}
+
+.table.admin-table thead {
+    background-color: #dcdcdc;
+}
+
+.table.admin-table.table-bordered > :not(caption) > * {
+    border-color: #c8c8c8;
+}
+
+.table.admin-table.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: #f6f6f6;
+}
+
+.table.admin-table th,
+.table.admin-table td {
+    vertical-align: middle;
+}
+
+.table.admin-table .col-actions {
+    width: 70px;
+    white-space: nowrap;
+}
+
+.table.admin-table .metric-col {
+    width: 40px;
+    text-align: center;
+}
+
+.table.admin-table .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border-radius: 2px;
+}
+
+.table.admin-table .action-btn i {
+    font-size: 0.85rem;
+    line-height: 1;
+}

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -9,22 +13,24 @@
     <link href="~/lib\bootstrap\dist\css\bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Webzine</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item text-secondary">
-                        <a class="nav-link active text-secondary" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link active text-secondary" aria-current="page" asp-area="" asp-controller="Home" asp-action="Home">
                             <i class="bi bi-house "></i>
                             Accueil
                         </a>
-                    </li>
+                        </li>
                     <li class="nav-item dropdown">
                         <button class="nav-link dropdown-toggle text-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-pencil-square text-secondary"></i>
@@ -35,27 +41,36 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Artistes</a></li>
                             <li><a class="dropdown-item" asp-area="Administration" asp-controller="Commentaires" asp-action="Index">Commentaires</a></li>
-                            <li><a class="dropdown-item" href="#">Style</a></li>
-                            <li><a class="dropdown-item" href="#">Titres</a></li>
+                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Style" asp-action="Index">Style</a></li>
+                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Titre" asp-action="Index">Titres</a></li>
                         </ul>
-                    </li>
+                        </li>
                     <li class="nav-item text-secondary">
-                        <a class="nav-link text-secondary" href="#">
+                        <a class="nav-link text-secondary" asp-controller="Contact">
                             <i class="bi bi-envelope-fill"></i>
                             Contact
                         </a>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Trouver un artiste/titre" aria-label="Search" />
                     <button class="btn btn-outline-success bg-primary border border-0" type="submit">
                         <i class="bi bi-search text-light"></i>
                     </button>
-                </form>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container-fluid mt-4 flex-grow-1">
+        <div class="row g-4">
+            <div class="col-12 col-lg-9">
+                @RenderBody()
             </div>
         </div>
-    </nav>
-    @RenderBody()
-    <script src="~/lib\bootstrap\dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,4 +1,10 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using Microsoft.Extensions.FileProviders;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Ajoute les services n�cessaires pour permettfre l'utilisation des
 // controllers avec des vues.
@@ -23,6 +29,6 @@ app.MapControllerRoute(
 // Configure le routage par défaut
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Home}/{id?}");
 
 app.Run();
