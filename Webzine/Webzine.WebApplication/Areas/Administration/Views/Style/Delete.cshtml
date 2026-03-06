@@ -1,0 +1,24 @@
+﻿@model Webzine.Entity.Style
+
+
+<div class="mt-4">
+    <h2>Supprimer un style</h2>
+
+    <hr class="mb-4" />
+
+    <p class="mb-4">
+        Etes-vous sûr de vouloir supprimer le style de musique "@Model.Libelle" ?
+    </p>
+
+    <form asp-area="Administration" asp-controller="Style" asp-action="DeleteConfirmed" asp-route-id="@Model.IdStyle" method="post" class="mb-5">
+
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Style" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des styles
+        </a>
+    </div>
+</div>

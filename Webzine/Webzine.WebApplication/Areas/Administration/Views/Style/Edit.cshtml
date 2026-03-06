@@ -1,5 +1,40 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Webzine.Entity.Style
+
 @{
+    ViewData["Title"] = "Editer un style";
 }
+
+<div class="mt-4">
+    <h2>Editer un style</h2>
+
+    <hr class="mb-4" />
+
+    <form asp-area="Administration" asp-controller="Style" asp-action="Edit" asp-route-id="@Model.IdStyle" method="post">
+
+        <input type="hidden" name="Id" value="@Model.IdStyle" />
+
+        <div class="row g-3 align-items-center mb-5">
+
+            <div class="col-auto">
+                <label for="Libelle" class="col-form-label">
+                    Libellé<span class="text-danger">*</span>
+                </label>
+            </div>
+
+            <div class="col-auto">
+                <input type="text" id="Libelle" name="Libelle" class="form-control" value="@Model.Libelle" required />
+            </div>
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+            </div>
+
+        </div>
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Style" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des styles
+        </a>
+    </div>
+</div>
