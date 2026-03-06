@@ -1,4 +1,10 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using Microsoft.Extensions.FileProviders;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Ajoute les services n�cessaires pour permettfre l'utilisation des
 // controllers avec des vues.
@@ -10,19 +16,20 @@ builder.Services.AddControllersWithViews()
 
 var app = builder.Build();
 
-// Active la possibilit� de servir des fichiers statiques pr�sents dans
-// le dossier wwwroot.
+// Ajoute les fichiers statiques (Bootstrap, CSS, JS)
 app.UseStaticFiles();
 
-// Active le middleware permettant le routage des requ�tes entrantes.
 app.UseRouting();
 
-// Ajoute un endpoint permettant de router les urls
-// avec la forme /controller/action/id(optionnel).
-// Equivalent � app.MapDefaultControllerRoute()
+// Configure le routage pour les zones (areas)
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+// Configure le routage par défaut
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Home}/{id?}");
 
 // Active le middleware permettant le routage des requêtes entrantes.
 app.UseRouting();
