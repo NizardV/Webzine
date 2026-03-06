@@ -18,7 +18,7 @@ namespace Webzine.Entity.Fixtures
         {
             var artistes = new List<Artiste>();
 
-            artistes.Add(new Artiste { IdArtiste = 1, Nom = "Aphex Twin", Biographie = "Légende de la musique électronique, maître de l'IDM et de l'expérimentation sonore." });
+            artistes.Add(new Artiste { IdArtiste = 1, Nom = "Serge Gainsbourg", Biographie = "Pionnier de la variété française." });
             artistes.Add(new Artiste { IdArtiste = 2, Nom = "Daft Punk", Biographie = "Duo casqué pionnier de la French Touch, mêlant house, synthpop et disco." });
             artistes.Add(new Artiste { IdArtiste = 3, Nom = "Boards of Canada", Biographie = "Frères écossais célèbres pour leurs mélodies nostalgiques et leurs samples obscurs." });
             artistes.Add(new Artiste { IdArtiste = 4, Nom = "Bicep", Biographie = "Duo nord-irlandais incontournable de la scène house et techno contemporaine." });
