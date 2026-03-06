@@ -26,7 +26,8 @@
         [Route("titre/create")]
         public IActionResult Create(Titre titre)
         {
-            return Ok(titre);
+            // Mock: no persistence, just return to list
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -49,7 +50,30 @@
             {
                 return BadRequest();
             }
-            return Ok(titre);
+
+            // Mock: no persistence, just return to list
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [Route("titre/delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            var titre = TitreFactory.GetTitreById(id);
+            if (titre == null)
+            {
+                return NotFound();
+            }
+
+            return View(titre);
+        }
+
+        [HttpPost]
+        [Route("titre/delete/{id}")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            // Mock: no persistence
+            return RedirectToAction(nameof(Index));
         }
 
     }
