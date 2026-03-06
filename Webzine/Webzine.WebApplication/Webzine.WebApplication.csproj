@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Webzine.Entity\Webzine.Entity.csproj" />
-
+    <Folder Include="Views\Admin\" />
   </ItemGroup>
 
 </Project>
