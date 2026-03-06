@@ -28,5 +28,31 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             return Ok(artiste);
         }
+
+        // Affiche le formulaire d'édition pré-rempli
+        [HttpGet]
+        [Route("artiste/edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            var artiste = ArtisteFactory.CreerArtistes().FirstOrDefault(a => a.IdArtiste == id);
+
+            if (artiste == null)
+            {
+                return NotFound();
+            }
+
+            return View(artiste);
+        }
+
+        [HttpPost]
+        [Route("artiste/edit/{id}")]
+        public IActionResult Edit(int id, Artiste artiste)
+        {
+            if (id != artiste.IdArtiste)
+            {
+                return BadRequest();
+            }
+            return Ok(artiste);
+        }
     }
 }
