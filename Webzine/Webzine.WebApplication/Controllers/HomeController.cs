@@ -35,9 +35,15 @@
                 return this.NotFound();
             }
 
-            TitreModel model = new TitreModel { Titre = titre };
+            var commentaires = new CommentaireFactory().GetCommentairesByTitre(id);
 
-            return this.View(model);
+            TitreModel model = new TitreModel
+            {
+                Titre = titre,
+                Commentaires = commentaires,
+            };
+
+            return this.View("/Views/Titre/DetailsTitre.cshtml", model);
         }
     }
 }
