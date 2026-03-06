@@ -9,29 +9,68 @@
 
 <h1 class="h3 mb-4">Derniers titres chroniqués</h1>
 
-<div class="list-group">
-    @foreach (var item in Model)
+<div class="d-grid gap-3">
+    @foreach (var item in Model.Take(3))
     {
-        <div class="list-group-item">
-            <div class="d-flex justify-content-between align-items-start">
-                <div class="me-3">
-                    <div class="fw-semibold">@item.Titre.Libelle</div>
-                    <div class="text-muted small">@item.Titre.DateSortie.ToString("dd/MM/yyyy")</div>
-                    <div class="mt-2">@item.Titre.Chronique</div>
-                    <div class="mt-3">
-                        <a asp-controller="Titre"
-                           asp-action="DetailsTitre"
+        <div class="titre-card">
+            <div class="d-flex gap-3">
+                <div>
+                    <img src="@item.Titre.UrlJaquette" alt="Jaquette" class="titre-thumb" />
+                </div>
+
+                <div class="flex-grow-1">
+                    <a class="titre-card-title"
+                       asp-controller="Home"
+                       asp-action="DetailTitre"
+                       asp-route-id="@item.Titre.IdTitre">
+                        @item.Titre.Artiste?.Nom - @item.Titre.Libelle
+                    </a>
+
+                    <p class="mt-2 mb-2">
+                        @(item.Titre.Chronique.Length > 160 ? item.Titre.Chronique.Substring(0, 160) + "..." : item.Titre.Chronique)
+                    </p>
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <a asp-controller="Home"
+                           asp-action="DetailTitre"
                            asp-route-id="@item.Titre.IdTitre"
                            class="btn btn-primary btn-sm">
                             Lire la suite
                         </a>
+
+                        <div class="titre-card-meta">
+                            <i class="bi bi-calendar3"></i>
+                            @item.Titre.DateSortie.ToString("dd/MM/yyyy")
+                            <span class="ms-2"><i class="bi bi-eye"></i> @item.Titre.NbLectures</span>
+                            <span class="ms-2"><i class="bi bi-hand-thumbs-up"></i> @item.Titre.NbLikes</span>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    }
 
-                @if (!string.IsNullOrWhiteSpace(item.Titre.UrlJaquette))
-                {
-                    <img src="@item.Titre.UrlJaquette" alt="Jaquette" class="img-thumbnail" style="width: 96px; height: 96px; object-fit: cover;" />
-                }
+    <div class="text-end">
+        <a class="btn btn-secondary btn-sm" href="#">Titres plus anciens »</a>
+    </div>
+</div>
+
+<hr class="my-5" />
+
+<h2 class="h4 mb-3">Titres les plus populaires</h2>
+
+<div class="row g-3">
+    @foreach (var item in Model.OrderByDescending(m => m.Titre.NbLectures).Take(3))
+    {
+        <div class="col-12 col-md-4">
+            <div class="popular-card">
+                <img src="@item.Titre.UrlJaquette" alt="Jaquette" />
+                <div class="mt-2">
+                    <a asp-controller="Home" asp-action="DetailTitre" asp-route-id="@item.Titre.IdTitre" class="text-decoration-none">
+                        @item.Titre.Libelle
+                    </a>
+                    <div class="text-muted small">par @item.Titre.Artiste?.Nom</div>
+                </div>
             </div>
         </div>
     }
