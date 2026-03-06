@@ -1,0 +1,45 @@
+﻿@model Webzine.Entity.Artiste
+
+@{
+    ViewData["Title"] = "Créer un artiste";
+}
+
+<div class="mt-4">
+    <h2>Créer un artiste</h2>
+
+    <hr class="mb-4" />
+
+    <form asp-area="Administration" asp-controller="Artiste" asp-action="Create" method="post">
+
+        <div class="row mb-4">
+            <label for="Nom" class="col-sm-2 col-form-label">
+                Nom de l'artiste<span class="text-danger">*</span>
+            </label>
+            <div class="col-sm-10">
+                <input type="text" id="Nom" name="Nom" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <label for="Biographie" class="col-sm-2 col-form-label">
+                Biographie
+            </label>
+            <div class="col-sm-10">
+                <textarea id="Biographie" name="Biographie" class="form-control" rows="6"></textarea>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Artiste" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des artistes
+        </a>
+    </div>
+</div>
