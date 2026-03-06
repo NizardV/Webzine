@@ -14,13 +14,16 @@ namespace Webzine.Entity
         /// Obtient ou définit l'identifiant de l'artiste.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public int IdArtiste { get; set; }
 
         /// <summary>
         /// Obtient ou définit le nom de l'artiste.
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        [MaxLength(50)]
+        [MinLength(2)]
+        [Display(Name= "Nom de l'artiste")]
+        public string Nom { get; set; }
 
         /// <summary>
         /// Obtient ou définit la biographie de l'artiste.
