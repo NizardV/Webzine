@@ -1,4 +1,9 @@
-﻿namespace Webzine.Entity.Fixtures
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Webzine.Entity;
+
+namespace Webzine.Entity.Fixtures
 {
     /// <summary>
     /// Factory pour la création d'instances de la classe Titre.
