@@ -11,7 +11,7 @@
         @foreach (var style in Model)
         {
             <li class="mb-1">
-                &bull; <a href="#" class="text-decoration-none">@style.Libelle</a>
+                &bull; <a asp-area="" asp-controller="Titre" asp-action="Style"  asp-route-libelle="@style.Libelle" class="text-decoration-none">@style.Libelle</a>
             </li>
         }
     </ul>
