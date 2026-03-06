@@ -3,58 +3,66 @@
 //using System.Text;
 //using Webzine.Entity;
 
-//namespace Webzine.Entity.Fixtures
-//{
-//    /// <summary>
-//    /// Factory pour la création d'instances de la classe Titre.
-//    /// Cette classe peut être utilisée pour centraliser la logique de création d'objets Titre,
-//    /// notamment si la création de ces objets nécessite des étapes supplémentaires ou des valeurs par défaut.
-//    /// </summary>
-//    public class TitreFactory
-//    {
-//        /// <summary>
-//        /// Créer une liste d'instances de la classe Titre avec des données d'exemple.
-//        /// </summary>
-//        /// <returns>
-//        /// Liste d'instances de la classe Titre créée.
-//        /// </returns>
-//        public static List<Titre> CreerTitres()
-//        {
-//            var titres = new List<Titre>();
+namespace Webzine.Entity.Fixtures
+{
+    /// <summary>
+    /// Factory pour la création d'instances de la classe Titre.
+    /// Cette classe peut être utilisée pour centraliser la logique de création d'objets Titre,
+    /// notamment si la création de ces objets nécessite des étapes supplémentaires ou des valeurs par défaut.
+    /// </summary>
+    public class TitreFactory
+    {
+        private readonly ICollection<Titre> titres = new List<Titre>()
+        {
+            new Titre
+            {
+                IdTitre = 1,
+                Libelle = "Titre 1",
+                Chronique = "Chronique du titre 1",
+                UrlJaquette = "image1.jpg",
+                UrlEcoute = "https://example.com/titre1",
+                DateCreation = DateTime.Now,
+                DateSortie = DateTime.Now.AddMonths(1),
+                NbLectures = 0,
+                NbLikes = 0,
+                IdArtiste = 1,
+                Commentaires = new List<Commentaire>(),
+                Styles = new List<Style>(),
+            },
+            new Titre
+            {
+                IdTitre = 2,
+                Libelle = "Titre 2",
+                Chronique = "Chronique du titre 2",
+                UrlJaquette = "image2.jpg",
+                UrlEcoute = "https://example.com/titre2",
+                DateCreation = DateTime.Now,
+                DateSortie = DateTime.Now.AddMonths(2),
+                NbLectures = 0,
+                NbLikes = 0,
+                IdArtiste = 1,
+                Commentaires = new List<Commentaire>(),
+                Styles = new List<Style>(),
+            },
+        };
 
-//            titres.Add(new Titre
-//            {
-//                Id = 1,
-//                Libelle = "Titre 1",
-//                Chronique = "Chronique du titre 1",
-//                ImageJaquette = "image1.jpg",
-//                Lien = "https://example.com/titre1",
-//                DateCreation = DateTime.Now,
-//                DateSortie = DateTime.Now.AddMonths(1),
-//                CompteurLecture = 0,
-//                CompteurLike = 0,
-//                ArtisteId = 1,
-//                Commentaires = new List<Commentaire>(),
-//                Styles = new List<Style>(),
-//            });
+        /// <summary>
+        /// Retourne une liste de titres préconfigurés. Cette méthode peut être utilisée pour obtenir des instances de Titre
+        /// </summary>
+        /// <returns>Liste de titres</returns>
+        public static ICollection<Titre> GetTitres()
+        {
+            return new TitreFactory().titres;
+        }
 
-//            titres.Add(new Titre
-//            {
-//                Id = 2,
-//                Libelle = "Titre 2",
-//                Chronique = "Chronique du titre 2",
-//                ImageJaquette = "image2.jpg",
-//                Lien = "https://example.com/titre2",
-//                DateCreation = DateTime.Now,
-//                DateSortie = DateTime.Now.AddMonths(2),
-//                CompteurLecture = 0,
-//                CompteurLike = 0,
-//                ArtisteId = 1,
-//                Commentaires = new List<Commentaire>(),
-//                Styles = new List<Style>(),
-//            });
-
-//            return titres;
-//        }
-//    }
-//}
+        /// <summary>
+        /// Retourne un titre spécifique en fonction de son identifiant. Cette méthode peut être utilisée pour obtenir une instance de Titre.
+        /// </summary>
+        /// <param name="id">Identifiant du titre</param>
+        /// <returns>Titre</returns>
+        public static Titre? GetTitreById(int id)
+        {
+            return new TitreFactory().titres.FirstOrDefault(t => t.IdTitre == id);
+        }
+    }
+}
