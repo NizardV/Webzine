@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 
 namespace Webzine.WebApplication.Areas.Administration.Controllers
@@ -12,6 +13,20 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             var artistes = ArtisteFactory.CreerArtistes();
             return View(artistes);
+        }
+
+        [HttpGet]
+        [Route("artiste/create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("artiste/create")]
+        public IActionResult Create(Artiste artiste)
+        {
+            return Ok(artiste);
         }
     }
 }
