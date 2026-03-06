@@ -1,0 +1,12 @@
+﻿@{
+    <h1>Supprimer un commentaire</h1>
+    <hr class="hr" />
+    <p>Êtes-vous sûr de vouloir supprimer le commentaire suivant ?</p>
+    <h3>@Model.Contenu</h3>
+    <p>- <strong>@Model.Auteur</strong> le @Model.DateCreation sur @Model.Titre.Libelle</p>
+    <button type="button" class="btn btn-danger">Supprimer</button>
+    <br />
+    <a asp-area="Administration" asp-controller="Commentaires" asp-action="Index">
+        <p class="text-primary">Retour à l'administration des commentaires</p>    
+    </a>
+}

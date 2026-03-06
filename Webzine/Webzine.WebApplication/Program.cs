@@ -10,16 +10,17 @@ builder.Services.AddControllersWithViews()
 
 var app = builder.Build();
 
-// Active la possibilit� de servir des fichiers statiques pr�sents dans
-// le dossier wwwroot.
+// Ajoute les fichiers statiques (Bootstrap, CSS, JS)
 app.UseStaticFiles();
 
-// Active le middleware permettant le routage des requ�tes entrantes.
 app.UseRouting();
 
-// Ajoute un endpoint permettant de router les urls
-// avec la forme /controller/action/id(optionnel).
-// Equivalent � app.MapDefaultControllerRoute()
+// Configure le routage pour les zones (areas)
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+// Configure le routage par défaut
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
