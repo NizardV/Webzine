@@ -29,11 +29,11 @@
                     <td>@artiste.Nom</td>
                     <td class="text-center">
                         <a asp-area="Administration" asp-controller="Artiste" asp-action="Edit" asp-route-id="@artiste.IdArtiste" class="text-primary text-decoration-none me-3" title="Éditer">
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i class="bi bi-pencil-square"></i>
                         </a>
 
-                        <a  class="text-primary text-decoration-none" title="Supprimer">
-                            <i class="fa-solid fa-trash"></i>
+                        <a asp-area="Administration" asp-controller="Artiste" asp-action="Delete" asp-route-id="@artiste.IdArtiste" class="text-primary text-decoration-none" title="Supprimer">
+                            <i class="bi bi-trash3"></i>
                         </a>
                     </td>
                 </tr>
