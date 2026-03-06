@@ -6,10 +6,6 @@ namespace Webzine.WebApplication.Controllers
 {
     public class TitreController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
         [HttpGet]
         [Route("Titre/DetailsTitre/{id}")]
         public IActionResult DetailsTitre(int id)

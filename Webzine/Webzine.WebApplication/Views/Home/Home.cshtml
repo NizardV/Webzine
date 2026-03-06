@@ -31,8 +31,8 @@
                     </p>
 
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <a asp-controller="Home"
-                           asp-action="DetailTitre"
+                        <a asp-controller="Titre"
+                           asp-action="DetailsTitre"
                            asp-route-id="@item.Titre.IdTitre"
                            class="btn btn-primary btn-sm">
                             Lire la suite
@@ -66,7 +66,7 @@
             <div class="popular-card">
                 <img src="@item.Titre.UrlJaquette" alt="Jaquette" />
                 <div class="mt-2">
-                    <a asp-controller="Home" asp-action="DetailTitre" asp-route-id="@item.Titre.IdTitre" class="text-decoration-none">
+                    <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@item.Titre.IdTitre" class="text-decoration-none">
                         @item.Titre.Libelle
                     </a>
                     <div class="text-muted small">par @item.Titre.Artiste?.Nom</div>
