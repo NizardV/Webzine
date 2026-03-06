@@ -35,7 +35,7 @@
                 return this.NotFound();
             }
 
-            var commentaires = new CommentaireFactory().GetCommentairesByTitre(id);
+            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
 
             TitreModel model = new TitreModel
             {

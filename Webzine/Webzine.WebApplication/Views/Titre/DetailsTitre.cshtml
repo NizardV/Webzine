@@ -41,27 +41,22 @@
 
 @if (!string.IsNullOrWhiteSpace(Model.Titre.UrlEcoute))
 {
-    <div class="mb-4">
-        <h2 class="h5">Écouter</h2>
-        <a class="btn btn-outline-primary btn-sm" href="@Model.Titre.UrlEcoute" target="_blank" rel="noopener noreferrer">
-            Ouvrir le lien d'écoute
-        </a>
-    </div>
+    <iframe width="auto" height="auto" src="@Model.Titre.UrlEcoute" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 }
 
 <div class="mb-5">
-    <h2 class="h5 mb-3">Donne ton avis sur le titre</h2>
+    <h1 class="h5 mb-3">Donne ton avis sur le titre</h1>
 
     <form asp-controller="Home" asp-action="AjouterCommentaire" asp-route-id="@Model.Titre.IdTitre" method="post" class="row g-3">
         <div class="col-12 col-md-6">
             <label asp-for="Auteur" class="form-label"></label>
-            <input asp-for="Auteur" class="form-control" placeholder="Votre nom (exemple : Emmanuel)" />
+            <input asp-for="Auteur" class="form-control" placeholder="Votre nom (exemple : Emmanuel)" required/>
             <span asp-validation-for="Auteur" class="text-danger"></span>
         </div>
 
         <div class="col-12">
             <label asp-for="Contenu" class="form-label"></label>
-            <textarea asp-for="Contenu" class="form-control" rows="3" placeholder="Votre commentaire..."></textarea>
+            <textarea asp-for="Contenu" class="form-control" rows="3" placeholder="Votre commentaire..." required></textarea>
             <span asp-validation-for="Contenu" class="text-danger"></span>
         </div>
 

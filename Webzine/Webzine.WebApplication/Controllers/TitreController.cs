@@ -15,7 +15,8 @@ namespace Webzine.WebApplication.Controllers
             {
                 return NotFound();
             }
-            return View(new TitreModel { Titre = titre});
+            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
+            return View(new TitreModel { Titre = titre, Commentaires = commentaires});
         }
 
         [HttpGet]

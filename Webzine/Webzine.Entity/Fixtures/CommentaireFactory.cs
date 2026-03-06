@@ -66,7 +66,7 @@ namespace Webzine.Entity.Fixtures
             return commentaires;
 
         }
-        public List<Commentaire> GetCommentairesByTitre(int idTitre)
+        public static List<Commentaire> GetCommentairesByTitre(int idTitre)
         {
             var commentaires = GetCommentaires();
             return commentaires.Where(c => c.IdTitre == idTitre).ToList();

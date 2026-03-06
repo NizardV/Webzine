@@ -8,14 +8,12 @@ namespace Webzine.WebApplication.Controllers
     /// </summary>
     public class ArtisteController : Controller
     {
-        /// <summary>
-        /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
-        /// </summary>
-        /// <returns>Une Vue</returns>
+        [HttpGet]
+        [Route("Artiste/{nom}")]
         public IActionResult DetailsArtiste(string nom)
         {
             var artiste = ArtisteFactory.TrouverParNom(nom);
-            return View();
+            return View(artiste);
         }
     }
 }
