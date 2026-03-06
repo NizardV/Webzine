@@ -54,5 +54,27 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             }
             return Ok(artiste);
         }
+
+        [HttpGet]
+        [Route("artiste/delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            var artiste = ArtisteFactory.CreerArtistes().FirstOrDefault(a => a.IdArtiste == id);
+
+            if (artiste == null)
+            {
+                return NotFound();
+            }
+
+            return View(artiste);
+        }
+
+        [HttpPost]
+        [Route("artiste/delete/{id}")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
