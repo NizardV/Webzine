@@ -14,7 +14,7 @@ namespace Webzine.WebApplication.Controllers
         /// <returns>Une Vue</returns>
         public IActionResult DetailsArtiste(string nom)
         {
-            var artiste = ArtisteFactory.TrouverParNom();
+            var artiste = ArtisteFactory.TrouverParNom(nom);
             return View();
         }
     }

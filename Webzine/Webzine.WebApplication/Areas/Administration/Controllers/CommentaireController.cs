@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Webzine.Repository.Factories;
+using Webzine.Entity.Fixtures;
 using Webzine.WebApplication.Areas.Administration.ViewModel.Commentaire;
 
 namespace Webzine.WebApplication.Areas.Administration.Controllers

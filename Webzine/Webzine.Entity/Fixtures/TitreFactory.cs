@@ -19,7 +19,7 @@ namespace Webzine.Entity.Fixtures
                 IdTitre = 1,
                 Libelle = "Titre 1",
                 Chronique = "Chronique du titre 1",
-                UrlJaquette = "image1.jpg",
+                UrlJaquette = "https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/43_0600753718551.jpg",
                 UrlEcoute = "https://example.com/titre1",
                 DateCreation = DateTime.Now,
                 DateSortie = DateTime.Now.AddMonths(1),
@@ -27,7 +27,7 @@ namespace Webzine.Entity.Fixtures
                 NbLikes = 0,
                 IdArtiste = 1,
                 Commentaires = new List<Commentaire>(),
-                Styles = new List<Style>(),
+                Styles = [new Style { IdStyle = 1, Libelle = "Jazz"}],
             },
             new Titre
             {
