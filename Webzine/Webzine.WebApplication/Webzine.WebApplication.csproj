@@ -29,8 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Webzine.Entity\Webzine.Entity.csproj" />
-=========
->>>>>>>>> Temporary merge branch 2
+
   </ItemGroup>
 
 </Project>
