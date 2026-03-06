@@ -30,6 +30,14 @@ namespace Webzine.Entity.Fixtures
 
             return styles;
         }
+
+        /// <summary>
+        /// Récupère un style en fonction de son libellé (insensible à la casse).
+        /// </summary>
+        public static Style? GetStyleByLibelle(string libelle)
+        {
+            return CreerStyles().FirstOrDefault(s => s.Libelle.ToLower() == libelle.ToLower());
+        }
     }
 
 }
