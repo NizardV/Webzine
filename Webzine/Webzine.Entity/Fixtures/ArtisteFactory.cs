@@ -14,37 +14,18 @@ namespace Webzine.Entity.Fixtures
         /// Récupérer tous les artistes.
         /// </summary>
         /// <return>Liste contenant des artistes</return>
-        public static List<Artiste> TousLesArtistes()
+        public static List<Artiste> CreerArtistes()
         {
             var artistes = new List<Artiste>();
 
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 1,
-                Nom = "The Beatles",
-                Biographie = "The Beatles était un groupe de rock britannique formé à Liverpool en 1960. Composé de John Lennon, Paul McCartney, George Harrison et Ringo Starr, le groupe est considéré comme l'un des plus influents de tous les temps. Leur musique a révolutionné la scène musicale et continue d'inspirer des générations d'artistes.",
-            });
-
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 1,
-                Nom = "The Beatles",
-                Biographie = "The Beatles était un groupe de rock britannique formé à Liverpool en 1960. Composé de John Lennon, Paul McCartney, George Harrison et Ringo Starr, le groupe est considéré comme l'un des plus influents de tous les temps. Leur musique a révolutionné la scène musicale et continue d'inspirer des générations d'artistes.",
-            });
-
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 1,
-                Nom = "The Beatles",
-                Biographie = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-            });
-
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 1,
-                Nom = "The Beatles",
-                Biographie = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-            });
+            artistes.Add(new Artiste { IdArtiste = 1, Nom = "Aphex Twin", Biographie = "Légende de la musique électronique, maître de l'IDM et de l'expérimentation sonore." });
+            artistes.Add(new Artiste { IdArtiste = 2, Nom = "Daft Punk", Biographie = "Duo casqué pionnier de la French Touch, mêlant house, synthpop et disco." });
+            artistes.Add(new Artiste { IdArtiste = 3, Nom = "Boards of Canada", Biographie = "Frères écossais célèbres pour leurs mélodies nostalgiques et leurs samples obscurs." });
+            artistes.Add(new Artiste { IdArtiste = 4, Nom = "Bicep", Biographie = "Duo nord-irlandais incontournable de la scène house et techno contemporaine." });
+            artistes.Add(new Artiste { IdArtiste = 5, Nom = "Kraftwerk", Biographie = "Pionniers allemands absolus de la musique électronique dès les années 1970." });
+            artistes.Add(new Artiste { IdArtiste = 6, Nom = "Burial", Biographie = "Producteur londonien insaisissable, figure de proue du genre dubstep et future garage." });
+            artistes.Add(new Artiste { IdArtiste = 7, Nom = "Peggy Gou", Biographie = "DJ et productrice sud-coréenne, créatrice d'une house énergique aux influences acid." });
+            artistes.Add(new Artiste { IdArtiste = 8, Nom = "Laurent Garnier", Biographie = "DJ historique et pilier de la scène techno et house en France." });
 
             return artistes;
         }
@@ -53,26 +34,26 @@ namespace Webzine.Entity.Fixtures
         /// Récupérer un artiste par son id
         /// </summary>
         /// <return>Un object artiste</return>
-        public static Artiste? TrouverParId(int artisteId)
-        {
-            return TousLesArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
-        }
+        //public static Artiste? TrouverParId(int artisteId)
+        //{
+        //    return TousLesArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
+        //}
 
         /// <summary>
         /// Récupérer un artiste par son nom.
         /// </summary>
         /// <return>Un object artiste</return>
-        public static Artiste? TrouverParNom(string nom)
-        {
-            if (string.IsNullOrWhiteSpace(nom)) // Vérifier si le nom est null ou vide
-            {
-                return null;
-            }
+        //public static Artiste? TrouverParNom(string nom)
+        //{
+        //    if (string.IsNullOrWhiteSpace(nom)) // Vérifier si le nom est null ou vide
+        //    {
+        //        return null;
+        //    }
 
-            nom = nom.Trim(); // Supprimer les espaces superflus
+        //    nom = nom.Trim(); // Supprimer les espaces superflus
 
-            return TousLesArtistes()
-                .FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
-        }
+        //    return TousLesArtistes()
+        //        .FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
+        //}
     }
 }
