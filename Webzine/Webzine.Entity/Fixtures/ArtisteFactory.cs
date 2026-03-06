@@ -34,26 +34,26 @@ namespace Webzine.Entity.Fixtures
         /// Récupérer un artiste par son id
         /// </summary>
         /// <return>Un object artiste</return>
-        //public static Artiste? TrouverParId(int artisteId)
-        //{
-        //    return TousLesArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
-        //}
+        public static Artiste? TrouverParId(int artisteId)
+        {
+            return CreerArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
+        }
 
         /// <summary>
         /// Récupérer un artiste par son nom.
         /// </summary>
         /// <return>Un object artiste</return>
-        //public static Artiste? TrouverParNom(string nom)
-        //{
-        //    if (string.IsNullOrWhiteSpace(nom)) // Vérifier si le nom est null ou vide
-        //    {
-        //        return null;
-        //    }
+        public static Artiste? TrouverParNom(string nom)
+        {
+            if (string.IsNullOrWhiteSpace(nom)) // Vérifier si le nom est null ou vide
+            {
+                return null;
+            }
 
-        //    nom = nom.Trim(); // Supprimer les espaces superflus
+            nom = nom.Trim();
 
-        //    return TousLesArtistes()
-        //        .FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
-        //}
+            return CreerArtistes()
+                .FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
+        }
     }
 }
