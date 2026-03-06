@@ -1,0 +1,28 @@
+@model Webzine.Entity.Titre
+
+<div class="mt-4">
+    <h2>Supprimer un titre</h2>
+
+    <hr class="mb-4" />
+
+    <p class="mb-4">
+        Etes-vous sûr de vouloir supprimer le titre "@Model.Libelle" ?
+    </p>
+
+    <form asp-area="Administration"
+          asp-controller="Titre"
+          asp-action="DeleteConfirmed"
+          asp-route-id="@Model.IdTitre"
+          method="post"
+          class="mb-5">
+
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Titre" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des titres
+        </a>
+    </div>
+</div>
