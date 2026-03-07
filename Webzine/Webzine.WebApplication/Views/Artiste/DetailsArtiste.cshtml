@@ -3,12 +3,49 @@
     Layout = "_Layout";
 }
 
-<h1>@Model.Artiste.Nom</h1>
-<p>@Model.Artiste.Biographie</p>
+<div class="container py-4">
 
-<h2>Titres</h2>
-<!--tableau d'affichage des titres-->
-    @foreach (var t in Model.Titres)
+    <h1 class="mb-2">@Model.Artiste.Nom</h1>
+    <hr class="my-4" />
+
+    <p class="text-muted mb-4">@Model.Artiste.Biographie</p>
+
+    <h2 class="h3 mb-4">Albums</h2>
+    <hr class="my-4" />
+
+    @foreach (var album in Model.Albums)
     {
-        @t.Libelle
+        <div class="row mb-4">
+            <div class="col-3 col-md-2">
+                <img src="@album.UrlJaquette"
+                     class="img-fluid"
+                     alt="@album.Album" />
+            </div>
+
+            <div class="col-9 col-md-10">
+                <h3 class="h5 fw-semibold text-center mb-2">@album.Album</h3>
+
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th class="text-muted fw-semibold" style="width: 90px;">Durée</th>
+                            <th class="text-muted fw-semibold">Titre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in album.Titres)
+                        {
+                            <tr>
+                                <td class="text-muted">@t.Duree</td>
+                                <td>
+                                    <a href="#" class="link-primary text-decoration-none">@t.Libelle</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     }
+</div>

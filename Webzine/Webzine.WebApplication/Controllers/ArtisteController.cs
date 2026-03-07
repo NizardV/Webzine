@@ -26,6 +26,18 @@ namespace Webzine.WebApplication.Controllers
 
             var model = new ArtisteModel { Artiste = artiste, Titres = titres };
 
+            // Titres regroupés par nom d'album et URL de jaquette
+            model.Albums = model.Titres
+                .GroupBy(t => new { t.Album, t.UrlJaquette })
+                // Transformez chaque groupe en un AlbumGroupModel
+                .Select(g => new AlbumGroupModel
+                {
+                    Album = g.Key.Album ?? "Album",
+                    UrlJaquette = g.Key.UrlJaquette ?? "",
+                    Titres = g.ToList()
+                })
+                .ToList();
+
             return View(model);
         }
     }
