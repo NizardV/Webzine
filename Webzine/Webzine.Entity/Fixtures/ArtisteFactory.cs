@@ -14,30 +14,18 @@ namespace Webzine.Entity.Fixtures
         /// Récupérer tous les artistes.
         /// </summary>
         /// <return>Liste contenant des artistes</return>
-        public static List<Artiste> TousLesArtistes()
+        public static List<Artiste> CreerArtistes()
         {
             var artistes = new List<Artiste>();
 
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 1,
-                Nom = "The Beatles",
-                Biographie = "The Beatles sont un groupe britannique formé à Liverpool en 1960, composé de John Lennon, Paul McCartney, George Harrison et Ringo Starr. Ils ont révolutionné la musique populaire avec des mélodies innovantes, des expérimentations en studio et une influence mondiale énorme. Des titres comme Hey Jude, Let It Be ou Yesterday ont traversé les générations, et leur impact sur la pop/rock reste colossal.",
-            });
-
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 2,
-                Nom = "Eminem",
-                Biographie = "Eminem (Marshall Bruce Mathers III), né en 1972 à Detroit, est l’un des rappeurs les plus influents de l’histoire. Révélé à la fin des années 1990 avec The Slim Shady LP, il se distingue par son écriture technique, ses alter egos, et des textes souvent introspectifs. Il a popularisé le rap auprès d’un très large public et a marqué la culture pop avec des albums comme The Marshall Mathers LP et The Eminem Show.",
-            });
-
-            artistes.Add(new Artiste
-            {
-                IdArtiste = 3,
-                Nom = "Stromae",
-                Biographie = "Stromae (Paul Van Haver), né en 1985 en Belgique, est un auteur-compositeur-interprète connu pour son mélange unique d’électro, de pop et d’influences urbaines. Il s’est fait connaître avec Alors on danse, puis a confirmé son succès avec des albums comme Racine carrée et Multitude. Son style se démarque par des textes forts (solitude, famille, société) et une identité visuelle très travaillée.",
-            });
+            artistes.Add(new Artiste { IdArtiste = 1, Nom = "Serge Gainsbourg", Biographie = "Pionnier de la variété française." });
+            artistes.Add(new Artiste { IdArtiste = 2, Nom = "Daft Punk", Biographie = "Duo casqué pionnier de la French Touch, mêlant house, synthpop et disco." });
+            artistes.Add(new Artiste { IdArtiste = 3, Nom = "Boards of Canada", Biographie = "Frères écossais célèbres pour leurs mélodies nostalgiques et leurs samples obscurs." });
+            artistes.Add(new Artiste { IdArtiste = 4, Nom = "Bicep", Biographie = "Duo nord-irlandais incontournable de la scène house et techno contemporaine." });
+            artistes.Add(new Artiste { IdArtiste = 5, Nom = "Kraftwerk", Biographie = "Pionniers allemands absolus de la musique électronique dès les années 1970." });
+            artistes.Add(new Artiste { IdArtiste = 6, Nom = "Burial", Biographie = "Producteur londonien insaisissable, figure de proue du genre dubstep et future garage." });
+            artistes.Add(new Artiste { IdArtiste = 7, Nom = "Peggy Gou", Biographie = "DJ et productrice sud-coréenne, créatrice d'une house énergique aux influences acid." });
+            artistes.Add(new Artiste { IdArtiste = 8, Nom = "Laurent Garnier", Biographie = "DJ historique et pilier de la scène techno et house en France." });
 
             return artistes;
         }
@@ -49,7 +37,7 @@ namespace Webzine.Entity.Fixtures
         /// <return>Un object artiste</return>
         public static Artiste? TrouverParId(int artisteId)
         {
-            return TousLesArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
+            return CreerArtistes().FirstOrDefault(a => a.IdArtiste == artisteId);
         }
 
         /// <summary>
@@ -64,10 +52,10 @@ namespace Webzine.Entity.Fixtures
                 return null;
             }
 
-            nom = nom.Trim(); // Supprimer les espaces superflus
+            nom = nom.Trim();
 
-            return TousLesArtistes().FirstOrDefault(a => 
-            string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
+            return CreerArtistes()
+                .FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase)); // Comparer les noms en ignorant la casse
         }
     }
 }

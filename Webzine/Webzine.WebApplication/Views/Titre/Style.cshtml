@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Webzine.Entity.Titre>
+
+@{
+    // On change le titre de l'onglet du navigateur dynamiquement
+    ViewData["Title"] = $"Titres {ViewBag.NomDuStyle}";
+}
+
+<div class="mb-4">
+
+    <h1 class="mb-4">Titres ayant le style @ViewBag.NomDuStyle</h1>
+
+    <hr class="mb-4" />
+
+    <div class="d-flex flex-column gap-4 mt-4">
+
+        @if (!Model.Any())
+        {
+            <p class="text-muted">Aucun titre n'a été trouvé pour ce style de musique.</p>
+        }
+        else
+        {
+            @foreach (var titre in Model)
+            {
+                <div class="d-flex align-items-center">
+
+                    <div class="flex-shrink-0 me-3">
+                        <img src="@titre.UrlJaquette" alt="Jaquette de @titre.Libelle" style="width: 80px; height: 80px; object-fit: cover;" />
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <div class="mb-1">
+                            <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@titre.IdTitre" class="text-primary text-decoration-none fs-5">
+                                @titre.Artiste.Nom - @titre.Libelle
+                            </a>
+                        </div>
+                        <div class="text-dark">
+                            Durée : @titre.Duree.ToString("mm\\:ss")
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+</div>
