@@ -412,3 +412,6 @@ FodyWeavers.xsd
 # Built Visual Studio Code Extensions
 *.vsix
 
+/Webzine/Webzine.WebApplication/wwwroot/lib
+/Webzine/Webzine.WebApplication/wwwroot/lib/bootstrap-icons
+/Webzine/Webzine.WebApplication/wwwroot/lib/bootstrap

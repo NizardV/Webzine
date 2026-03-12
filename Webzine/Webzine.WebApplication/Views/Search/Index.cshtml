@@ -1,0 +1,61 @@
+@model Webzine.WebApplication.ViewModels.SearchResultsModel
+
+@{
+    ViewData["Title"] = "Moteur de recherche";
+}
+
+<h1>Résultats de la recherche pour "@Model.Query"</h1>
+
+<section class="mt-4">
+    <h2>Artistes</h2>
+
+    @if (Model.Artistes.Count == 0)
+    {
+        <p class="text-muted">Aucun artiste.</p>
+    }
+    else
+    {
+        <ul class="list-unstyled">
+            @foreach (var artiste in Model.Artistes)
+            {
+                <li>
+                    <i class="bi bi-person-fill"></i>
+                    <a asp-controller="Artiste" asp-action="DetailsArtiste" asp-route-nom="@artiste.Nom">@artiste.Nom</a>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+<section class="mt-4">
+    <h2>Titres</h2>
+
+    @if (Model.Titres.Count == 0)
+    {
+        <p class="text-muted">Aucun titre.</p>
+    }
+    else
+    {
+        <div class="d-grid gap-3">
+            @foreach (var titre in Model.Titres)
+            {
+                <div class="d-flex gap-3 align-items-start">
+                    <div style="width:60px;" class="flex-shrink-0">
+                        @if (!string.IsNullOrWhiteSpace(titre.UrlJaquette))
+                        {
+                            <img src="@titre.UrlJaquette" alt="Jaquette" class="img-fluid rounded" style="width:60px;height:60px;object-fit:cover;" />
+                        }
+                    </div>
+                    <div>
+                        <div>
+                            <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@titre.IdTitre">
+                                @titre.Artiste?.Nom - @titre.Libelle
+                            </a>
+                        </div>
+                     <div class="text-muted small">Durée : @titre.Duree.ToString("mm\\:ss")</div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

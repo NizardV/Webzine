@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Webzine.Entity.Titre>
+
+<div class="mt-4">
+    <h2>Titres</h2>
+    <hr />
+
+    <div class="mb-3">
+        <a asp-area="Administration" asp-controller="Titre" asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-style"></i> Ajouter un nouveau titre
+        </a>
+    </div>
+
+    <div class="w-100">
+        <table class="table table-striped table-bordered admin-table w-100">
+            <thead>
+                <tr>
+                    <th>Artiste</th>
+                    <th>Titre</th>
+                    <th>Styles</th>
+                    <th class="text-center">Durée</th>
+                    <th>Date de sortie</th>
+                    <th class="metric-col"><i class="bi bi-eye text-dark" aria-hidden="true"></i><span class="visually-hidden">Lectures</span></th>
+                    <th class="metric-col"><i class="bi bi-hand-thumbs-up text-dark" aria-hidden="true"></i><span class="visually-hidden">Likes</span></th>
+                    <th class="metric-col"><i class="bi bi-chat-left-text text-dark" aria-hidden="true"></i><span class="visually-hidden">Commentaires</span></th>
+                    <th class="text-center col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var titre in Model)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            @(titre.Artiste?.Nom ?? $"Artiste #{titre.IdArtiste}")
+                        </td>
+                        <td class="align-middle">@titre.Libelle</td>
+                        <td class="align-middle">
+                            @if (titre.Styles?.Any() == true)
+                            {
+                                @string.Join(", ", titre.Styles.Select(s => s.Libelle))
+                            }
+                        </td>
+                        <td class="align-middle text-center">@titre.Duree.ToString("mm':'ss")</td>
+                        <td class="align-middle">@titre.DateSortie.ToString("dd/MM/yyyy")</td>
+                        <td class="metric-col">@titre.NbLectures</td>
+                        <td class="metric-col">@titre.NbLikes</td>
+                        <td class="metric-col">@(titre.Commentaires?.Count ?? 0)</td>
+                        <td class="text-center col-actions">
+                            <a asp-area="Administration"
+                                   asp-controller="Titre"
+                                   asp-action="Edit"
+                                   asp-route-id="@titre.IdTitre"
+                                   class="btn action-btn"
+                                   title="Éditer">
+                                <i class="bi bi-pencil-square text-primary" aria-hidden="true"></i>
+                                <span class="visually-hidden">Éditer</span>
+                            </a>
+                            <a asp-area="Administration"
+                                   asp-controller="Titre"
+                                   asp-action="Delete"
+                                   asp-route-id="@titre.IdTitre"
+                                   class="btn action-btn ms-1"
+                                   title="Supprimer">
+                                <i class="bi bi-trash text-primary" aria-hidden="true"></i>
+                                <span class="visually-hidden">Supprimer</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

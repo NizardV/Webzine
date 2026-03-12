@@ -1,0 +1,27 @@
+﻿@model Webzine.Entity.Artiste
+
+@{
+    ViewData["Title"] = "Supprimer un artiste";
+}
+
+<div class="mt-4">
+    <h2>Supprimer un artiste</h2>
+
+    <hr class="mb-4" />
+
+    <p class="mb-4">
+        Etes-vous sûr de vouloir supprimer l'artiste "@Model.Nom" ?
+    </p>
+
+    <form asp-area="Administration" asp-controller="Artiste" asp-action="DeleteConfirmed" asp-route-id="@Model.IdArtiste" method="post" class="mb-5">
+
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Artiste" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des artistes
+        </a>
+    </div>
+</div>
