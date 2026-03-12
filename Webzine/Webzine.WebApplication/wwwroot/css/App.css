@@ -1,5 +1,11 @@
-/* Visitor-facing tweaks for the reference home page */
+/*
+ * App.css
+ * Unique fichier CSS custom autorisé (Cf. cahier des charges).
+ *
+ * Note: bootstrap est conservé pour la mise en forme générale.
+ */
 
+/* Home cards */
 .titre-card {
     background: #f8f9fa;
     border-radius: 0.25rem;
@@ -24,6 +30,7 @@
     border-radius: 0.25rem;
 }
 
+/* Popular titles */
 .popular-card img {
     width: 100%;
     aspect-ratio: 1 / 1;

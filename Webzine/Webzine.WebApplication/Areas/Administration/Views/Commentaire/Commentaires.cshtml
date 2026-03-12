@@ -15,7 +15,20 @@
             @foreach (var commentaire in Model.Commentaires)
             {
                 <tr class="table-light">
-                    <td>@commentaire.Titre.Libelle</td>
+                    <td>
+                        @if (commentaire.Titre is not null)
+                        {
+                            <a class="text-decoration-none"
+                               asp-area=""
+                               asp-controller="Titre"
+                               asp-action="DetailsTitre"
+                               asp-route-id="@commentaire.Titre.IdTitre">@commentaire.Titre.Libelle</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">(titre introuvable)</span>
+                        }
+                    </td>
                     <td>@commentaire.Auteur</td>
                     <td>@commentaire.Contenu</td>
                     <td>@commentaire.DateCreation</td>
