@@ -16,6 +16,7 @@
                 <tr>
                     <th>Artiste</th>
                     <th>Titre</th>
+                    <th>Styles</th>
                     <th class="text-center">Durée</th>
                     <th>Date de sortie</th>
                     <th class="metric-col"><i class="bi bi-eye text-dark" aria-hidden="true"></i><span class="visually-hidden">Lectures</span></th>
@@ -32,6 +33,12 @@
                             @(titre.Artiste?.Nom ?? $"Artiste #{titre.IdArtiste}")
                         </td>
                         <td class="align-middle">@titre.Libelle</td>
+                        <td class="align-middle">
+                            @if (titre.Styles?.Any() == true)
+                            {
+                                @string.Join(", ", titre.Styles.Select(s => s.Libelle))
+                            }
+                        </td>
                         <td class="align-middle text-center">@titre.Duree.ToString("mm':'ss")</td>
                         <td class="align-middle">@titre.DateSortie.ToString("dd/MM/yyyy")</td>
                         <td class="metric-col">@titre.NbLectures</td>
