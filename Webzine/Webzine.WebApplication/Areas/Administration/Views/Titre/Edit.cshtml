@@ -1,0 +1,86 @@
+﻿@model Webzine.Entity.Titre
+
+@{
+    ViewData["Title"] = "Editer un titre";
+}
+
+<div class="mt-4">
+    <h2>Editer un titre</h2>
+    <hr class="mb-4" />
+
+    <form asp-area="Administration" asp-controller="Titre" asp-action="Edit" asp-route-id="@Model.IdTitre" method="post" class="mb-5">
+        <input asp-for="IdTitre" type="hidden" />
+
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label asp-for="IdArtiste" class="form-label">Id artiste</label>
+                <input asp-for="IdArtiste" class="form-control" />
+                <span asp-validation-for="IdArtiste" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Libelle" class="form-label"></label>
+                <input asp-for="Libelle" class="form-control" />
+                <span asp-validation-for="Libelle" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Album" class="form-label"></label>
+                <input asp-for="Album" class="form-control" />
+                <span asp-validation-for="Album" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="DateSortie" class="form-label"></label>
+                <input asp-for="DateSortie" type="date" class="form-control" />
+                <span asp-validation-for="DateSortie" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Duree" class="form-label"></label>
+                <input asp-for="Duree" type="time" step="1" class="form-control" />
+                <span asp-validation-for="Duree" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="UrlJaquette" class="form-label"></label>
+                <input asp-for="UrlJaquette" class="form-control" />
+                <span asp-validation-for="UrlJaquette" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="UrlEcoute" class="form-label"></label>
+                <input asp-for="UrlEcoute" class="form-control" />
+                <span asp-validation-for="UrlEcoute" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Chronique" class="form-label"></label>
+                <textarea asp-for="Chronique" class="form-control" rows="8"></textarea>
+                <span asp-validation-for="Chronique" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="NbLectures" class="form-label"></label>
+                <input asp-for="NbLectures" class="form-control" readonly/>
+                <span asp-validation-for="NbLectures" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="NbLikes" class="form-label"></label>
+                <input asp-for="NbLikes" class="form-control" readonly/>
+                <span asp-validation-for="NbLikes" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        </div>
+    </form>
+
+    <div>
+        <a asp-area="Administration" asp-controller="Titre" asp-action="Index" class="text-decoration-none">
+            Retour à l'administration des titres
+        </a>
+    </div>
+</div>

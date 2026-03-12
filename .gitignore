@@ -413,3 +413,5 @@ FodyWeavers.xsd
 *.vsix
 
 /Webzine/Webzine.WebApplication/wwwroot/lib
+/Webzine/Webzine.WebApplication/wwwroot/lib/bootstrap-icons
+/Webzine/Webzine.WebApplication/wwwroot/lib/bootstrap

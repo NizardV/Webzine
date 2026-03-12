@@ -2,29 +2,28 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
-    <PackageReference Include="NLog.Targets.Loki" Version="2.4.0" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.2" />
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="MSTest" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Webzine.Business.Contracts\Webzine.Business.Contracts.csproj" />
+    <ProjectReference Include="..\Webzine.Business\Webzine.Business.csproj" />
+    <ProjectReference Include="..\Webzine.Documentation\Webzine.Documentation.csproj" />
+    <ProjectReference Include="..\Webzine.EntitiesContext\Webzine.EntitiesContext.csproj" />
+    <ProjectReference Include="..\Webzine.Entity\Webzine.Entity.csproj" />
+    <ProjectReference Include="..\Webzine.Repository.Contracts\Webzine.Repository.Contracts.csproj" />
+    <ProjectReference Include="..\Webzine.Repository\Webzine.Repository.csproj" />
+    <ProjectReference Include="..\Webzine.WebApplication\Webzine.WebApplication.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,108 @@
+﻿@model Webzine.WebApplication.ViewModels.TitreModel
+
+@{
+    ViewData["Title"] = $"{Model.Titre.Libelle}";
+}
+
+<div class="mb-2">
+    <h1 class="h3 mb-1">
+        <a asp-controller="Artiste"
+           asp-action="DetailsArtiste"
+           asp-route-nom="@Model.Titre.Artiste?.Nom"
+           class="text-decoration-none">
+            @Model.Titre.Artiste?.Nom
+        </a>
+        - @Model.Titre.Libelle
+    </h1>
+    <div class="text-muted small">
+        <i class="bi bi-calendar3"></i>
+        @Model.Titre.DateSortie.ToString("dd/MM/yyyy")
+        <span class="ms-3">
+            <i class="bi bi-eye"></i> @Model.Titre.NbLectures
+        </span>
+        <span class="ms-3">
+            <i class="bi bi-hand-thumbs-up"></i> @Model.Titre.NbLikes
+        </span>
+        <span class="ms-3">
+            <i class="bi bi-tags"></i>
+            @if (Model.Titre.Styles?.Any() == true)
+            {
+                @string.Join(", ", Model.Titre.Styles.Select(s => s.Libelle))
+            }
+        </span>
+    </div>
+</div>
+
+<hr class="mb-4" />
+
+@if (!string.IsNullOrWhiteSpace(Model.Titre.UrlJaquette))
+{
+    <div class="mb-4">
+        <img src="@Model.Titre.UrlJaquette" alt="Jaquette" class="img-fluid rounded" style="max-height: 260px; object-fit: cover;" />
+    </div>
+}
+
+<div class="mb-4">
+    <h2 class="h5">Chronique</h2>
+    <p class="mb-0" style="white-space: pre-line;">@Model.Titre.Chronique</p>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Titre.UrlEcoute))
+{
+    <iframe width="auto" height="auto" src="@Model.Titre.UrlEcoute" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+}
+
+<div class="mb-5">
+    <h1 class="h5 mb-3">Donne ton avis sur le titre</h1>
+
+    <form asp-controller="Home" asp-action="AjouterCommentaire" asp-route-id="@Model.Titre.IdTitre" method="post" class="row g-3">
+        <div class="col-12 col-md-6">
+            <label asp-for="Auteur" class="form-label"></label>
+            <input asp-for="Auteur" class="form-control" placeholder="Votre nom (exemple : Emmanuel)" required/>
+            <span asp-validation-for="Auteur" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Contenu" class="form-label"></label>
+            <textarea asp-for="Contenu" class="form-control" rows="3" placeholder="Votre commentaire..." required></textarea>
+            <span asp-validation-for="Contenu" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
+        </div>
+    </form>
+</div>
+
+<div class="mb-4">
+    <h2 class="h5">Commentaires</h2>
+
+    @if (Model.Commentaires == null || !Model.Commentaires.Any())
+    {
+        <p class="text-muted">Aucun commentaire pour le moment.</p>
+    }
+    else
+    {
+        <div class="d-grid gap-3">
+            @foreach (var c in Model.Commentaires.OrderByDescending(x => x.DateCreation))
+            {
+                <div class="d-flex gap-3">
+                    <div class="text-primary" style="font-size: 2.5rem; line-height: 1;">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">
+                            @c.Auteur
+                            <span class="text-muted small">le @c.DateCreation.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div>@c.Contenu</div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Home" class="text-decoration-none">Retour à l'accueil</a>
+</div>

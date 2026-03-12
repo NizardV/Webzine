@@ -1,0 +1,51 @@
+﻿@model Webzine.WebApplication.ViewModels.ArtisteModel
+@{
+    ViewData["Title"] = $"{Model.Artiste.Nom}";
+}
+
+<div class="container py-4">
+
+    <h1 class="mb-2">@Model.Artiste.Nom</h1>
+    <hr class="my-4" />
+
+    <p class="text-muted mb-4">@Model.Artiste.Biographie</p>
+
+    <h2 class="h3 mb-4">Albums</h2>
+    <hr class="my-4" />
+
+    @foreach (var album in Model.Albums)
+    {
+        <div class="row mb-4">
+            <div class="col-3 col-md-2">
+                <img src="@album.UrlJaquette"
+                     class="img-fluid"
+                     alt="@album.Album" />
+            </div>
+
+            <div class="col-9 col-md-10">
+                <h3 class="h5 fw-semibold text-center mb-2">@album.Album</h3>
+
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th class="text-muted fw-semibold" style="width: 90px;">Durée</th>
+                            <th class="text-muted fw-semibold">Titre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var titre in album.Titres)
+                        {
+                            <tr>
+                                <td class="text-muted">@titre.Duree.ToString("mm\\:ss")</td>
+                                <td>
+                                    <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@titre.IdTitre">@titre.Libelle</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    }
+</div>

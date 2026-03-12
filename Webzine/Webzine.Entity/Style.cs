@@ -1,27 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Timers;
 
-namespace Webzine.Entity;
-
-/// <summary>
-/// Représente un style musical (ex: Rock, Jazz, Électro).
-/// </summary>
-public class Style
+namespace Webzine.Entity
 {
-    /// <summary>
-    /// Identifiant unique du style en base de données.
-    /// </summary>
-    [Key]
-    public int Id { get; set; }
 
     /// <summary>
-    /// Nom ou libellé affichable du style.
+    /// Représente un style musical (ex: Rock, Jazz, Électro).
     /// </summary>
-    [Required]
-    public string Libelle { get; set; } = string.Empty;
+    [Table("Style")]
+    public class Style
+    {
+        /// <summary>
+        /// Identifiant unique du style en base de données.
+        /// </summary>
+        [Key]
+        public int IdStyle { get; set; }
 
-    /// <summary>
-    /// Liste des titres associés au style.
-    /// </summary>
-    public virtual ICollection<Titre> Titres { get; set; } = new List<Titre>();
+        /// <summary>
+        /// Nom ou libellé affichable du style.
+        /// </summary>
+        [Required]
+        [Display(Name = "Libellé")]
+        [MaxLength(50)]
+        [MinLength(2)]
+        public string Libelle { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Liste des titres associés au style.
+        /// </summary>
+        public virtual ICollection<Titre> Titres { get; set; } = new List<Titre>();
+    }
+
 }
