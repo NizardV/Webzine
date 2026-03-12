@@ -5,7 +5,15 @@
 }
 
 <div class="mb-2">
-    <h1 class="h3 mb-1">@Model.Titre.Artiste?.Nom - @Model.Titre.Libelle</h1>
+    <h1 class="h3 mb-1">
+        <a asp-controller="Artiste"
+           asp-action="DetailsArtiste"
+           asp-route-nom="@Model.Titre.Artiste?.Nom"
+           class="text-decoration-none">
+            @Model.Titre.Artiste?.Nom
+        </a>
+        - @Model.Titre.Libelle
+    </h1>
     <div class="text-muted small">
         <i class="bi bi-calendar3"></i>
         @Model.Titre.DateSortie.ToString("dd/MM/yyyy")

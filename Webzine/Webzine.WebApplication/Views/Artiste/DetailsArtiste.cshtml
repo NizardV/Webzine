@@ -1,6 +1,6 @@
 ﻿@model Webzine.WebApplication.ViewModels.ArtisteModel
 @{
-    Layout = "_Layout";
+    ViewData["Title"] = $"{Model.Artiste.Nom}";
 }
 
 <div class="container py-4">
@@ -33,12 +33,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var t in album.Titres)
+                        @foreach (var titre in album.Titres)
                         {
                             <tr>
-                                <td class="text-muted">@t.Duree</td>
+                                <td class="text-muted">@titre.Duree.ToString("mm\\:ss")</td>
                                 <td>
-                                    <a href="#" class="link-primary text-decoration-none">@t.Libelle</a>
+                                    <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@titre.IdTitre">@titre.Libelle</a>
                                 </td>
                             </tr>
                         }
