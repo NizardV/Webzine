@@ -15,7 +15,7 @@
             @foreach (var commentaire in Model.Commentaires)
             {
                 <tr class="table-light">
-                    <td>@commentaire.Titre.Libelle</td>
+                    <td><a asp-area="" asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@commentaire.Titre.IdTitre">@commentaire.Titre.Libelle</a></td>
                     <td>@commentaire.Auteur</td>
                     <td>@commentaire.Contenu</td>
                     <td>@commentaire.DateCreation</td>

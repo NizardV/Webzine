@@ -14,11 +14,26 @@
         /// Retourne la vue principale de l'application.
         /// </summary>
         /// <returns>Un objet IActionResult qui rend la vue associée à la page d'accueil.</returns>
-        public IActionResult Home()
+        [HttpGet]
+        public IActionResult Home(int page = 0)
         {
-            ICollection<TitreModel> model = TitreFactory.GetTitres().Select(t => new TitreModel { Titre = t }).ToList();
+            const int pageSize = 3;
 
-            return this.View(model);
+            var titres = TitreFactory.GetTitres().Select(t => new TitreModel { Titre = t }).ToList();
+            var totalItems = titres.Count;
+            var maxPage = totalItems == 0 ? 0 : (int)Math.Ceiling(totalItems / (double)pageSize) - 1;
+            var currentPage = Math.Clamp(page, 0, maxPage);
+
+            var vm = new HomeViewModel
+            {
+                AllTitres = titres,
+                PageSize = pageSize,
+                CurrentPage = currentPage,
+                MaxPage = maxPage,
+                PagedTitres = titres.Skip(currentPage * pageSize).Take(pageSize).ToList(),
+            };
+
+            return this.View(vm);
         }
 
         /// <summary>

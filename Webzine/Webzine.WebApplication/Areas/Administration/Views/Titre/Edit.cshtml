@@ -38,7 +38,7 @@
 
             <div class="col-12 col-md-6">
                 <label asp-for="Duree" class="form-label"></label>
-                <input asp-for="Duree" type="time" step="1" class="form-control" />
+                <input class="form-control" name="Duree" value="@Model.Duree.ToString("mm\\:ss")" inputmode="numeric" placeholder="mm:ss" pattern="^([0-5]?[0-9]):([0-5][0-9])$" />
                 <span asp-validation-for="Duree" class="text-danger"></span>
             </div>
 
@@ -58,6 +58,22 @@
                 <label asp-for="Chronique" class="form-label"></label>
                 <textarea asp-for="Chronique" class="form-control" rows="8"></textarea>
                 <span asp-validation-for="Chronique" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Styles</label>
+                <div class="row g-2">
+                    @foreach (var style in (IEnumerable<Webzine.Entity.Style>)(ViewBag.AllStyles ?? Array.Empty<Webzine.Entity.Style>()))
+                    {
+                        var isSelected = ((IEnumerable<string>)(ViewBag.SelectedStyleIds ?? Array.Empty<string>())).Contains(style.IdStyle.ToString());
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedStyleIds" value="@style.IdStyle" checked="@isSelected" id="style_@style.IdStyle" />
+                                <label class="form-check-label" for="style_@style.IdStyle">@style.Libelle</label>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
 
             <div class="col-12 col-md-6">
