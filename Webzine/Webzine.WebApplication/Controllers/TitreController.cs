@@ -7,7 +7,7 @@ namespace Webzine.WebApplication.Controllers
     public class TitreController : Controller
     {
         [HttpGet]
-        [Route("Titre/DetailsTitre/{id}")]
+        [Route("titre/{id}")]
         public IActionResult DetailsTitre(int id)
         {
             var titre = TitreFactory.GetTitreById(id);
