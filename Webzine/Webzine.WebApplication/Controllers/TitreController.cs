@@ -41,7 +41,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Titre/Like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
@@ -90,7 +89,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Enregistre l'édition légère (IHM) d'un titre, sans persistance.
