@@ -18,7 +18,7 @@
                 <div class="flex-grow-1">
                     <a class="titre-card-title"
                            asp-controller="Home"
-                           asp-action="DetailTitre"
+                           asp-action="Details"
                            asp-route-id="@item.Titre.IdTitre">
                         @item.Titre.Artiste?.Nom - @item.Titre.Libelle
                     </a>
@@ -29,7 +29,7 @@
 
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <a asp-controller="Titre"
-                               asp-action="DetailsTitre"
+                               asp-action="Details"
                                asp-route-id="@item.Titre.IdTitre"
                                class="btn btn-primary btn-sm">
                             Lire la suite

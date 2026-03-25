@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bogus;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Webzine.Entity;
@@ -7,64 +8,32 @@ namespace Webzine.Entity.Fixtures
 {
     public class CommentaireFactory
     {
+        // On crée une variable statique pour stocker la liste. 
+        // Ainsi, les commentaires ne changent pas à chaque fois qu'on rafraîchit la page !
+        private static List<Commentaire>? _commentaires;
         public static List<Commentaire> GetCommentaires()
         {
-            var commentaires = new List<Commentaire>();
-            commentaires.Add(new Commentaire
+            // Si la liste a déjà été générée, on la retourne directement
+            if (_commentaires != null)
             {
-                IdCommentaire = 1,
-                Contenu = "C'est un super article !",
-                Auteur = "Jean Dupont",
-                DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                IdTitre = 1,
-                Titre = new Titre
-                {
-                    IdTitre = 1,
-                    Libelle = "Chanson 1"
-                }
-            });
-            commentaires.Add(new Commentaire
-            {
-                IdCommentaire = 2,
-                Contenu = "Super chanson !",
-                Auteur = "Michel",
-                DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                IdTitre = 2,
-                Titre = new Titre
-                {
-                    IdTitre = 2,
-                    Libelle = "Chanson 2"
-                }
-            });
-            commentaires.Add(new Commentaire
-            {
-                IdCommentaire = 3,
-                Contenu = "Cette chanson me rappelle mon enfance",
-                Auteur = "xxxGamerxxx",
-                DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                IdTitre = 3,
-                Titre = new Titre
-                {
-                    IdTitre = 3,
-                    Libelle = "Chanson 3"
-                }
-            });
-            commentaires.Add(new Commentaire
-            {
-                IdCommentaire = 4,
-                Contenu = "Cette chanson est géniale",
-                Auteur = "BonjourCMoi",
-                DateCreation = DateOnly.FromDateTime(DateTime.Now),
-                IdTitre = 3,
-                Titre = new Titre
-                {
-                    IdTitre = 3,
-                    Libelle = "Chanson 3"
-                }
-            });
+                return _commentaires;
+            }
 
-            return commentaires;
+            // Ça permet d'avoir toujours les mêmes fausses données à chaque lancement de l'app.
+            Randomizer.Seed = new Random(12345);
 
+            // On configure les règles de génération pour l'entité Commentaire
+            var commentaireFaker = new Faker<Commentaire>("fr") // "fr" pour générer du texte en français
+                .RuleFor(c => c.IdCommentaire, f => f.IndexGlobal + 1) // Auto-incrément : 1, 2, 3...
+                .RuleFor(c => c.Auteur, f => f.Internet.UserName()) // Génère un pseudo réaliste
+                .RuleFor(c => c.DateCreation, f => DateOnly.FromDateTime(f.Date.Recent(60))) // Une date dans les 60 derniers jours
+                .RuleFor(c => c.Contenu, f => f.Lorem.Paragraph()) // Génère un paragraphe de "Lorem Ipsum"
+                .RuleFor(c => c.IdTitre, f => f.Random.Number(1, 10)); // On génère juste un faux ID entre 1 et 10 (selon le nombre de titres prévu)
+
+            // On demande à Bogus de générer 30 commentaires d'un coup
+            _commentaires = commentaireFaker.Generate(30);
+
+            return _commentaires;
         }
         public static List<Commentaire> GetCommentairesByTitre(int idTitre)
         {
