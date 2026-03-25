@@ -28,10 +28,10 @@ namespace Webzine.Entity.Fixtures
                 .RuleFor(c => c.Auteur, f => f.Internet.UserName()) // Génère un pseudo réaliste
                 .RuleFor(c => c.DateCreation, f => DateOnly.FromDateTime(f.Date.Recent(60))) // Une date dans les 60 derniers jours
                 .RuleFor(c => c.Contenu, f => f.Lorem.Paragraph()) // Génère un paragraphe de "Lorem Ipsum"
-                .RuleFor(c => c.IdTitre, f => f.Random.Number(1, 10)); // On génère juste un faux ID entre 1 et 10 (selon le nombre de titres prévu)
+                .RuleFor(c => c.IdTitre, f => f.Random.Number(1, 200)); // On génère juste un faux ID entre 1 et 10 (selon le nombre de titres prévu)
 
             // On demande à Bogus de générer 30 commentaires d'un coup
-            _commentaires = commentaireFaker.Generate(30);
+            _commentaires = commentaireFaker.Generate(100);
 
             return _commentaires;
         }
