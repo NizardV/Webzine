@@ -9,73 +9,26 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/App.css" />
-</head>
-<body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Home">Webzine</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item text-secondary">
-                        <a class="nav-link active text-secondary" aria-current="page" asp-area="" asp-controller="Home" asp-action="Home">
-                            <i class="bi bi-house "></i>
-                            Accueil
-                        </a>
-                        </li>
-                    <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle text-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-pencil-square text-secondary"></i>
-                            Administration
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard" asp-action="Dashboard">Tableau de bord</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Artiste" asp-action="Index">Artistes</a></li>
-                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Commentaires" asp-action="Index">Commentaires</a></li>
-                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Style" asp-action="Index">Styles</a></li>
-                            <li><a class="dropdown-item" asp-area="Administration" asp-controller="Titre" asp-action="Index">Titres</a></li>
-                        </ul>
-                        </li>
-                    <li class="nav-item text-secondary">
-                        <a class="nav-link text-secondary" asp-area="" asp-controller="Contact" asp-action="Index">
-                            <i class="bi bi-envelope-fill"></i>
-                            Contact
-                        </a>
-                    </li>
-                    </ul>
-             <form class="d-flex" role="search" asp-controller="Search" asp-action="Index" method="get">
-                    <input class="form-control me-2" name="q" value="@Context.Request.Query["q"]" type="search" placeholder="Trouver un artiste/titre" aria-label="Search" />
-                    <button class="btn btn-outline-success bg-primary border border-0" type="submit">
-                        <i class="bi bi-search text-light"></i>
-                    </button>
-                    </form>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/App.css" />
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+    
+        <partial name="_Navbar" />
+
+        <main class="container-fluid mt-4 flex-grow-1">
+            <div class="row g-4">
+                <div class="col-12 col-lg-9">
+                    @RenderBody()
                 </div>
+                <aside class="col-12 col-lg-3">
+                    @await Component.InvokeAsync("Sidebar")
+                </aside>
             </div>
-        </nav>
-    </header>
+        </main>
 
-    <main class="container-fluid mt-4 flex-grow-1">
-        <div class="row g-4">
-            <div class="col-12 col-lg-9">
-                @RenderBody()
-            </div>
-            <aside class="col-12 col-lg-3">
-                @await Component.InvokeAsync("Sidebar")
-            </aside>
-        </div>
-    </main>
+        <partial name="_Footer" />
 
-    <footer class="bg-light mt-auto">
-        <div class="container-fluid py-3">
-            <div class="text-muted small">© ASP.NET Core - DIIAGE 2025 - 2026</div>
-        </div>
-    </footer>
-
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>
