@@ -12,7 +12,7 @@
         public TitreFactory()
         {
             var styles = LocalStylesFactory.CreerStyles();
-            var artistes = ArtisteFactory.CreerArtistes();
+            var artistes = ArtisteFactory.CreerArtistes(8);
 
             // Helper pour récupérer un style existant par id
             Style GetStyle(int id) => styles.First(s => s.IdStyle == id);
