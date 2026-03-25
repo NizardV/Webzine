@@ -11,7 +11,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("artistes")]
         public IActionResult Index()
         {
-            var artistes = ArtisteFactory.CreerArtistes();
+            var artistes = ArtisteFactory.CreerArtistes(8);
             return View(artistes);
         }
 
@@ -34,7 +34,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("artiste/edit/{id}")]
         public IActionResult Edit(int id)
         {
-            var artiste = ArtisteFactory.CreerArtistes().FirstOrDefault(a => a.IdArtiste == id);
+            var artiste = ArtisteFactory.CreerArtistes(Math.Max(8, id)).FirstOrDefault(a => a.IdArtiste == id);
 
             if (artiste == null)
             {
@@ -59,7 +59,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("artiste/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            var artiste = ArtisteFactory.CreerArtistes().FirstOrDefault(a => a.IdArtiste == id);
+            var artiste = ArtisteFactory.CreerArtistes(Math.Max(8, id)).FirstOrDefault(a => a.IdArtiste == id);
 
             if (artiste == null)
             {
