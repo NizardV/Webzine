@@ -28,6 +28,7 @@ namespace Webzine.Entity
 
         [ForeignKey(nameof(Titre.IdTitre))]
         public int IdTitre { get; set; }
+
         [Required]
         public Titre Titre { get; set; }
     }
