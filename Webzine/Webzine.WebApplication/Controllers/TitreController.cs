@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 using Webzine.WebApplication.ViewModels;
 
@@ -135,6 +136,31 @@ namespace Webzine.WebApplication.Controllers
 
             // On envoie la liste filtrée à la vue
             return View(titresDuStyle);
+        }
+
+        /// <summary>
+        /// Retourne la vue de détail d'un titre spécifique.
+        /// </summary>
+        /// <param name="id">Id du Titre</param>
+        /// <returns>Une vue</returns>
+        public IActionResult Details(int id)
+        {
+            Titre? titre = TitreFactory.GetTitreById(id);
+
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
+            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
+
+            TitreModel model = new TitreModel
+            {
+                Titre = titre,
+                Commentaires = commentaires,
+            };
+
+            return this.View(model);
         }
     }
 }
