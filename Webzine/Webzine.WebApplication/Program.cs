@@ -3,8 +3,17 @@
 // </copyright>
 
 using Microsoft.Extensions.FileProviders;
+using Webzine.EntitiesContext.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Ajout du singleton pour les données locales
+var data = SeedData.InitializeLocal();
+
+// Si on utilise les repo locaux
+builder.Services.AddSingleton(data);
+
+
 
 // Ajoute les services n�cessaires pour permettfre l'utilisation des
 // controllers avec des vues.
