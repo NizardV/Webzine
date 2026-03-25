@@ -11,7 +11,7 @@ namespace Webzine.Entity.Fixtures
         // On crée une variable statique pour stocker la liste. 
         // Ainsi, les commentaires ne changent pas à chaque fois qu'on rafraîchit la page !
         private static List<Commentaire>? _commentaires;
-        public static List<Commentaire> GetCommentaires()
+        public static List<Commentaire> CreerCommentaires()
         {
             // Si la liste a déjà été générée, on la retourne directement
             if (_commentaires != null)
@@ -37,7 +37,7 @@ namespace Webzine.Entity.Fixtures
         }
         public static List<Commentaire> GetCommentairesByTitre(int idTitre)
         {
-            var commentaires = GetCommentaires();
+            var commentaires = CreerCommentaires();
             return commentaires.Where(c => c.IdTitre == idTitre).ToList();
         }
     }
