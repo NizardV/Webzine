@@ -6,7 +6,7 @@ using Webzine.Entity.Fixtures;
 
 namespace Webzine.EntitiesContext.Seeders
 {
-    public class SeedData
+    public class SeedDataLocal
     {
         
         public static WebzineData Initialize()

@@ -61,6 +61,7 @@ namespace Webzine.Repository.Local
         }
         public void Update(Titre titre)
         {
+            throw new NotImplementedException();
         }
     }
 }

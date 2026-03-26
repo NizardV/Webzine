@@ -15,9 +15,9 @@ var dataSource = config["DataSource"];
 if (repoMode == "Local")
 {
     var data = dataSource == "Factories"
-        ? SeedData.Initialize()
+        ? SeedDataLocal.Initialize()
         //TODO Remplacer par spotify au jalon 3
-        : SeedData.Initialize();
+        : SeedDataLocal.Initialize();
 
     //Ajout du singleton pour les données locales
     builder.Services.AddSingleton(data);
@@ -26,7 +26,7 @@ if (repoMode == "Local")
     builder.Services.AddScoped<ITitreRepository, LocalTitreRepository>();
 
 }
-else if(repoMode == "Databse")
+else if(repoMode == "Database")
 {
     //En fonction de l'environnement on ajoute un dbContext différent
     if (environment == "Development")
@@ -64,7 +64,7 @@ if (repoMode == "Database")
 
     if (dataSource == "Factories")
     {
-        SeedData.Initialize();
+        SeedDataLocal.Initialize();
     }
     //    else if (dataSource == "Spotify")
     //    {
