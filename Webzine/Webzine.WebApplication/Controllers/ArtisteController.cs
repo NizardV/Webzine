@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Webzine.Entity.Fixtures;
+using Webzine.Repository.Contracts;
 using Webzine.WebApplication.ViewModels;
 
 namespace Webzine.WebApplication.Controllers
@@ -9,6 +10,12 @@ namespace Webzine.WebApplication.Controllers
     /// </summary>
     public class ArtisteController : Controller
     {
+        private readonly IArtisteRepository artisteRepository;
+
+        public ArtisteController(IArtisteRepository artisteRepository)
+        {
+            this.artisteRepository = artisteRepository;
+        }
         /// <summary>
         /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
         /// </summary>
@@ -16,7 +23,7 @@ namespace Webzine.WebApplication.Controllers
         [HttpGet("/artiste/{nom}")]
         public IActionResult DetailsArtiste(string nom)
         {
-            var artiste = ArtisteFactory.TrouverParNom(nom);
+            var artiste = this.artisteRepository.FindByName(nom);
             if (artiste == null)
             {
                 return NotFound();
