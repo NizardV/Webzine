@@ -22,6 +22,14 @@ namespace Webzine.Repository.Local
                 return;
             }
 
+            if (artiste.IdArtiste <= 0)
+            {
+                var nextId = this.data.artistes.Any()
+                    ? this.data.artistes.Max(a => a.IdArtiste) + 1
+                    : 1;
+                artiste.IdArtiste = nextId;
+            }
+
             this.data.artistes.Add(artiste);
         }
 
