@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 using Webzine.WebApplication.ViewModels;
 
@@ -11,10 +12,6 @@ namespace Webzine.WebApplication.Controllers
     /// </summary>
     public class TitreController : Controller
     {
-        private static string GetLikesKey(int id) => $"ui:titre:{id}:likes";
-
-        private static string GetChroniqueKey(int id) => $"ui:titre:{id}:chronique";
-
         [HttpGet]
         [Route("titre/{id}")]
         public IActionResult DetailsTitre(int id)
@@ -23,17 +20,6 @@ namespace Webzine.WebApplication.Controllers
             if (titre is null)
             {
                 return NotFound();
-            }
-
-            if (TempData.Peek(GetLikesKey(id)) is object likesObj
-                && int.TryParse(likesObj?.ToString(), out var likes))
-            {
-                titre.NbLikes = likes;
-            }
-
-            if (TempData.Peek(GetChroniqueKey(id)) is object chroniqueObj)
-            {
-                titre.Chronique = chroniqueObj?.ToString() ?? titre.Chronique;
             }
             var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
             return View(new TitreModel { Titre = titre, Commentaires = commentaires});
@@ -53,15 +39,7 @@ namespace Webzine.WebApplication.Controllers
             {
                 return NotFound();
             }
-
-            var current = titre.NbLikes;
-            if (TempData.Peek(GetLikesKey(id)) is object likesObj
-                && int.TryParse(likesObj?.ToString(), out var likes))
-            {
-                current = likes;
-            }
-
-            TempData[GetLikesKey(id)] = current + 1;
+            titre.NbLikes += 1;
             return RedirectToAction(nameof(DetailsTitre), new { id });
         }
 
@@ -78,12 +56,6 @@ namespace Webzine.WebApplication.Controllers
             {
                 return NotFound();
             }
-
-            if (TempData.Peek(GetChroniqueKey(id)) is object chroniqueObj)
-            {
-                titre.Chronique = chroniqueObj?.ToString() ?? titre.Chronique;
-            }
-
             return View(titre);
         }
 
@@ -104,7 +76,7 @@ namespace Webzine.WebApplication.Controllers
 
             if (!string.IsNullOrWhiteSpace(chronique))
             {
-                TempData[GetChroniqueKey(id)] = chronique;
+                titre.Chronique = chronique;
             }
 
             return RedirectToAction(nameof(DetailsTitre), new { id });
@@ -133,6 +105,31 @@ namespace Webzine.WebApplication.Controllers
 
             // On envoie la liste filtrée à la vue
             return View(titresDuStyle);
+        }
+
+        /// <summary>
+        /// Retourne la vue de détail d'un titre spécifique.
+        /// </summary>
+        /// <param name="id">Id du Titre</param>
+        /// <returns>Une vue</returns>
+        public IActionResult Details(int id)
+        {
+            Titre? titre = TitreFactory.GetTitreById(id);
+
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
+            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
+
+            TitreModel model = new TitreModel
+            {
+                Titre = titre,
+                Commentaires = commentaires,
+            };
+
+            return this.View(model);
         }
     }
 }

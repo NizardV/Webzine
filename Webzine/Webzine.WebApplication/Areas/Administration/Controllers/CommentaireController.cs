@@ -11,14 +11,15 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("Commentaires")]
         public IActionResult Commentaires()
         {
-            var commentaires = CommentaireFactory.GetCommentaires();
+            var commentaires = CommentaireFactory.CreerCommentaires();
             return View(new CommentairesAdministrationModel {Commentaires = commentaires});
         }
+
         [HttpGet]
         [Route("Commentaires/Supprimer/{id}")]
         public IActionResult Supprimer(int id)
         {
-            var commentaire = CommentaireFactory.GetCommentaires().FirstOrDefault(c => c.IdCommentaire == id);
+            var commentaire = CommentaireFactory.CreerCommentaires().FirstOrDefault(c => c.IdCommentaire == id);
             if (commentaire is not null)
             {
                 return View(commentaire);

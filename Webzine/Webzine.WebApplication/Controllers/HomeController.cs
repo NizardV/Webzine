@@ -15,7 +15,7 @@
         /// </summary>
         /// <returns>Un objet IActionResult qui rend la vue associée à la page d'accueil.</returns>
         [HttpGet]
-        public IActionResult Home(int page = 0)
+        public IActionResult Index(int page = 0)
         {
             const int pageSize = 3;
 
@@ -34,31 +34,6 @@
             };
 
             return this.View(vm);
-        }
-
-        /// <summary>
-        /// Retourne la vue de détail d'un titre spécifique.
-        /// </summary>
-        /// <param name="id">Id du Titre</param>
-        /// <returns>Une vue</returns>
-        public IActionResult DetailTitre(int id)
-        {
-            Titre? titre = TitreFactory.GetTitreById(id);
-
-            if (titre == null)
-            {
-                return this.NotFound();
-            }
-
-            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
-
-            TitreModel model = new TitreModel
-            {
-                Titre = titre,
-                Commentaires = commentaires,
-            };
-
-            return this.View("/Views/Titre/DetailsTitre.cshtml", model);
         }
     }
 }

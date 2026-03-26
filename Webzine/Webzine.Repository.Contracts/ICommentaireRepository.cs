@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Webzine.Entity;
 
 namespace Webzine.Repository.Contracts
 {
-    public class ICommentaireRepository
+    public interface ICommentaireRepository
     {
-
+        void Add(Commentaire commentaire);
+        void Delete(Commentaire commentaire);
+        Commentaire Find(int id);
+        IEnumerable<Commentaire> FindAll();
     }
 }
