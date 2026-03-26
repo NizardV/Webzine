@@ -17,6 +17,7 @@ namespace Webzine.Repository.Local
 
         public void Add(Titre titre)
         {
+            throw new NotImplementedException();
         }
         public int Count()
         {

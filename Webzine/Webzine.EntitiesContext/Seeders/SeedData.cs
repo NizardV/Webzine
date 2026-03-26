@@ -9,7 +9,7 @@ namespace Webzine.EntitiesContext.Seeders
     public class SeedData
     {
         
-        public static WebzineData InitializeLocal()
+        public static WebzineData Initialize()
         {
             var data = new WebzineData();
             var styles = LocalStylesFactory.CreerStyles();
@@ -24,6 +24,5 @@ namespace Webzine.EntitiesContext.Seeders
 
             return data;
         }
-
     }
 }

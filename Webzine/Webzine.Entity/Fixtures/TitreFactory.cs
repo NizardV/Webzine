@@ -10,10 +10,6 @@ namespace Webzine.Entity.Fixtures
     public class TitreFactory
     {
 
-        public TitreFactory()
-        {
-        }
-
         /// <summary>
         /// Retourne une liste de titres préconfigurés. Cette méthode peut être utilisée pour obtenir des instances de Titre
         /// </summary>
