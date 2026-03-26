@@ -65,7 +65,12 @@ if (repoMode == "Database")
 
     if (dataSource == "Factories")
     {
-        SeedDataLocal.Initialize();
+        if (environment == "Development")
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            SeedDataDb.Initialize(context);
+        }
     }
     //    else if (dataSource == "Spotify")
     //    {
