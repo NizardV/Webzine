@@ -8,7 +8,7 @@ namespace Webzine.Entity.Fixtures
 {
     public class CommentaireFactory
     {
-        // On crée une variable statique pour stocker la liste. 
+        // On crée une variable statique pour stocker la liste.
         // Ainsi, les commentaires ne changent pas à chaque fois qu'on rafraîchit la page !
         private static List<Commentaire>? _commentaires;
         public static List<Commentaire> CreerCommentaires()
