@@ -13,7 +13,7 @@ namespace Webzine.Entity.Fixtures
         /// Retourne une liste de titres préconfigurés. Cette méthode peut être utilisée pour obtenir des instances de Titre
         /// </summary>
         /// <returns>Liste de titres</returns>
-        public static ICollection<Titre> CreerTitres(List<Style> styles, List<Artiste> artistes, int nombreDeTitres)
+        public static List<Titre> CreerTitres(List<Style> styles, List<Artiste> artistes, int nombreDeTitres)
         {
             var titres = new List<Titre>();
             var faker = new Faker<Titre>()
