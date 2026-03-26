@@ -38,11 +38,11 @@ else if(repoMode == "Database")
         builder.Services.AddDbContext<WebzineDbContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
     }
-    //else if (environment == "Production")
-    //{
-    //    builder.Services.AddDbContext<WebzineDbContext>(options =>
-    //        options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
-    //}
+    else if (environment == "Production")
+    {
+        builder.Services.AddDbContext<WebzineDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+    }
 
     // Injection des repos DB
     //builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
