@@ -1,5 +1,7 @@
 ﻿using Webzine.Entity;
+using Webzine.EntitiesContext;
 using Webzine.Repository.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Webzine.Repository.Db
 {

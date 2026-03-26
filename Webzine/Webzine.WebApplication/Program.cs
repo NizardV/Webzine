@@ -5,6 +5,7 @@ using Webzine.Repository.Contracts;
 using Webzine.Repository.Local;
 using Webzine.EntitiesContext;
 using Webzine.Repository.Db;
+using Webzine.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration.GetSection("AppConfig");
@@ -24,7 +25,9 @@ if (repoMode == "Local")
 
     //Injecter les repo locaux
     builder.Services.AddScoped<ITitreRepository, LocalTitreRepository>();
-    builder.Services.AddSingleton<IArtisteRepository, LocalArtisteRepository>();
+    builder.Services.AddScoped<IArtisteRepository, LocalArtisteRepository>();
+    builder.Services.AddScoped<IStyleRepository, LocalStyleRepository>();
+    builder.Services.AddScoped<ICommentaireRepository, LocalCommentaireRepository>();
 
 }
 else if(repoMode == "Database")
@@ -44,11 +47,6 @@ else if(repoMode == "Database")
     // Injection des repos DB
     //builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
 }
-
-// Si on utilise les repo locaux
-builder.Services.AddSingleton(data);
-
-
 
 // Ajoute les services n�cessaires pour permettfre l'utilisation des
 // controllers avec des vues.
