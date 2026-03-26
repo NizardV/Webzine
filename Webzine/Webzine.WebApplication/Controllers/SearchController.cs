@@ -23,11 +23,11 @@ namespace Webzine.WebApplication.Controllers
                 return View(model);
             }
 
-            model.Artistes = ArtisteFactory.CreerArtistes(50)
+            model.Artistes = // Ajouter la logique pour recupérer à partir du repo
                 .Where(a => !string.IsNullOrWhiteSpace(a.Nom) && a.Nom.Contains(q, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            model.Titres = TitreFactory.GetTitres()
+            model.Titres = // Ajouter la logique pour recupérer à partir du repo
                 .Where(t =>
                     (!string.IsNullOrWhiteSpace(t.Libelle) && t.Libelle.Contains(q, StringComparison.OrdinalIgnoreCase))
                     || (!string.IsNullOrWhiteSpace(t.Artiste?.Nom) && t.Artiste.Nom.Contains(q, StringComparison.OrdinalIgnoreCase)))

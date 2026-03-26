@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Webzine.Entity.Fixtures;
+using Webzine.Entity;
 using Webzine.Repository.Contracts;
 using Webzine.WebApplication.ViewModels;
 
@@ -29,7 +30,7 @@ namespace Webzine.WebApplication.Controllers
                 return NotFound();
             }
 
-            var titres = TitreFactory.TrouverParIdArtiste(artiste.IdArtiste);
+            var titres = new List<Titre> { }; // Ajouter la logique pour recupérer à partir du repo
 
             var model = new ArtisteModel { Artiste = artiste, Titres = titres };
 
