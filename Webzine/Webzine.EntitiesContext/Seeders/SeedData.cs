@@ -13,7 +13,7 @@ namespace Webzine.EntitiesContext.Seeders
         {
             var data = new WebzineData();
             var styles = LocalStylesFactory.CreerStyles();
-            var artistes = ArtisteFactory.CreerArtistes();
+            var artistes = ArtisteFactory.CreerArtistes(8);
             var titres = TitreFactory.CreerTitres(styles, artistes, 50);
             var commentaires = CommentaireFactory.CreerCommentaires();
 
