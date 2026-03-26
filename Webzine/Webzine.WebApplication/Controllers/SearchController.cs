@@ -23,7 +23,7 @@ namespace Webzine.WebApplication.Controllers
                 return View(model);
             }
 
-            model.Artistes = ArtisteFactory.CreerArtistes()
+            model.Artistes = ArtisteFactory.CreerArtistes(50)
                 .Where(a => !string.IsNullOrWhiteSpace(a.Nom) && a.Nom.Contains(q, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 

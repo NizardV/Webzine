@@ -4,6 +4,8 @@
 
 using Microsoft.Extensions.FileProviders;
 using Webzine.EntitiesContext.Seeders;
+using Webzine.Repository.Contracts;
+using Webzine.Repository.Local;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ var data = SeedData.InitializeLocal();
 
 // Si on utilise les repo locaux
 builder.Services.AddSingleton(data);
+builder.Services.AddSingleton<IArtisteRepository, LocalArtisteRepository>();
 
 
 

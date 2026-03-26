@@ -1,7 +1,6 @@
 namespace Webzine.Entity.Fixtures
 {
     using Bogus;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Webzine.Entity;
