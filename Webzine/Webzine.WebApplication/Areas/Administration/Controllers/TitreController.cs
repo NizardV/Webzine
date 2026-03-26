@@ -158,7 +158,7 @@
                 var styleIdsRaw = TempData.Peek(GetTitreStylesKey(t.IdTitre))?.ToString();
                 if (!string.IsNullOrWhiteSpace(styleIdsRaw))
                 {
-                    var all = LocalStylesFactory.CreerStyles();
+                    var all = StyleFactory.CreerStyles();
                     var ids = styleIdsRaw.Split(',', StringSplitOptions.RemoveEmptyEntries)
                         .Select(x => int.TryParse(x, out var v) ? v : (int?)null)
                         .Where(x => x is not null)
@@ -248,7 +248,7 @@
             ApplyFormIfAny(titre, TempData.Peek(GetTitreFormKey(id))?.ToString());
             ApplyOverrideIfAny(titre, TempData.Peek(GetTitreOverrideKey(id))?.ToString());
 
-            ViewBag.AllStyles = LocalStylesFactory.CreerStyles();
+            ViewBag.AllStyles = StyleFactory.CreerStyles();
             ViewBag.SelectedStyleIds = (TempData.Peek(GetTitreStylesKey(id))?.ToString() ?? string.Empty)
                 .Split(',', StringSplitOptions.RemoveEmptyEntries);
             return View(titre);

@@ -40,7 +40,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Titre/Like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
@@ -89,7 +88,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Enregistre l'édition légère (IHM) d'un titre, sans persistance.
@@ -117,7 +115,7 @@ namespace Webzine.WebApplication.Controllers
         public IActionResult Style(string libelle)
         {
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
-            var style = LocalStylesFactory.GetStyleByLibelle(libelle);
+            var style = StyleFactory.GetStyleByLibelle(libelle);
 
             if (style == null)
             {
