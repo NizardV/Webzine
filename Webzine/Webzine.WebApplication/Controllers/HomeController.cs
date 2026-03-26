@@ -19,7 +19,7 @@
         {
             const int pageSize = 3;
 
-            var titres = new List<Titre> { }; // Ajouter la logique pour recupérer à partir du repo
+            var titres = new List<TitreModel> { }; // Ajouter la logique pour recupérer à partir du repo
             var totalItems = titres.Count;
             var maxPage = totalItems == 0 ? 0 : (int)Math.Ceiling(totalItems / (double)pageSize) - 1;
             var currentPage = Math.Clamp(page, 0, maxPage);
