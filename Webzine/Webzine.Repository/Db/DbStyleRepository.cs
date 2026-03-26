@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Webzine.Entity;
+using Microsoft.Extensions.Logging;
 using Webzine.EntitiesContext;
+using Webzine.Entity;
 using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
@@ -11,15 +12,17 @@ namespace Webzine.Repository.Db
         /// Permet d'accéder à la base de données via une instance de DbContext.
         /// </summary>
         private readonly WebzineDbContext _context;
+        private readonly ILogger<DbStyleRepository> _logger;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="DbStyleRepository"/> class.
         /// Constructeur de la classe DbStyleRepository qui prend en paramètre une instance de DbContext.
         /// </summary>
         /// <param name="context"></param>
-        DbStyleRepository(WebzineDbContext context)
+        public DbStyleRepository(WebzineDbContext context, ILogger<DbStyleRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,7 +31,10 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Add(Style style)
         {
-            // Not developed yet.
+            this._logger.LogWarning(
+                "Tentative d'ajout du style {Libelle}. Méthode non encore implémentée dans le repository base de données.",
+                style.Libelle);
+
             throw new NotImplementedException();
         }
 
@@ -38,8 +44,27 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Delete(Style style)
         {
-            _context.Styles.Remove(style);
-            _context.SaveChanges();
+            try
+            {
+                this._logger.LogInformation(
+                    "Suppression du style {IdStyle} demandée dans le repository base de données.",
+                    style.IdStyle);
+
+                this._context.Styles.Remove(style);
+                this._context.SaveChanges();
+
+                this._logger.LogInformation(
+                    "Suppression du style {IdStyle} réussie dans le repository base de données.",
+                    style.IdStyle);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la suppression du style {IdStyle} dans le repository base de données.",
+                    style.IdStyle);
+                throw;
+            }
         }
 
         /// <summary>
@@ -49,7 +74,31 @@ namespace Webzine.Repository.Db
         /// <returns>Un objet style</returns>
         public Style Find(int id)
         {
-            return _context.Styles.FirstOrDefault(s => s.IdStyle == id);
+            try
+            {
+                this._logger.LogDebug(
+                    "Recherche du style {IdStyle} dans le repository base de données.",
+                    id);
+
+                var style = _context.Styles.FirstOrDefault(s => s.IdStyle == id);
+
+                if (style == null)
+                {
+                    this._logger.LogWarning(
+                        "Aucun style trouvé pour l'identifiant {IdStyle} dans le repository base de données.",
+                        id);
+                }
+
+                return style;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la recherche du style {IdStyle} dans le repository base de données.",
+                    id);
+                throw;
+            }
         }
 
         /// <summary>
@@ -58,8 +107,20 @@ namespace Webzine.Repository.Db
         /// <returns>Une liste de styles</returns>
         public IEnumerable<Style> FindAll()
         {
-            var styles = _context.Styles;
-            return styles;
+            try
+            {
+                this._logger.LogDebug(
+                    "Récupération de tous les styles depuis le repository base de données.");
+
+                return _context.Styles.ToList();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la récupération de tous les styles depuis le repository base de données.");
+                throw;
+            }
         }
 
         /// <summary>
@@ -68,7 +129,10 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Update(Style style)
         {
-            // Not developed yet.
+            this._logger.LogWarning(
+                "Tentative de modification du style {IdStyle}. Méthode non encore implémentée dans le repository base de données.",
+                style.IdStyle);
+
             throw new NotImplementedException();
         }
     }
