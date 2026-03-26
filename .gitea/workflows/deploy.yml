@@ -1,0 +1,24 @@
+name: CI/CD API dev .NET
+on: [push]
+
+jobs:
+  build-and-deploy:
+    runs-on: debian-13
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Compilation et Publication
+        run: |
+          dotnet publish -c Release -o ./publish
+
+      - name: Déploiement Local
+        run: |
+          sudo rm -rf /var/www/api/*
+          sudo cp -r ./publish/* /var/www/api/
+          sudo chown -R www-data:www-data /var/www/api
+
+      - name: Redémarrage du service
+        run: |
+          sudo systemctl restart api-dotnet
+          sudo systemctl status api-dotnet --no-pager
