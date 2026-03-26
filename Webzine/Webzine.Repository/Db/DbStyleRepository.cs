@@ -1,24 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Webzine.Entity;
+using Webzine.EntitiesContext;
+using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
 {
-    public class DbStyleRepository
+    public class DbStyleRepository : IStyleRepository
     {
         /// <summary>
         /// Permet d'accéder à la base de données via une instance de DbContext.
         /// </summary>
-        private readonly DbContext _context;
+        private readonly WebzineDbContext _context;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="DbStyleRepository"/> class.
         /// Constructeur de la classe DbStyleRepository qui prend en paramètre une instance de DbContext.
         /// </summary>
         /// <param name="context"></param>
-        DbStyleRepository(DbContext context)
+        DbStyleRepository(WebzineDbContext context)
         {
             _context = context;
         }
@@ -39,7 +38,7 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Delete(Style style)
         {
-            _context.styles.Remove(style);
+            _context.Styles.Remove(style);
             _context.SaveChanges();
         }
 
@@ -50,7 +49,7 @@ namespace Webzine.Repository.Db
         /// <returns>Un objet style</returns>
         public Style Find(int id)
         {
-            return _context.styles.FirstOrDefault(s => s.IdStyle == id);
+            return _context.Styles.FirstOrDefault(s => s.IdStyle == id);
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace Webzine.Repository.Db
         /// <returns>Une liste de styles</returns>
         public IEnumerable<Style> FindAll()
         {
-            var styles = _context.styles;
+            var styles = _context.Styles;
             return styles;
         }
 
