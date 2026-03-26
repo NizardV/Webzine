@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Webzine.Entity;
-using Webzine.Repository.Contracts;
 
-namespace Webzine.Repository
+namespace Webzine.Repository.Db
 {
-    public class LocalStyleRepository : IStyleRepository
+    public class DbStyleRepository
     {
-        public readonly WebzineData _data;
+        private readonly DbContext _context;
 
-        public LocalStyleRepository(WebzineData data)
+        DbStyleRepository(DbContext context)
         {
-            _data = data;
+            _context = context;
         }
 
         public void Add(Style style)
@@ -23,17 +23,18 @@ namespace Webzine.Repository
 
         public void Delete(Style style)
         {
-            _data.styles.Remove(style);
+            _context.styles.Remove(style);
+            _context.SaveChanges();
         }
 
         public Style Find(int id)
         {
-            return _data.styles.FirstOrDefault(s => s.IdStyle == id);
+            return _context.styles.FirstOrDefault(s => s.IdStyle == id);
         }
 
         public IEnumerable<Style> FindAll()
         {
-            var styles = _data.styles;
+            var styles = _context.styles;
             return styles;
         }
 
