@@ -39,7 +39,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         public IActionResult Commentaires()
         {
             var commentaires = _commentaireRepository.FindAll().ToList();
-            return View(new CommentairesAdministrationModel { Commentaires = commentaires });
+            return View(commentaires);
         }
 
         /// <summary>

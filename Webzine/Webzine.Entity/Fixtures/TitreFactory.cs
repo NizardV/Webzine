@@ -41,6 +41,7 @@ namespace Webzine.Entity.Fixtures
                         t.Styles.Add(style);
                         style.Titres.Add(t);
                     }
+                    artistes.First(a => a.IdArtiste == t.IdArtiste).Titres.Add(t);
                 });
             titres = faker.Generate(nombreDeTitres > 0 ? nombreDeTitres : 50);
             return titres;

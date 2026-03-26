@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Webzine.Entity
+@model List<Commentaire>
+
+@{
     <h1>Commentaires</h1>
     <hr class="hr" />
     <table class="table table-striped table-bordered border-secondary text-center">
@@ -12,10 +15,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var commentaire in Model.Commentaires)
+            @foreach (var commentaire in Model)
             {
                 <tr class="table-light">
-                    <td><a asp-area="" asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@commentaire.Titre.IdTitre">@commentaire.Titre.Libelle</a></td>
+                    <td><a asp-area="" asp-controller="Titre" asp-action="Details" asp-route-id="@commentaire.Titre.IdTitre">@commentaire.Titre.Libelle</a></td>
                     <td>@commentaire.Auteur</td>
                     <td>@commentaire.Contenu</td>
                     <td>@commentaire.DateCreation</td>

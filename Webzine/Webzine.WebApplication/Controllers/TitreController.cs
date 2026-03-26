@@ -22,19 +22,6 @@ namespace Webzine.WebApplication.Controllers
             _commentaireRepository = commentaireRepository;
         }
 
-        [HttpGet]
-        [Route("titre/{id}")]
-        public IActionResult DetailsTitre(int id)
-        {
-            var titre = _titreRepository.Find(id);
-            if (titre is null)
-            {
-                return NotFound();
-            }
-            var commentaires = _commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
-            return View(new TitreModel { Titre = titre, Commentaires = commentaires});
-        }
-
         [HttpPost]
         [Route("Titre/Like/{id}")]
         /// <summary>
@@ -50,7 +37,7 @@ namespace Webzine.WebApplication.Controllers
                 return NotFound();
             }
             _titreRepository.IncrementNbLikes(titre);
-            return RedirectToAction(nameof(DetailsTitre), new { id });
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         [HttpGet]
@@ -89,7 +76,7 @@ namespace Webzine.WebApplication.Controllers
                 titre.Chronique = chronique;
             }
 
-            return RedirectToAction(nameof(DetailsTitre), new { id });
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         [HttpGet]
@@ -112,6 +99,7 @@ namespace Webzine.WebApplication.Controllers
         /// </summary>
         /// <param name="id">Id du Titre</param>
         /// <returns>Une vue</returns>
+        [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
             Titre? titre = _titreRepository.Find(id);
@@ -129,7 +117,7 @@ namespace Webzine.WebApplication.Controllers
                 Commentaires = commentaires,
             };
 
-            return this.View(model);
+            return View(model);
         }
     }
 }
