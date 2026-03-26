@@ -6,10 +6,10 @@ using Webzine.Entity.Fixtures;
 
 namespace Webzine.EntitiesContext.Seeders
 {
-    public class SeedData
+    public class SeedDataLocal
     {
         
-        public static WebzineData InitializeLocal()
+        public static WebzineData Initialize()
         {
             var data = new WebzineData();
             var styles = LocalStylesFactory.CreerStyles();
@@ -24,6 +24,5 @@ namespace Webzine.EntitiesContext.Seeders
 
             return data;
         }
-
     }
 }

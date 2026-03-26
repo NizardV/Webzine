@@ -1,17 +1,49 @@
-﻿// <copyright file="Program.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
-
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Webzine.EntitiesContext.Seeders;
+using Webzine.Repository.Contracts;
+using Webzine.Repository.Local;
+using Webzine.EntitiesContext;
+using Webzine.Repository.Db;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration.GetSection("AppConfig");
+var environment = config["Environment"];
+var repoMode = config["RepositoryMode"];
+var dataSource = config["DataSource"];
 
-//Ajout du singleton pour les données locales
-var data = SeedData.InitializeLocal();
+if (repoMode == "Local")
+{
+    var data = dataSource == "Factories"
+        ? SeedDataLocal.Initialize()
+        //TODO Remplacer par spotify au jalon 3
+        : SeedDataLocal.Initialize();
 
-// Si on utilise les repo locaux
-builder.Services.AddSingleton(data);
+    //Ajout du singleton pour les données locales
+    builder.Services.AddSingleton(data);
+
+    //Injecter les repo locaux
+    builder.Services.AddScoped<ITitreRepository, LocalTitreRepository>();
+
+}
+else if(repoMode == "Database")
+{
+    //En fonction de l'environnement on ajoute un dbContext différent
+    if (environment == "Development")
+    {
+        builder.Services.AddDbContext<WebzineDbContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+    }
+    //else if (environment == "Production")
+    //{
+    //    builder.Services.AddDbContext<WebzineDbContext>(options =>
+    //        options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+    //}
+
+    // Injection des repos DB
+    //builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
+}
+
 
 
 
@@ -24,6 +56,22 @@ builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 
 var app = builder.Build();
+
+if (repoMode == "Database")
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<WebzineDbContext>();
+
+    if (dataSource == "Factories")
+    {
+        SeedDataLocal.Initialize();
+    }
+    //    else if (dataSource == "Spotify")
+    //    {
+    //        SeedDataSpotify.InitializeDb(context);
+    //    }
+}
+
 
 // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
 app.UseStaticFiles();
