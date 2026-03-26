@@ -13,10 +13,6 @@ namespace Webzine.Entity.Fixtures
         private static readonly List<Artiste> artistes = ArtisteFactory.CreerArtistes(8);
         private static readonly List<Titre> titres = CreerTitres(styles, artistes, 50).ToList();
 
-        public TitreFactory()
-        {
-        }
-
         /// <summary>
         /// Retourne une liste de titres préconfigurés.
         /// </summary>
