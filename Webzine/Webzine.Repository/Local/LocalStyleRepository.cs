@@ -1,65 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Webzine.Entity;
 using Webzine.Repository.Contracts;
 
-namespace Webzine.Repository.Db
+namespace Webzine.Repository.Local
 {
-    public class DbStyleRepository
+    public class LocalStyleRepository : IStyleRepository
     {
-        private readonly DbContext _context;
+        public readonly WebzineData _data;
 
-        DbStyleRepository(DbContext context)
+        public LocalStyleRepository(WebzineData data)
         {
-            _context = context;
+            _data = data;
         }
 
-        /// <summary>
-        /// Implémentation de la méthode d'ajout d'un style.
-        /// </summary>
-        /// <param name="style"></param>
         public void Add(Style style)
         {
             // Not developed yet.
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Implémentation de la méthode de suppression d'un style. 
-        /// </summary>
-        /// <param name="style"></param>
         public void Delete(Style style)
         {
-            _context.styles.Remove(style);
-            _context.SaveChanges();
+            _data.styles.Remove(style);
         }
 
-        /// <summary>
-        /// Implémentation de la méthode de recherche d'un style par son identifiant.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Un objet style</returns>
         public Style Find(int id)
         {
-            return _context.styles.FirstOrDefault(s => s.IdStyle == id);
+            return _data.styles.FirstOrDefault(s => s.IdStyle == id);
         }
 
-        /// <summary>
-        /// Implémentation de la méthode de recherche de tous les styles.
-        /// </summary>
-        /// <returns>Une liste de styles</returns>
         public IEnumerable<Style> FindAll()
         {
-            var styles = _context.styles;
+            var styles = _data.styles;
             return styles;
         }
 
-        /// <summary>
-        /// Implémentation de la méthode de mise à jour d'un style.
-        /// </summary>
-        /// <param name="style"></param>
         public void Update(Style style)
         {
             // Not developed yet.
