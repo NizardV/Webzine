@@ -42,7 +42,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [HttpGet]
         [Route("style/edit/{id}")]
         public IActionResult Edit(int id) {
-            var style = StyleFactory.CreerStyles().FirstOrDefault(s => s.IdStyle == id);
+            var style = new List<Style>(); // Ajouter la logique pour recupérer à partir du repo
 
             if (style == null) { 
                 return NotFound();
@@ -66,7 +66,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("style/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            var style = StyleFactory.CreerStyles().FirstOrDefault(s => s.IdStyle == id);
+            var style = new Style { }; // Ajouter la logique pour recupérer à partir du repo
 
             if (style == null)
             {

@@ -11,7 +11,7 @@ namespace Webzine.Entity.Fixtures
         // On crée une variable statique pour stocker la liste.
         // Ainsi, les commentaires ne changent pas à chaque fois qu'on rafraîchit la page !
         private static List<Commentaire>? _commentaires;
-        public static List<Commentaire> CreerCommentaires()
+        public static List<Commentaire> CreerCommentaires(ICollection<Titre> titres, int nombreDeCommentaires)
         {
             // Si la liste a déjà été générée, on la retourne directement
             if (_commentaires != null)
@@ -31,14 +31,9 @@ namespace Webzine.Entity.Fixtures
                 .RuleFor(c => c.IdTitre, f => f.Random.Number(1, 200)); // On génère juste un faux ID entre 1 et 10 (selon le nombre de titres prévu)
 
             // On demande à Bogus de générer 30 commentaires d'un coup
-            _commentaires = commentaireFaker.Generate(100);
+            _commentaires = commentaireFaker.Generate(nombreDeCommentaires);
 
             return _commentaires;
-        }
-        public static List<Commentaire> GetCommentairesByTitre(int idTitre)
-        {
-            var commentaires = CreerCommentaires();
-            return commentaires.Where(c => c.IdTitre == idTitre).ToList();
         }
     }
 }

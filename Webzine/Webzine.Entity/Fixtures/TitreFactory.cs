@@ -9,39 +9,6 @@ namespace Webzine.Entity.Fixtures
     /// </summary>
     public class TitreFactory
     {
-        private static readonly List<Style> styles = LocalStylesFactory.CreerStyles();
-        private static readonly List<Artiste> artistes = ArtisteFactory.CreerArtistes(8);
-        private static readonly List<Titre> titres = CreerTitres(styles, artistes, 50).ToList();
-
-        /// <summary>
-        /// Retourne une liste de titres préconfigurés.
-        /// </summary>
-        /// <returns>Liste de titres.</returns>
-        public static ICollection<Titre> GetTitres()
-        {
-            return titres;
-        }
-
-        /// <summary>
-        /// Retourne un titre spécifique en fonction de son identifiant.
-        /// </summary>
-        /// <param name="id">Identifiant du titre.</param>
-        /// <returns>Titre.</returns>
-        public static Titre? GetTitreById(int id)
-        {
-            return titres.FirstOrDefault(t => t.IdTitre == id);
-        }
-
-        /// <summary>
-        /// Récupérer une liste de titres associés à un artiste spécifique en fonction de l'identifiant de l'artiste.
-        /// </summary>
-        /// <param name="idArtiste">L'identifiant de l'artiste.</param>
-        /// <returns>Liste de titres fait par l'artiste en paramètre.</returns>
-        public static List<Titre> TrouverParIdArtiste(int idArtiste)
-        {
-            return titres.Where(t => t.IdArtiste == idArtiste).ToList();
-        }
-
         /// <summary>
         /// Retourne une liste de titres préconfigurés. Cette méthode peut être utilisée pour obtenir des instances de Titre
         /// </summary>
