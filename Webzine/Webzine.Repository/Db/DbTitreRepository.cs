@@ -31,12 +31,12 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                _logger.LogInformation($"Suppression du titre {titre.IdTitre} - {titre.Libelle}");
+                this._logger.LogInformation($"Suppression du titre {titre.IdTitre} - {titre.Libelle}");
                 _context.Titres.Remove(titre);
             }
             catch (Exception)
             {
-                _logger.LogError($"Erreur lors de la suppression du titre {titre.IdTitre} - {titre.Libelle}");
+                this._logger.LogError($"Erreur lors de la suppression du titre {titre.IdTitre} - {titre.Libelle}");
                 throw new Exception("Impossible de supprimer le titre");
             }
         }
@@ -48,12 +48,12 @@ namespace Webzine.Repository.Db
                     .Include(t=> t.Artiste)
                     .Include(t=> t.Commentaires)
                     .FirstOrDefault(t => t.IdTitre == idTitre);
-                _logger.LogInformation($"Recherche du titre {idTitre} - {titre.Libelle}");
+                this._logger.LogInformation($"Recherche du titre {idTitre} - {titre.Libelle}");
                 return titre;
             }
             catch (Exception)
             {
-                _logger.LogError($"Erreur lors de la recherche du titre {idTitre}");
+                this._logger.LogError($"Erreur lors de la recherche du titre {idTitre}");
                 throw new Exception("Titre non trouvé");
             }
         }
@@ -74,19 +74,19 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                _logger.LogInformation("Récupération de tous les titres");
+                this._logger.LogInformation("Récupération de tous les titres");
                 var titres = _context.Titres;
                 return titres;
             }
             catch (Exception)
             {
-                _logger.LogError("Erreur lors de la récupération de tous les titres");
+                this._logger.LogError("Erreur lors de la récupération de tous les titres");
                 throw new Exception("Impossible de retourner les titres");
             }
         }
         public void IncrementNbLectures(Titre titre)
         {
-            _logger.LogInformation($"Nouvelle lecture sur le titre : {titre.IdTitre} - {titre.Libelle}");
+            this._logger.LogInformation($"Nouvelle lecture sur le titre : {titre.IdTitre} - {titre.Libelle}");
             titre.NbLectures++;
         }
         public void IncrementNbLikes(Titre titre)
@@ -94,11 +94,11 @@ namespace Webzine.Repository.Db
             try
             {
                 titre.NbLikes++;
-                _logger.LogInformation($"Nouveau like sur : {titre.IdTitre} - {titre.Libelle}");
+                this._logger.LogInformation($"Nouveau like sur : {titre.IdTitre} - {titre.Libelle}");
             }
             catch (Exception)
             {
-                _logger.LogError($"Erreur lors du like du titre {titre.IdTitre} - {titre.Libelle}");
+                this._logger.LogError($"Erreur lors du like du titre {titre.IdTitre} - {titre.Libelle}");
                 throw new Exception("Impossible de liker ce titre.s");
             }
         }
@@ -107,7 +107,7 @@ namespace Webzine.Repository.Db
             try
             {
                 var titres = _context.Titres.Where(t => t.Libelle.Contains(mot, StringComparison.OrdinalIgnoreCase) || t.Chronique.Contains(mot, StringComparison.OrdinalIgnoreCase));
-                _logger.LogInformation($"Recherche de titres avec le mot : {mot} - {titres.Count()} résultats trouvés");
+                this._logger.LogInformation($"Recherche de titres avec le mot : {mot} - {titres.Count()} résultats trouvés");
                 return titres;
             }
             catch (Exception)
@@ -125,10 +125,10 @@ namespace Webzine.Repository.Db
                                 .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle))
                                 .Include(t => t.Styles)
                                 .Include(t => t.Artiste);
-                _logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
+                this._logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
                 if (!titres.Any())
                 {
-                    _logger.LogWarning($"Aucun titre trouvé pour le style : {libelle}");
+                    this._logger.LogWarning($"Aucun titre trouvé pour le style : {libelle}");
                 }
                 return titres;
             }
