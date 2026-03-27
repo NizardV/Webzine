@@ -36,9 +36,6 @@ namespace Webzine.Repository.Local
         {
             this._logger.LogWarning(
                 "Tentative d'ajout d'un style dans le repository local. Opération non supportée.");
-
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas d'ajouter un style.");
         }
 
         /// <summary>
@@ -50,9 +47,6 @@ namespace Webzine.Repository.Local
             this._logger.LogWarning(
                 "Tentative de suppression du style {IdStyle} dans le repository local. Opération non supportée.",
                 style.IdStyle);
-
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas de supprimer un style.");
         }
 
         /// <summary>
@@ -100,7 +94,7 @@ namespace Webzine.Repository.Local
                 this._logger.LogDebug(
                     "Récupération de tous les styles depuis le repository local.");
 
-                return _data.styles.ToList();
+                return this._data.styles.ToList();
             }
             catch (Exception ex)
             {
@@ -120,9 +114,6 @@ namespace Webzine.Repository.Local
             this._logger.LogWarning(
                 "Tentative de modification du style {IdStyle} dans le repository local. Opération non supportée.",
                 style.IdStyle);
-
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas de modifier un style.");
         }
     }
 }

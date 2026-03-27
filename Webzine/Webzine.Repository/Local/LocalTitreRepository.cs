@@ -21,7 +21,7 @@ namespace Webzine.Repository.Local
 
         public void Add(Titre titre)
         {
-            throw new NotImplementedException();
+            this._logger.LogWarning("Tentative d'ajout d'un titre dans le repository local. Opération non supportée.");
         }
         public int Count()
         {
@@ -29,6 +29,7 @@ namespace Webzine.Repository.Local
         }
         public void Delete(Titre titre)
         {
+            this._logger.LogWarning("Tentative de suppression d'un titre dans le repository local. Opération non supportée.");
         }
         public Titre Find(int idTitre)
         {
@@ -49,11 +50,12 @@ namespace Webzine.Repository.Local
             try
             {
                 var titres = _data.titres.Skip(offset).Take(limit).OrderBy(t => t.Libelle);
+                this._logger.LogInformation($"Recherche du titre {offset} - {limit}");
                 return titres;
             }
             catch (Exception)
             {
-
+                this._logger.LogError($"Erreur lors de la recherche du titre {offset} - {limit}");
                 throw new Exception("Impossible de retourner les titres demandés.");
             }
         }
@@ -99,7 +101,6 @@ namespace Webzine.Repository.Local
             }
             catch (Exception)
             {
-
                 throw new Exception("Impossible d'effectuer la recherche");
             }
         }
