@@ -43,7 +43,7 @@
 
                         <div class="titre-card-meta">
                             <i class="bi bi-calendar3"></i>
-                            @item.DateSortie.ToString("dd/MM/yyyy HH:mm")
+                            @item.DateSortie.ToString("dd/MM/yyyy HH:mm:ss")
                             <a asp-area="" asp-controller="Titre" asp-action="Style" asp-route-libelle="@item.Styles.Select(s => s.Libelle)" class="text-decoration-none"></a>
                             <span class="ms-2">
                                 <i class="bi bi-tag"></i>
