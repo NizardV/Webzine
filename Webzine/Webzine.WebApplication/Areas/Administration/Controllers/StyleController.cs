@@ -19,12 +19,12 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             _logger = logger;
         }
 
-        [Route("styles")]
 
         /// <summary>
         /// Retourne une vue qui affiche la liste de tous les styles de musique présents dans la collection de styles.
         /// </summary>
         /// <returns>Une vue.</returns>
+        [Route("styles")]
         public IActionResult Index()
         {
             try
