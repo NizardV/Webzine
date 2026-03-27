@@ -76,6 +76,7 @@ try
         builder.Services.AddScoped<IArtisteRepository, DbArtisteRepository>();
         builder.Services.AddScoped<IStyleRepository, DbStyleRepository>();
         builder.Services.AddScoped<ICommentaireRepository, DbCommentaireRepository>();
+        builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
     }
 
     // Ajoute les services n�cessaires pour permettfre l'utilisation des
@@ -92,6 +93,7 @@ try
     if (repoMode == "Database")
     {
         logger.Info("Vérification de l'initialisation de la base de données.");
+
 
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<WebzineDbContext>();

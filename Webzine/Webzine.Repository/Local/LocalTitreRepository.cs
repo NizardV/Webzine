@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -116,7 +117,8 @@ namespace Webzine.Repository.Local
         {
             try
             {
-                var titres = _data.titres.Where(t => t.Styles.Any(s => s.Libelle.Equals(libelle, StringComparison.OrdinalIgnoreCase)));
+                var titres = _data.titres
+                                .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle));
                 _logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
                 return titres;
             }

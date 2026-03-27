@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Text;
 using Webzine.Entity;
 using Webzine.EntitiesContext;
+using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
 {
-    public class DbTitreRepository
+    public class DbTitreRepository : ITitreRepository
     {
         private readonly WebzineDbContext _context;
         private readonly ILogger<DbTitreRepository> _logger;
-        DbTitreRepository(WebzineDbContext context, ILogger<DbTitreRepository> logger)
+        public DbTitreRepository(WebzineDbContext context, ILogger<DbTitreRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -43,7 +44,10 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                var titre = _context.Titres.FirstOrDefault(t => t.IdTitre == idTitre);
+                var titre = _context.Titres
+                    .Include(t=> t.Artiste)
+                    .Include(t=> t.Commentaires)
+                    .FirstOrDefault(t => t.IdTitre == idTitre);
                 _logger.LogInformation($"Recherche du titre {idTitre} - {titre.Libelle}");
                 return titre;
             }
@@ -116,8 +120,16 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                var titres = _context.Titres.Where(t => t.Styles.Any(s => s.Libelle.Equals(libelle, StringComparison.OrdinalIgnoreCase)));
+                libelle = libelle?.ToLower() ?? "";
+                var titres = _context.Titres
+                                .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle))
+                                .Include(t => t.Styles)
+                                .Include(t => t.Artiste);
                 _logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
+                if (!titres.Any())
+                {
+                    _logger.LogWarning($"Aucun titre trouvé pour le style : {libelle}");
+                }
                 return titres;
             }
             catch (Exception)
