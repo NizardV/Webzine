@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +29,7 @@ namespace Webzine.Repository.Local
         }
         public void Delete(Titre titre)
         {
-            _data.titres.Remove(titre);
+            throw new NotImplementedException();
         }
         public Titre Find(int idTitre)
         {

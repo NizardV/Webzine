@@ -5,44 +5,51 @@ using Webzine.Repository.Contracts;
 namespace Webzine.Repository.Local
 {
     /// <summary>
-    /// Provides an in-memory implementation of the ICommentaireRepository interface for managing Commentaire entities.
+    /// Provides an in-memory implementation of the ICommentaireRepository interface for managing Commentaire entities
+    /// within the local application context.
     /// </summary>
-    /// <remarks>This repository simulates data storage using a local collection and is intended for scenarios
-    /// such as testing or prototyping where persistent storage is not required. Changes made through this repository do
-    /// not persist beyond the lifetime of the collection instance.</remarks>
+    /// <remarks>This repository stores Commentaire instances in memory using the provided WebzineData
+    /// context. It is suitable for scenarios such as testing or development where persistent storage is not required.
+    /// Changes made through this repository affect only the in-memory collection and are not persisted beyond the
+    /// application's lifetime.</remarks>
     public class LocalCommentaireRepository : ICommentaireRepository
     {
-        /// <summary>
-        /// Adds a new comment to the collection, assigning it a unique identifier.
-        /// </summary>
-        /// <remarks>The method simulates database auto-increment behavior by assigning a new identifier
-        /// to the comment before adding it. The comment's identifier will be set to one greater than the current
-        /// maximum identifier in the collection.</remarks>
-        /// <param name="commentaire">The comment to add to the collection. Cannot be null.</param>
-        public void Add(Commentaire commentaire)
-        {
-            var commentaires = CommentaireFactory.CreerCommentaires();
-            // On simule l'auto-incrémentation de la base de données
-            commentaire.IdCommentaire = commentaires.Max(c => c.IdCommentaire) + 1;
 
-            commentaires.Add(commentaire);
+        private readonly WebzineData _data;
+
+        /// <summary>
+        /// Initialise une nouvelle instance de la classe LocalCommentaireRepository à l'aide de la source de données
+        /// spécifiée.
+        /// </summary>
+        /// <param name="data">La source de données WebzineData utilisée pour accéder aux commentaires. Ne peut pas être null.</param>
+        public LocalCommentaireRepository(WebzineData data)
+        {
+            _data = data;
         }
 
         /// <summary>
-        /// Supprime le commentaire spécifié de la collection de commentaires.
+        /// Adds the specified comment to the collection of comments.
         /// </summary>
-        /// <remarks>Si le commentaire spécifié n'existe pas dans la collection, aucune action n'est
-        /// effectuée.</remarks>
-        /// <param name="commentaire">Le commentaire à supprimer. Doit contenir un identifiant valide correspondant à un commentaire existant dans
-        /// la collection.</param>
+        /// <param name="commentaire">The comment to add to the collection. Cannot be null.</param>
+        public void Add(Commentaire commentaire)
+        {
+            _data.commentaires.Add(commentaire);
+        }
+
+        /// <summary>
+        /// Supprime le commentaire spécifié de la collection de commentaires si celui-ci existe.
+        /// </summary>
+        /// <remarks>Aucune exception n'est levée si le commentaire n'est pas trouvé dans la collection.
+        /// Cette méthode ne modifie pas le paramètre passé en argument.</remarks>
+        /// <param name="commentaire">Le commentaire à supprimer. Doit correspondre à un commentaire existant dans la collection, identifié par
+        /// son identifiant unique.</param>
         public void Delete(Commentaire commentaire)
         {
-            var commentaires = CommentaireFactory.CreerCommentaires();
-            var elementASupprimer = commentaires.FirstOrDefault(c => c.IdCommentaire == commentaire.IdCommentaire);
+            var elementASupprimer = _data.commentaires.FirstOrDefault(c => c.IdCommentaire == commentaire.IdCommentaire);
 
             if (elementASupprimer != null)
             {
-                commentaires.Remove(elementASupprimer);
+                _data.commentaires.Remove(elementASupprimer);
             }
         }
 
@@ -50,22 +57,21 @@ namespace Webzine.Repository.Local
         /// Recherche et retourne le commentaire correspondant à l'identifiant spécifié.
         /// </summary>
         /// <param name="id">L'identifiant unique du commentaire à rechercher.</param>
-        /// <returns>Le commentaire dont l'identifiant correspond à la valeur de <paramref name="id"/> ; ou <see
-        /// langword="null"/> si aucun commentaire correspondant n'est trouvé.</returns>
+        /// <returns>Le commentaire correspondant à l'identifiant spécifié, ou null si aucun commentaire n'est trouvé.</returns>
         public Commentaire Find(int id)
         {
-            var commentaires = CommentaireFactory.CreerCommentaires();
-            return commentaires.FirstOrDefault(c => c.IdCommentaire == id);
+            return _data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
         }
 
+       
         /// <summary>
-        /// Récupère tous les objets de type Commentaire disponibles.
+        /// Returns a collection containing all available comments.
         /// </summary>
-        /// <returns>Une collection d'objets Commentaire représentant l'ensemble des commentaires disponibles. La collection peut
-        /// être vide si aucun commentaire n'est disponible.</returns>
+        /// <returns>An enumerable collection of <see cref="Commentaire"/> objects representing all comments. The collection will
+        /// be empty if no comments are available.</returns>
         public IEnumerable<Commentaire> FindAll()
         {
-            return CommentaireFactory.CreerCommentaires();
+            return _data.commentaires;
         }
     }
 }

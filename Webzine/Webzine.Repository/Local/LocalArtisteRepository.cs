@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Webzine.Entity;
 using Webzine.Repository.Contracts;
 
@@ -11,7 +12,7 @@ namespace Webzine.Repository.Local
         private readonly WebzineData _data;
         private readonly ILogger<LocalArtisteRepository> _logger;
 
-        public LocalArtisteRepository(WebzineData data)
+        public LocalArtisteRepository(WebzineData data, ILogger<LocalArtisteRepository> logger)
         {
             this._data = data;
             this._logger = logger;
@@ -20,7 +21,7 @@ namespace Webzine.Repository.Local
         public void Add(Artiste artiste)
         {
             this._logger.LogWarning(
-                "Tentative d'ajout d'un artiste dans le repository local. Opération non supportée.");
+                "Tentative d'ajout d'un artiste dans le repository local. OpÃ©ration non supportÃ©e.");
         }
 
         public int Count()
@@ -33,7 +34,7 @@ namespace Webzine.Repository.Local
         public void Delete(Artiste artiste)
         {
             this._logger.LogWarning(
-                "Tentative de suppression d'un artiste dans le repository local. Opération non supportée.");
+                "Tentative de suppression d'un artiste dans le repository local. OpÃ©ration non supportÃ©e.");
         }
 
         public Artiste? Find(int idArtiste)
@@ -45,7 +46,7 @@ namespace Webzine.Repository.Local
                     idArtiste);
 
                 var artiste = this._data.artistes.FirstOrDefault(a => a.IdArtiste == idArtiste);
-                this._logger.LogDebug("Recherche artiste par id {ArtisteId}. Trouvé: {Found}.", idArtiste, artiste != null);
+                this._logger.LogDebug("Recherche artiste par id {ArtisteId}. TrouvÃ©: {Found}.", idArtiste, artiste != null);
                 return artiste;
             }
             catch (Exception ex)
@@ -62,7 +63,7 @@ namespace Webzine.Repository.Local
             try
             {
                 this._logger.LogDebug(
-                    "Récupération de tous les artistes depuis le repository local.");
+                    "RÃ©cupÃ©ration de tous les artistes depuis le repository local.");
 
                 return this._data.artistes.ToList();
             }
@@ -70,7 +71,7 @@ namespace Webzine.Repository.Local
             {
                 this._logger.LogError(
                     ex,
-                    "Erreur lors de la récupération de tous les artistes depuis le repository local.");
+                    "Erreur lors de la rÃ©cupÃ©ration de tous les artistes depuis le repository local.");
                 throw;
             }
         }
@@ -86,7 +87,7 @@ namespace Webzine.Repository.Local
                 }
 
                 var artiste = this._data.artistes.FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase));
-                this._logger.LogDebug("Recherche artiste par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
+                this._logger.LogDebug("Recherche artiste par nom {Nom}. TrouvÃ©: {Found}.", nom, artiste != null);
 
                 return artiste;
             }
@@ -102,7 +103,7 @@ namespace Webzine.Repository.Local
         public void Update(Artiste artiste)
         {
             this._logger.LogWarning(
-                "Tentative de mise à jour d'un style dans le repository local. Opération non supportée.");
+                "Tentative de mise Ã  jour d'un style dans le repository local. OpÃ©ration non supportÃ©e.");
         }
     }
 }

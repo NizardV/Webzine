@@ -18,14 +18,14 @@
         <div class="row mb-4">
             <div class="col-3 col-md-2">
                 <img src="@album.UrlJaquette"
-                     class="img-fluid"
+                     class="img-fluid artiste-album-cover"
                      alt="@album.Album" />
             </div>
 
             <div class="col-9 col-md-10">
-                <h3 class="h5 fw-semibold text-center mb-2">@album.Album</h3>
+                <h3 class="h5 fw-semibold mb-2">@album.Album</h3>
 
-                <table class="table table-sm align-middle">
+                <table class="table table-sm align-middle artiste-album-table">
                     <thead>
                         <tr>
                             <th class="text-muted fw-semibold" style="width: 90px;">Durée</th>
@@ -38,7 +38,7 @@
                             <tr>
                                 <td class="text-muted">@titre.Duree.ToString("mm\\:ss")</td>
                                 <td>
-                                    <a asp-controller="Titre" asp-action="DetailsTitre" asp-route-id="@titre.IdTitre">@titre.Libelle</a>
+                                    <a asp-controller="Titre" asp-action="Details" asp-route-id="@titre.IdTitre">@titre.Libelle</a>
                                 </td>
                             </tr>
                         }

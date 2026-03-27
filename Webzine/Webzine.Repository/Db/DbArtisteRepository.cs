@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Webzine.Entity;
+using Webzine.EntitiesContext;
 using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
@@ -28,7 +32,7 @@ namespace Webzine.Repository.Db
 
                 this.context.Artistes.Add(artiste);
                 this.context.SaveChanges();
-                this.logger.LogDebug("Artiste ajouté en base (Id: {ArtisteId}).", artiste.IdArtiste);
+                this.logger.LogDebug("Artiste ajoutÃ© en base (Id: {ArtisteId}).", artiste.IdArtiste);
             }
             catch (Exception ex)
             {
@@ -65,7 +69,7 @@ namespace Webzine.Repository.Db
 
                 this.context.Artistes.Remove(artiste);
                 this.context.SaveChanges();
-                this.logger.LogDebug("Artiste supprimé en base (Id: {ArtisteId}).", artiste.IdArtiste);
+                this.logger.LogDebug("Artiste supprimÃ© en base (Id: {ArtisteId}).", artiste.IdArtiste);
             }
             catch (Exception ex)
             {
@@ -80,7 +84,7 @@ namespace Webzine.Repository.Db
                 var artiste = this.context.Artistes
                     .Include(a => a.Titres)
                     .FirstOrDefault(a => a.IdArtiste == idArtiste);
-                this.logger.LogDebug("Recherche artiste en base par id {ArtisteId}. Trouvé: {Found}.", idArtiste, artiste != null);
+                this.logger.LogDebug("Recherche artiste en base par id {ArtisteId}. TrouvÃ©: {Found}.", idArtiste, artiste != null);
             
                 return artiste;
             }
@@ -95,7 +99,7 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                this.logger.LogDebug("Récupération de tous les artistes en base.");
+                this.logger.LogDebug("RÃ©cupÃ©ration de tous les artistes en base.");
                 
                 return this.context.Artistes
                     .Include(a => a.Titres)
@@ -103,7 +107,7 @@ namespace Webzine.Repository.Db
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Erreur lors de la récupération de tous les artistes en base.");
+                this.logger.LogError(ex, "Erreur lors de la rÃ©cupÃ©ration de tous les artistes en base.");
                 throw;
             }
         }
@@ -121,7 +125,7 @@ namespace Webzine.Repository.Db
                 var artiste = this.context.Artistes
                     .Include(a => a.Titres)
                     .FirstOrDefault(a => a.Nom.ToLower() == nom.ToLower());
-                this.logger.LogDebug("Recherche artiste en base par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
+                this.logger.LogDebug("Recherche artiste en base par nom {Nom}. TrouvÃ©: {Found}.", nom, artiste != null);
 
                 return artiste;
             }
@@ -138,7 +142,7 @@ namespace Webzine.Repository.Db
             {
                 if (artiste == null)
                 {
-                    this.logger.LogWarning("Tentative de mise à jour d'un artiste null.");
+                    this.logger.LogWarning("Tentative de mise Ã  jour d'un artiste null.");
                     return;
                 }
 
@@ -146,18 +150,18 @@ namespace Webzine.Repository.Db
 
                 if (existing == null)
                 {
-                    this.logger.LogWarning("Artiste introuvable pour mise à jour (Id: {ArtisteId}).", artiste.IdArtiste);
+                    this.logger.LogWarning("Artiste introuvable pour mise Ã  jour (Id: {ArtisteId}).", artiste.IdArtiste);
                     return;
                 }
 
                 existing.Nom = artiste.Nom;
                 existing.Biographie = artiste.Biographie;
                 this.context.SaveChanges();
-                this.logger.LogDebug("Artiste mis à jour en base (Id: {ArtisteId}).", artiste.IdArtiste);
+                this.logger.LogDebug("Artiste mis Ã  jour en base (Id: {ArtisteId}).", artiste.IdArtiste);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Erreur lors de la mise à jour d'un artiste en base (Id: {ArtisteId}).", artiste?.IdArtiste);
+                this.logger.LogError(ex, "Erreur lors de la mise Ã  jour d'un artiste en base (Id: {ArtisteId}).", artiste?.IdArtiste);
                 throw;
             }
         }
