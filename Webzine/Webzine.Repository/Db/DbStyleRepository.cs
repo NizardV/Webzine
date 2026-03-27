@@ -46,14 +46,14 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                this._logger.LogInformation(
+                this._logger.LogDebug(
                     "Suppression du style {IdStyle} demandée dans le repository base de données.",
                     style.IdStyle);
 
                 this._context.Styles.Remove(style);
                 this._context.SaveChanges();
 
-                this._logger.LogInformation(
+                this._logger.LogDebug(
                     "Suppression du style {IdStyle} réussie dans le repository base de données.",
                     style.IdStyle);
             }

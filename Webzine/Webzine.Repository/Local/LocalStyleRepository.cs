@@ -65,8 +65,7 @@ namespace Webzine.Repository.Local
             try
             {
                 this._logger.LogDebug(
-                    "Recherche du style d'identifiant {IdStyle} dans le repository local.",
-                    id);
+                    $"Recherche du style d'identifiant {id} dans le repository local.");
 
                 var style = _data.styles.FirstOrDefault(s => s.IdStyle == id);
 
@@ -118,11 +117,7 @@ namespace Webzine.Repository.Local
         public void Update(Style style)
         {
             this._logger.LogWarning(
-                "Tentative de modification du style {IdStyle} dans le repository local. Opération non supportée.",
-                style.IdStyle);
-
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas de modifier un style.");
+                $"Tentative de modification du style {style.IdStyle} dans le repository local. Opération non supportée.");
         }
     }
 }
