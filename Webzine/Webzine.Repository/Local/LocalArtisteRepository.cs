@@ -8,81 +8,101 @@ namespace Webzine.Repository.Local
 {
     public class LocalArtisteRepository : IArtisteRepository
     {
-        private readonly WebzineData data;
+        private readonly WebzineData _data;
+        private readonly ILogger<LocalArtisteRepository> _logger;
 
         public LocalArtisteRepository(WebzineData data)
         {
-            this.data = data;
+            this._data = data;
+            this._logger = logger;
         }
 
         public void Add(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                return;
-            }
-
-            if (artiste.IdArtiste <= 0)
-            {
-                var nextId = this.data.artistes.Any()
-                    ? this.data.artistes.Max(a => a.IdArtiste) + 1
-                    : 1;
-                artiste.IdArtiste = nextId;
-            }
-
-            this.data.artistes.Add(artiste);
+            this._logger.LogWarning(
+                "Tentative d'ajout d'un artiste dans le repository local. Opération non supportée.");
         }
 
         public int Count()
         {
-            return this.data.artistes.Count();
+            var count = this._data.artistes.Count();
+            this._logger.LogDebug("Comptage des artistes: {Count}.", count);
+            return count;
         }
 
         public void Delete(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                return;
-            }
-
-            this.data.artistes.Remove(artiste);
+            this._logger.LogWarning(
+                "Tentative de suppression d'un artiste dans le repository local. Opération non supportée.");
         }
 
         public Artiste? Find(int idArtiste)
         {
-            return this.data.artistes.FirstOrDefault(a => a.IdArtiste == idArtiste);
+            try
+            {
+                this._logger.LogDebug(
+                    "Recherche du style d'identifiant {IdStyle} dans le repository local.",
+                    idArtiste);
+
+                var artiste = this._data.artistes.FirstOrDefault(a => a.IdArtiste == idArtiste);
+                this._logger.LogDebug("Recherche artiste par id {ArtisteId}. Trouvé: {Found}.", idArtiste, artiste != null);
+                return artiste;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    $"Erreur lors de la recherche de l'artiste {idArtiste} dans le repository local.");
+                throw;
+            }
         }
 
         public IEnumerable<Artiste> FindAll()
         {
-            return this.data.artistes;
+            try
+            {
+                this._logger.LogDebug(
+                    "Récupération de tous les artistes depuis le repository local.");
+
+                return this._data.artistes.ToList();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la récupération de tous les artistes depuis le repository local.");
+                throw;
+            }
         }
 
         public Artiste? FindByName(string nom)
         {
-            if (string.IsNullOrWhiteSpace(nom))
+            try
             {
-                return null;
-            }
+                if (string.IsNullOrWhiteSpace(nom))
+                {
+                    this._logger.LogWarning("Recherche d'artiste avec un nom vide.");
+                    return null;
+                }
 
-            return this.data.artistes.FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase));
+                var artiste = this._data.artistes.FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase));
+                this._logger.LogDebug("Recherche artiste par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
+
+                return artiste;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    $"Erreur lors de la recherche de l'artiste par nom {nom} dans le repository local.");
+                throw;
+            }
         }
 
         public void Update(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                return;
-            }
-
-            var existing = this.data.artistes.FirstOrDefault(a => a.IdArtiste == artiste.IdArtiste);
-            if (existing == null)
-            {
-                return;
-            }
-
-            existing.Nom = artiste.Nom;
-            existing.Biographie = artiste.Biographie;
+            this._logger.LogWarning(
+                "Tentative de mise à jour d'un style dans le repository local. Opération non supportée.");
         }
     }
 }
