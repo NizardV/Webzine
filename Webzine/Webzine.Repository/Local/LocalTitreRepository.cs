@@ -74,7 +74,6 @@ namespace Webzine.Repository.Local
         }
         public void IncrementNbLectures(Titre titre)
         {
-            throw new NotImplementedException();
         }
         public void IncrementNbLikes(Titre titre)
         {
@@ -99,7 +98,7 @@ namespace Webzine.Repository.Local
             try
             {
                 var titres = _data.titres
-                                .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle));
+                                .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle.ToLower()));
                 this._logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
                 return titres;
             }
