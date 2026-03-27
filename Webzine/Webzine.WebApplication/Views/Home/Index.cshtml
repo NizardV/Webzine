@@ -24,10 +24,10 @@
                     </a>
 
                     <p class="mt-2 mb-2">
-                        @(@item.Chronique.Length > 160 ? @item.Chronique.Substring(0, 160) + "..." : @item.Chronique)
+                        @(@item.Chronique.Length > 200 ? @item.Chronique.Substring(0, 200) + "..." : @item.Chronique)
                     </p>
 
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex align-items-center justify-content-start flex-wrap gap-2">
                         <a asp-controller="Titre"
                                asp-action="Details"
                                asp-route-id="@item.IdTitre"
@@ -37,9 +37,8 @@
 
                         <div class="titre-card-meta">
                             <i class="bi bi-calendar3"></i>
-                            @item.DateSortie.ToString("dd/MM/yyyy")
-                            <span class="ms-2"><i class="bi bi-eye"></i> @item.NbLectures</span>
-                            <span class="ms-2"><i class="bi bi-hand-thumbs-up"></i> @item.NbLikes</span>
+                            @item.DateSortie.ToString("dd/MM/yyyy HH:mm")
+                            <span class="ms-2"><i class="bi bi-tag"></i> @(item.Styles?.Any() == true ? string.Join(", ", item.Styles.Select(s => s.Libelle)) : "-")</span>
                         </div>
                     </div>
                 </div>
@@ -69,7 +68,7 @@
     </div>
 </div>
 
-<hr class="my-5" />
+<br class="my-5" />
 
 <h2 class="h4 mb-3">Titres les plus populaires</h2>
 
