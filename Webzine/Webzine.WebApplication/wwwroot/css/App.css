@@ -85,3 +85,14 @@
 .artiste-album-table thead th {
     border-bottom: none;
 }
+
+/* Search */
+.search-titre-thumb {
+    width: 60px;
+}
+
+.search-titre-thumb-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
