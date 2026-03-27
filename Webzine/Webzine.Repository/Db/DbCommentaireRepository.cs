@@ -9,6 +9,11 @@ namespace Webzine.Repository.Db
     {
         private readonly WebzineDbContext _context;
 
+        public DbCommentaireRepository(WebzineDbContext context)
+        {
+            _context = context;
+        }
+
         public void Add(Commentaire commentaire)
         {
             _context.Commentaires.Add(commentaire);

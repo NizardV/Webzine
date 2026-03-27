@@ -11,11 +11,13 @@ namespace Webzine.WebApplication.Controllers
     /// </summary>
     public class ArtisteController : Controller
     {
-        private readonly IArtisteRepository artisteRepository;
+        private readonly IArtisteRepository _artisteRepository;
+        private readonly ITitreRepository _titreRepository;
 
-        public ArtisteController(IArtisteRepository artisteRepository)
+        public ArtisteController(IArtisteRepository artisteRepository, ITitreRepository titreRepository)
         {
-            this.artisteRepository = artisteRepository;
+            _artisteRepository = artisteRepository;
+            _titreRepository = titreRepository;
         }
         /// <summary>
         /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
@@ -24,13 +26,13 @@ namespace Webzine.WebApplication.Controllers
         [HttpGet("/artiste/{nom}")]
         public IActionResult DetailsArtiste(string nom)
         {
-            var artiste = this.artisteRepository.FindByName(nom);
+            var artiste = _artisteRepository.FindByName(nom);
             if (artiste == null)
             {
                 return NotFound();
             }
 
-            var titres = new List<Titre> { }; // Ajouter la logique pour recupérer à partir du repo
+            var titres = _titreRepository.FindAll().Where(t =>t.IdArtiste == artiste.IdArtiste);
 
             var model = new ArtisteModel { Artiste = artiste, Titres = titres };
 
