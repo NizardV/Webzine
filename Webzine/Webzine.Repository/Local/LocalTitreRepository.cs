@@ -29,6 +29,7 @@ namespace Webzine.Repository.Local
         }
         public void Delete(Titre titre)
         {
+            throw new NotImplementedException();
         }
         public Titre Find(int idTitre)
         {
@@ -73,9 +74,11 @@ namespace Webzine.Repository.Local
         }
         public void IncrementNbLectures(Titre titre)
         {
+            throw new NotImplementedException();
         }
         public void IncrementNbLikes(Titre titre)
         {
+            throw new NotImplementedException();
         }
         public IEnumerable<Titre> Search(string mot)
         {
