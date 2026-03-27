@@ -20,22 +20,23 @@ namespace Webzine.Repository.Local
 
         public void Add(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                this.logger.LogWarning("Tentative d'ajout d'un artiste null.");
-                return;
-            }
+            //if (artiste == null)
+            //{
+            //    this.logger.LogWarning("Tentative d'ajout d'un artiste null.");
+            //    return;
+            //}
 
-            if (artiste.IdArtiste <= 0)
-            {
-                var nextId = this.data.artistes.Any()
-                    ? this.data.artistes.Max(a => a.IdArtiste) + 1
-                    : 1;
-                artiste.IdArtiste = nextId;
-            }
+            //if (artiste.IdArtiste <= 0)
+            //{
+            //    var nextId = this.data.artistes.Any()
+            //        ? this.data.artistes.Max(a => a.IdArtiste) + 1
+            //        : 1;
+            //    artiste.IdArtiste = nextId;
+            //}
 
-            this.data.artistes.Add(artiste);
-            this.logger.LogInformation("Artiste ajouté (Id: {ArtisteId}, Nom: {Nom}).", artiste.IdArtiste, artiste.Nom);
+            //this.data.artistes.Add(artiste);
+            //this.logger.LogInformation("Artiste ajouté (Id: {ArtisteId}, Nom: {Nom}).", artiste.IdArtiste, artiste.Nom);
+            throw new NotImplementedException();
         }
 
         public int Count()
@@ -47,14 +48,15 @@ namespace Webzine.Repository.Local
 
         public void Delete(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                this.logger.LogWarning("Tentative de suppression d'un artiste null.");
-                return;
-            }
+            //if (artiste == null)
+            //{
+            //    this.logger.LogWarning("Tentative de suppression d'un artiste null.");
+            //    return;
+            //}
 
-            this.data.artistes.Remove(artiste);
-            this.logger.LogInformation("Artiste supprimé (Id: {ArtisteId}).", artiste.IdArtiste);
+            //this.data.artistes.Remove(artiste);
+            //this.logger.LogInformation("Artiste supprimé (Id: {ArtisteId}).", artiste.IdArtiste);
+            throw new NotImplementedException();
         }
 
         public Artiste? Find(int idArtiste)
@@ -85,22 +87,23 @@ namespace Webzine.Repository.Local
 
         public void Update(Artiste artiste)
         {
-            if (artiste == null)
-            {
-                this.logger.LogWarning("Tentative de mise à jour d'un artiste null.");
-                return;
-            }
+            //if (artiste == null)
+            //{
+            //    this.logger.LogWarning("Tentative de mise à jour d'un artiste null.");
+            //    return;
+            //}
 
-            var existing = this.data.artistes.FirstOrDefault(a => a.IdArtiste == artiste.IdArtiste);
-            if (existing == null)
-            {
-                this.logger.LogWarning("Artiste introuvable pour mise à jour (Id: {ArtisteId}).", artiste.IdArtiste);
-                return;
-            }
+            //var existing = this.data.artistes.FirstOrDefault(a => a.IdArtiste == artiste.IdArtiste);
+            //if (existing == null)
+            //{
+            //    this.logger.LogWarning("Artiste introuvable pour mise à jour (Id: {ArtisteId}).", artiste.IdArtiste);
+            //    return;
+            //}
 
-            existing.Nom = artiste.Nom;
-            existing.Biographie = artiste.Biographie;
-            this.logger.LogInformation("Artiste mis à jour (Id: {ArtisteId}).", artiste.IdArtiste);
+            //existing.Nom = artiste.Nom;
+            //existing.Biographie = artiste.Biographie;
+            //this.logger.LogInformation("Artiste mis à jour (Id: {ArtisteId}).", artiste.IdArtiste);
+            throw new NotImplementedException();
         }
     }
 }
