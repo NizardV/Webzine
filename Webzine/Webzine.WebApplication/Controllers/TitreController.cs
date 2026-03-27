@@ -23,7 +23,7 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("Titre/Like/{id}")]
+        [Route("titre/like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
         /// L'opération n'est pas persistée (Factory inchangées) et sert uniquement à refléter l'état dans l'interface.
@@ -37,6 +37,7 @@ namespace Webzine.WebApplication.Controllers
                 return NotFound();
             }
             _titreRepository.IncrementNbLikes(titre);
+            TempData["VientDeLiker"] = true;
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -103,6 +104,9 @@ namespace Webzine.WebApplication.Controllers
         public IActionResult Details(int id)
         {
             Titre? titre = _titreRepository.Find(id);
+            if (TempData["VientDeLiker"] == null) {
+                _titreRepository.IncrementNbLectures(titre);
+            }
 
             if (titre == null)
             {
