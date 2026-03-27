@@ -72,11 +72,6 @@ namespace Webzine.WebApplication.Controllers
                 return NotFound();
             }
 
-            if (!string.IsNullOrWhiteSpace(chronique))
-            {
-                titre.Chronique = chronique;
-            }
-
             return RedirectToAction(nameof(Details), new { id });
         }
 

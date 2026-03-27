@@ -75,21 +75,11 @@ namespace Webzine.Repository.Local
         }
         public void IncrementNbLectures(Titre titre)
         {
-            this._logger.LogInformation($"Nouvelle lecture sur le titre : {titre.IdTitre} - {titre.Libelle}");
-            titre.NbLectures++;
+            throw new NotImplementedException();
         }
         public void IncrementNbLikes(Titre titre)
         {
-            try
-            {
-                titre.NbLikes++;
-                this._logger.LogInformation($"Nouveau like sur : {titre.IdTitre} - {titre.Libelle}");
-            }
-            catch (Exception)
-            {
-                this._logger.LogError($"Erreur lors du like du titre {titre.IdTitre} - {titre.Libelle}");
-                throw new Exception("Impossible de liker ce titre.s");
-            }
+            throw new NotImplementedException();
         }
         public IEnumerable<Titre> Search(string mot)
         {
