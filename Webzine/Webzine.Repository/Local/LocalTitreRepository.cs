@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,11 @@ namespace Webzine.Repository.Local
     public class LocalTitreRepository : ITitreRepository
     {
         public readonly WebzineData _data;
-        public LocalTitreRepository(WebzineData data)
+        private readonly ILogger<LocalTitreRepository> _logger;
+        public LocalTitreRepository(WebzineData data, ILogger<LocalTitreRepository> logger)
         {
             _data = data;
+            _logger = logger;
         }
 
         public void Add(Titre titre)
@@ -25,11 +28,30 @@ namespace Webzine.Repository.Local
         }
         public void Delete(Titre titre)
         {
-            _data.titres.Remove(titre);
+            try
+            {
+                _logger.LogInformation($"Suppression du titre {titre.IdTitre} - {titre.Libelle}");
+                _data.titres.Remove(titre);
+            }
+            catch (Exception)
+            {
+                _logger.LogError($"Erreur lors de la suppression du titre {titre.IdTitre} - {titre.Libelle}");
+                throw new Exception("Impossible de supprimer le titre");
+            }
         }
         public Titre Find(int idTitre)
         {
-            return _data.titres.FirstOrDefault(t => t.IdTitre == idTitre);
+            try
+            {
+                var titre = _data.titres.FirstOrDefault(t => t.IdTitre == idTitre);
+                _logger.LogInformation($"Recherche du titre {idTitre} - {titre.Libelle}");
+                return titre;
+            }
+            catch (Exception)
+            {
+                _logger.LogError($"Erreur lors de la recherche du titre {idTitre}");
+                throw new Exception("Titre non trouvé");
+            }
         }
         public IEnumerable<Titre> FindTitres(int offset, int limit)
         {
