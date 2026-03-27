@@ -49,7 +49,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             {
                 NbArtistes = artistes.Count,
                 NbTitres = titres.Count,
-                NbStyles = titres.Count,
+                NbStyles = styles.Count,
 
                 NbLikes = titres.Sum(t => t.NbLikes),
                 NbLectures = titres.Sum(t => t.NbLectures),
