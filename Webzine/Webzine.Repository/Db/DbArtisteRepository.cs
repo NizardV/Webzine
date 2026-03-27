@@ -80,7 +80,7 @@ namespace Webzine.Repository.Db
 
             var artiste = this.context.Artistes
                 .Include(a => a.Titres)
-                .FirstOrDefault(a => a.Nom.Equals(nom, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(a => a.Nom.ToLower() == nom.ToLower());
             this.logger.LogInformation("Recherche artiste en base par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
             return artiste;
         }

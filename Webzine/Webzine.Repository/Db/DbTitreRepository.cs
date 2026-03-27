@@ -33,6 +33,7 @@ namespace Webzine.Repository.Db
             {
                 this._logger.LogInformation($"Suppression du titre {titre.IdTitre} - {titre.Libelle}");
                 _context.Titres.Remove(titre);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -47,6 +48,7 @@ namespace Webzine.Repository.Db
                 var titre = _context.Titres
                     .Include(t=> t.Artiste)
                     .Include(t=> t.Commentaires)
+                    .Include(t=> t.Styles)
                     .FirstOrDefault(t => t.IdTitre == idTitre);
                 this._logger.LogInformation($"Recherche du titre {idTitre} - {titre.Libelle}");
                 return titre;
@@ -75,7 +77,10 @@ namespace Webzine.Repository.Db
             try
             {
                 this._logger.LogInformation("Récupération de tous les titres");
-                var titres = _context.Titres;
+                var titres = _context.Titres
+                    .Include(t => t.Artiste)
+                    .Include(t => t.Styles)
+                    .Include(t => t.Commentaires);
                 return titres;
             }
             catch (Exception)
@@ -86,14 +91,27 @@ namespace Webzine.Repository.Db
         }
         public void IncrementNbLectures(Titre titre)
         {
-            this._logger.LogInformation($"Nouvelle lecture sur le titre : {titre.IdTitre} - {titre.Libelle}");
-            titre.NbLectures++;
+            try
+            {
+
+                var titreBDD = _context.Titres.Where(t => t.IdTitre == titre.IdTitre).FirstOrDefault();
+                titreBDD.NbLectures++;
+                _context.SaveChanges();
+                this._logger.LogInformation($"Nouvelle lecture sur le titre : {titre.IdTitre} - {titre.Libelle}");
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Impossible d'incrémenter le nombre de lectures");
+            }
         }
         public void IncrementNbLikes(Titre titre)
         {
             try
             {
-                titre.NbLikes++;
+                var titreBDD = _context.Titres.Where(t => t.IdTitre == titre.IdTitre).FirstOrDefault();
+                titreBDD.NbLikes++;
+                _context.SaveChanges();
                 this._logger.LogInformation($"Nouveau like sur : {titre.IdTitre} - {titre.Libelle}");
             }
             catch (Exception)
