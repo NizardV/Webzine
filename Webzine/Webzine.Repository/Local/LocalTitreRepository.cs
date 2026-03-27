@@ -109,7 +109,7 @@ namespace Webzine.Repository.Local
                 throw new Exception("Impossible de rechercher par style.");
             }
         }
-        }
+        
         public void Update(Titre titre)
         {
             this._logger.LogWarning("Tentative de de mise à jour d'un titre dans le repository local. Opération non supportée.");
