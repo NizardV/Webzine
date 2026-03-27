@@ -1,5 +1,6 @@
 ﻿@model Webzine.WebApplication.ViewModels.HomeViewModel
 
+
 @{
     ViewData["Title"] = "Derniers titres chroniqués";
 }
@@ -12,7 +13,12 @@
         <div class="titre-card">
             <div class="d-flex gap-3">
                 <div>
-                    <img src="@item.UrlJaquette" alt="Jaquette" class="titre-thumb" />
+                    <a class="titre-card-title"
+                           asp-controller="Titre"
+                           asp-action="Details"
+                           asp-route-id="@item.IdTitre">
+                        <img src="@item.UrlJaquette" alt="Jaquette" class="titre-thumb" />
+                    </a>
                 </div>
 
                 <div class="flex-grow-1">
@@ -38,7 +44,27 @@
                         <div class="titre-card-meta">
                             <i class="bi bi-calendar3"></i>
                             @item.DateSortie.ToString("dd/MM/yyyy HH:mm")
-                            <span class="ms-2"><i class="bi bi-tag"></i> @(item.Styles?.Any() == true ? string.Join(", ", item.Styles.Select(s => s.Libelle)) : "-")</span>
+                            <a asp-area="" asp-controller="Titre" asp-action="Style" asp-route-libelle="@item.Styles.Select(s => s.Libelle)" class="text-decoration-none"></a>
+                            <span class="ms-2">
+                                <i class="bi bi-tag"></i>
+                                @if (item.Styles?.Any() == true)
+                                {
+                                    var styles = item.Styles.ToList();
+                                    for (var i = 0; i < styles.Count; i++)
+                                    {
+                                        var style = styles[i];
+                                        <a asp-controller="Titre" asp-action="Style" asp-route-libelle="@style.Libelle" class="text-decoration-none">@style.Libelle</a>
+                                        if (i < styles.Count - 1)
+                                        {
+                                            @: ,
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    @: -
+                                }
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -77,12 +103,19 @@
     {
         <div class="col-12 col-md-4">
             <div class="popular-card">
-                <img src="@item.UrlJaquette" alt="Jaquette" />
+                <a asp-controller="Titre" asp-action="Details" asp-route-id="@item.IdTitre" class="text-decoration-none">
+                    <img src="@item.UrlJaquette" alt="Jaquette" />
+                </a>
                 <div class="mt-2">
                     <a asp-controller="Titre" asp-action="Details" asp-route-id="@item.IdTitre" class="text-decoration-none">
                         @item.Libelle
                     </a>
-                    <div class="text-muted small">par @item.Artiste?.Nom</div>
+                    <div class="text-muted small">
+                        par
+                        <a asp-controller="Artiste" asp-action="DetailsArtiste" asp-route-nom="@item.Artiste?.Nom" class="text-decoration-none">
+                            @item.Artiste?.Nom
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
