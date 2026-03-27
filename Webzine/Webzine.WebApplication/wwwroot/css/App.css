@@ -62,3 +62,35 @@
 .popular-card .text-muted {
     font-size: 0.75rem;
 }
+
+/* Titre details */
+.titre-detail-cover {
+    width: 250px;
+    height: 250px;
+    max-width: 100%;
+    display: block;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.artiste-album-cover {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+.artiste-album-table thead th {
+    border-bottom: none;
+}
+
+/* Search */
+.search-titre-thumb {
+    width: 60px;
+}
+
+.search-titre-thumb-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}

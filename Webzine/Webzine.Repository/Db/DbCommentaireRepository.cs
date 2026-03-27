@@ -41,10 +41,20 @@ namespace Webzine.Repository.Db
         /// method.</param>
         public void Add(Commentaire commentaire)
         {
-            this._logger.LogInformation("Tentative d'ajout d'un nouveau commentaire (Auteur: {Auteur}, TitreID: {IdTitre}).", commentaire.Auteur, commentaire.IdTitre);
-            this._context.Commentaires.Add(commentaire);
-            this._context.SaveChanges();
-            this._logger.LogInformation("Commentaire ajouté avec succès avec l'ID {IdCommentaire}.", commentaire.IdCommentaire);
+            try
+            {
+                this._logger.LogDebug("Tentative d'ajout d'un nouveau commentaire (Auteur: {Auteur}, TitreID: {IdTitre}).", commentaire.Auteur, commentaire.IdTitre);
+
+                this._context.Commentaires.Add(commentaire);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug("Commentaire ajouté avec succès avec l'ID {IdCommentaire}.", commentaire.IdCommentaire);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de l'ajout du commentaire (Auteur: {Auteur}, TitreID: {IdTitre}).", commentaire.Auteur, commentaire.IdTitre);
+                throw;
+            }
         }
 
         /// <summary>
@@ -56,12 +66,21 @@ namespace Webzine.Repository.Db
         /// <param name="commentaire">The comment to delete. Must not be null and must exist in the data context.</param>
         public void Delete(Commentaire commentaire)
         {
-            this._logger.LogInformation("Tentative de suppression du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+            try
+            {
+                this._logger.LogDebug("Tentative de suppression du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
 
-            this._context.Commentaires.Remove(commentaire);
-            this._context.SaveChanges();
+                this._context.Commentaires.Remove(commentaire);
+                this._context.SaveChanges();
 
-            this._logger.LogInformation("Commentaire ID {IdCommentaire} supprimé avec succès de la base de données.", commentaire.IdCommentaire);
+                this._logger.LogDebug("Commentaire ID {IdCommentaire} supprimé avec succès de la base de données.", commentaire.IdCommentaire);
+
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la suppression du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+                throw;
+            }
         }
 
         /// <summary>
@@ -73,20 +92,29 @@ namespace Webzine.Repository.Db
         /// <returns>Le commentaire correspondant à l'identifiant spécifié, ou null si aucun commentaire n'est trouvé.</returns>
         public Commentaire Find(int id)
         {
-            this._logger.LogInformation("Recherche du commentaire avec l'ID {Id} dans la base de données...", id);
 
-            var commentaire = this._context.Commentaires.Include(c => c.Titre).FirstOrDefault(c => c.IdCommentaire == id);
-
-            if (commentaire == null)
+            try
             {
-                this._logger.LogWarning("Aucun commentaire trouvé avec l'ID {Id}.", id);
-            }
-            else
-            {
-                this._logger.LogInformation("Commentaire ID {Id} récupéré avec succès.", id);
-            }
+                this._logger.LogDebug("Recherche du commentaire avec l'ID {Id} dans la base de données...", id);
 
-            return commentaire;
+                var commentaire = this._context.Commentaires.Include(c => c.Titre).FirstOrDefault(c => c.IdCommentaire == id);
+
+                if (commentaire == null)
+                {
+                    this._logger.LogWarning("Aucun commentaire trouvé avec l'ID {Id}.", id);
+                }
+                else
+                {
+                    this._logger.LogDebug("Commentaire ID {Id} récupéré avec succès.", id);
+                }
+
+                return commentaire;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la recherche du commentaire avec l'ID {Id}.", id);
+                throw;
+            }
         }
 
         /// <summary>
@@ -98,13 +126,21 @@ namespace Webzine.Repository.Db
         /// collection est vide s'il n'existe aucun commentaire.</returns>
         public IEnumerable<Commentaire> FindAll()
         {
-            this._logger.LogInformation("Récupération de la liste complète des commentaires depuis la base de données...");
+            try
+            {
+                this._logger.LogDebug("Récupération de la liste complète des commentaires depuis la base de données...");
 
-            var commentaires = this._context.Commentaires.Include(c => c.Titre).ToList();
+                var commentaires = this._context.Commentaires.Include(c => c.Titre).ToList();
 
-            this._logger.LogInformation("{Count} commentaires récupérés avec succès.", commentaires.Count);
+                this._logger.LogDebug("{Count} commentaires récupérés avec succès.", commentaires.Count);
 
-            return commentaires;
+                return commentaires;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la récupération de tous les commentaires depuis la base de données.");
+                throw;
+            }
         }
     }
 }

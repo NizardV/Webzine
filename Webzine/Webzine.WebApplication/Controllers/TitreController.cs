@@ -37,7 +37,7 @@ namespace Webzine.WebApplication.Controllers
                 return NotFound();
             }
             _titreRepository.IncrementNbLikes(titre);
-            TempData["VientDeLiker"] = true;
+
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -99,9 +99,6 @@ namespace Webzine.WebApplication.Controllers
         public IActionResult Details(int id)
         {
             Titre? titre = _titreRepository.Find(id);
-            if (TempData["VientDeLiker"] == null) {
-                _titreRepository.IncrementNbLectures(titre);
-            }
 
             if (titre == null)
             {
