@@ -1,5 +1,6 @@
 namespace Webzine.WebApplication.ViewModels
 {
+    using Webzine.Entity;
     /// <summary>
     /// Modèle de vue utilisé pour la page d'accueil.
     /// Contient la liste paginée des derniers titres chroniqués ainsi que les informations de pagination,
@@ -10,12 +11,12 @@ namespace Webzine.WebApplication.ViewModels
         /// <summary>
         /// Obtient la liste complète des titres.
         /// </summary>
-        public required IReadOnlyList<TitreModel> AllTitres { get; init; }
+        public required IEnumerable<Titre> AllTitres { get; init; }
 
         /// <summary>
         /// Obtient la liste paginée des titres à afficher sur la page courante.
         /// </summary>
-        public required IReadOnlyList<TitreModel> PagedTitres { get; init; }
+        public required IEnumerable<Titre> PagedTitres { get; init; }
 
         /// <summary>
         /// Obtient le nombre d'éléments par page.

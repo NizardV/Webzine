@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
+using Webzine.Repository.Contracts;
+using Webzine.Repository.Db;
 using Webzine.WebApplication.ViewModels;
 
 namespace Webzine.WebApplication.Controllers
@@ -11,37 +14,16 @@ namespace Webzine.WebApplication.Controllers
     /// </summary>
     public class TitreController : Controller
     {
-        private static string GetLikesKey(int id) => $"ui:titre:{id}:likes";
-
-        private static string GetChroniqueKey(int id) => $"ui:titre:{id}:chronique";
-
-        [HttpGet]
-        [Route("titre/{id}")]
-        public IActionResult DetailsTitre(int id)
+        private ITitreRepository _titreRepository;
+        private ICommentaireRepository _commentaireRepository;
+        public TitreController(ITitreRepository titreRepository, ICommentaireRepository commentaireRepository)
         {
-            var titre = TitreFactory.GetTitreById(id);
-            if (titre is null)
-            {
-                return NotFound();
-            }
-
-            if (TempData.Peek(GetLikesKey(id)) is object likesObj
-                && int.TryParse(likesObj?.ToString(), out var likes))
-            {
-                titre.NbLikes = likes;
-            }
-
-            if (TempData.Peek(GetChroniqueKey(id)) is object chroniqueObj)
-            {
-                titre.Chronique = chroniqueObj?.ToString() ?? titre.Chronique;
-            }
-            var commentaires = CommentaireFactory.GetCommentairesByTitre(id);
-            return View(new TitreModel { Titre = titre, Commentaires = commentaires});
+            _titreRepository = titreRepository;
+            _commentaireRepository = commentaireRepository;
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Titre/Like/{id}")]
+        [Route("titre/like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
         /// L'opération n'est pas persistée (Factory inchangées) et sert uniquement à refléter l'état dans l'interface.
@@ -49,21 +31,14 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="id">Identifiant du titre.</param>
         public IActionResult Like(int id)
         {
-            var titre = TitreFactory.GetTitreById(id);
+            var titre = _titreRepository.Find(id);
             if (titre is null)
             {
                 return NotFound();
             }
+            _titreRepository.IncrementNbLikes(titre);
 
-            var current = titre.NbLikes;
-            if (TempData.Peek(GetLikesKey(id)) is object likesObj
-                && int.TryParse(likesObj?.ToString(), out var likes))
-            {
-                current = likes;
-            }
-
-            TempData[GetLikesKey(id)] = current + 1;
-            return RedirectToAction(nameof(DetailsTitre), new { id });
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         [HttpGet]
@@ -74,22 +49,15 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="id">Identifiant du titre.</param>
         public IActionResult Edit(int id)
         {
-            var titre = TitreFactory.GetTitreById(id);
+            var titre = _titreRepository.Find(id);
             if (titre is null)
             {
                 return NotFound();
             }
-
-            if (TempData.Peek(GetChroniqueKey(id)) is object chroniqueObj)
-            {
-                titre.Chronique = chroniqueObj?.ToString() ?? titre.Chronique;
-            }
-
             return View(titre);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Enregistre l'édition légère (IHM) d'un titre, sans persistance.
@@ -98,18 +66,13 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="chronique">Nouvelle chronique à afficher.</param>
         public IActionResult Edit(int id, [FromForm] string chronique)
         {
-            var titre = TitreFactory.GetTitreById(id);
+            var titre = _titreRepository.Find(id);
             if (titre is null)
             {
                 return NotFound();
             }
 
-            if (!string.IsNullOrWhiteSpace(chronique))
-            {
-                TempData[GetChroniqueKey(id)] = chronique;
-            }
-
-            return RedirectToAction(nameof(DetailsTitre), new { id });
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         [HttpGet]
@@ -117,24 +80,40 @@ namespace Webzine.WebApplication.Controllers
         public IActionResult Style(string libelle)
         {
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
-            var style = LocalStylesFactory.GetStyleByLibelle(libelle);
+            var titres = _titreRepository.SearchByStyle(libelle);
 
-            if (style == null)
+            if (titres == null)
             {
                 return NotFound();
             }
-
-            // On récupère tous les titres de la Factory
-            // puis on filtre (.Where) pour ne garder que ceux qui contiennent ce style précis.
-            var titresDuStyle = TitreFactory.GetTitres()
-                .Where(t => t.Styles.Any(s => s.IdStyle == style.IdStyle))
-                .ToList();
-
-            // On stocke le vrai nom du style (avec la bonne majuscule) pour l'afficher dans le <h1> de la vue
-            ViewBag.NomDuStyle = style.Libelle;
-
             // On envoie la liste filtrée à la vue
-            return View(titresDuStyle);
+            return View(titres);
+        }
+
+        /// <summary>
+        /// Retourne la vue de détail d'un titre spécifique.
+        /// </summary>
+        /// <param name="id">Id du Titre</param>
+        /// <returns>Une vue</returns>
+        [Route("titre/{id}")]
+        public IActionResult Details(int id)
+        {
+            Titre? titre = _titreRepository.Find(id);
+
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
+            var commentaires = _commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
+
+            TitreModel model = new TitreModel
+            {
+                Titre = titre,
+                Commentaires = commentaires,
+            };
+
+            return View(model);
         }
     }
 }

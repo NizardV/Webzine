@@ -17,6 +17,7 @@
             </label>
             <div class="col-sm-10">
                 <input type="text" id="Nom" name="Nom" class="form-control" required />
+                <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
         </div>
 
@@ -26,6 +27,7 @@
             </label>
             <div class="col-sm-10">
                 <textarea id="Biographie" name="Biographie" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Biographie" class="text-danger"></span>
             </div>
         </div>
 

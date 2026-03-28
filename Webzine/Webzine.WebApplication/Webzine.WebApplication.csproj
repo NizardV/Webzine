@@ -7,9 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Admin\**" />
+    <Content Remove="Views\Admin\**" />
+    <EmbeddedResource Remove="Views\Admin\**" />
+    <None Remove="Views\Admin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,6 +28,7 @@
     </PackageReference>
     <PackageReference Include="NLog.Targets.Loki" Version="2.4.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,8 +36,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Webzine.Business.Contracts\Webzine.Business.Contracts.csproj" />
+    <ProjectReference Include="..\Webzine.EntitiesContext\Webzine.EntitiesContext.csproj" />
     <ProjectReference Include="..\Webzine.Entity\Webzine.Entity.csproj" />
-    <Folder Include="Views\Admin\" />
+    <ProjectReference Include="..\Webzine.Repository.Contracts\Webzine.Repository.Contracts.csproj" />
+    <ProjectReference Include="..\Webzine.Repository\Webzine.Repository.csproj" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

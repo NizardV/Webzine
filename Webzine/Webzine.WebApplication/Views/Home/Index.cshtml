@@ -1,3 +1,125 @@
-﻿@{
-    Context.Response.Redirect(Url.Action("Home", "Home") ?? "/");
+﻿@model Webzine.WebApplication.ViewModels.HomeViewModel
+
+
+@{
+    ViewData["Title"] = "Derniers titres chroniqués";
 }
+
+<h1 class="h3 mb-4">Derniers titres chroniqués</h1>
+
+<div class="d-grid gap-3">
+    @foreach (var item in Model.PagedTitres)
+    {
+        <div class="titre-card">
+            <div class="d-flex gap-3">
+                <div class="titre-thumb-wrapper">
+                    <a class="titre-card-title"
+                           asp-controller="Titre"
+                           asp-action="Details"
+                           asp-route-id="@item.IdTitre">
+                        <img src="@item.UrlJaquette" alt="Jaquette" class="titre-thumb" />
+                    </a>
+                </div>
+
+                <div class="flex-grow-1">
+                    <a class="titre-card-title"
+                           asp-controller="Titre"
+                           asp-action="Details"
+                           asp-route-id="@item.IdTitre">
+                        @item.Artiste?.Nom - @item.Libelle
+                    </a>
+
+                    <p class="mt-2 mb-2">
+                        @(@item.Chronique.Length > 200 ? @item.Chronique.Substring(0, 200) + "..." : @item.Chronique)
+                    </p>
+
+                    <div class="d-flex align-items-center justify-content-start flex-wrap gap-2">
+                        <a asp-controller="Titre"
+                               asp-action="Details"
+                               asp-route-id="@item.IdTitre"
+                               class="btn btn-primary btn-sm">
+                            Lire la suite
+                        </a>
+
+                        <div class="titre-card-meta">
+                            <i class="bi bi-calendar3"></i>
+                            @item.DateSortie.ToString("dd/MM/yyyy HH:mm:ss")
+                            <a asp-area="" asp-controller="Titre" asp-action="Style" asp-route-libelle="@item.Styles.Select(s => s.Libelle)" class="text-decoration-none"></a>
+                            <span class="ms-2">
+                                <i class="bi bi-tag"></i>
+                                @if (item.Styles?.Any() == true)
+                                {
+                                    var styles = item.Styles.ToList();
+                                    for (var i = 0; i < styles.Count; i++)
+                                    {
+                                        var style = styles[i];
+                                        <a asp-controller="Titre" asp-action="Style" asp-route-libelle="@style.Libelle" class="text-decoration-none">@style.Libelle</a>
+                                        if (i < styles.Count - 1)
+                                        {
+                                            @: ,
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    @: -
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            @if (Model.CurrentPage > 0)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage - 1)">« Titres plus récents</a>
+            }
+        </div>
+        <div>
+            @if (Model.CurrentPage < Model.MaxPage)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage + 1)">Titres plus anciens »</a>
+            }
+        </div>
+    </div>
+</div>
+
+<br class="my-3" />
+
+<h2 class="h4 mb-3">Titres les plus populaires</h2>
+
+<div class="row g-3">
+    @foreach (var item in Model.AllTitres.OrderByDescending(m => m.NbLectures).Take(3))
+    {
+        <div class="col-12 col-md-4">
+            <div class="popular-card">
+                <a asp-controller="Titre" asp-action="Details" asp-route-id="@item.IdTitre" class="text-decoration-none">
+                    <img src="@item.UrlJaquette" alt="Jaquette" />
+                </a>
+                <div class="mt-2">
+                    <a asp-controller="Titre" asp-action="Details" asp-route-id="@item.IdTitre" class="text-decoration-none">
+                        @item.Libelle
+                    </a>
+                    <div class="text-muted small">
+                        par
+                        <a asp-controller="Artiste" asp-action="DetailsArtiste" asp-route-nom="@item.Artiste?.Nom" class="text-decoration-none">
+                            @item.Artiste?.Nom
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<br class="my-2" />

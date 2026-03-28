@@ -1,0 +1,158 @@
+﻿@model Webzine.WebApplication.ViewModels.TitreModel
+
+@{
+    ViewData["Title"] = $"{Model.Titre.Libelle}";
+}
+
+<div class="mb-2">
+    <h1 class="h3 mb-1">
+        <a asp-controller="Artiste"
+           asp-action="DetailsArtiste"
+           asp-route-nom="@Model.Titre.Artiste?.Nom"
+           class="link-primary text-decoration-none">
+            @Model.Titre.Artiste?.Nom
+        </a>
+        - @Model.Titre.Libelle
+    </h1>
+</div>
+
+<div class="d-flex align-items-center flex-wrap gap-2 text-muted small">
+    <span>
+        <i class="bi bi-calendar3"></i>
+        Le @Model.Titre.DateSortie.ToString("dd/MM/yyyy") à @Model.Titre.DateSortie.ToString("HH:mm")
+    </span>
+    <span class="ms-3">
+        <i class="bi bi-hand-thumbs-up"></i> @Model.Titre.NbLikes
+    </span>
+    <span class="ms-3">
+        <i class="bi bi-tags"></i>
+        Styles :
+        @if (Model.Titre.Styles?.Any() == true)
+        {
+            var styles = Model.Titre.Styles.ToList();
+            for (var i = 0; i < styles.Count; i++)
+            {
+                var style = styles[i];
+                <a asp-controller="Titre" asp-action="Style" asp-route-libelle="@style.Libelle" class="text-decoration-none">@style.Libelle</a>
+                if (i < styles.Count - 1)
+                {
+                    @: ,
+                }
+            }
+        }
+    </span>
+    <span class="ms-auto d-inline-flex gap-2">
+        <form asp-controller="Titre"
+              asp-action="Like"
+              asp-route-id="@Model.Titre.IdTitre"
+              method="post">
+            <button type="submit" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-hand-thumbs-up"></i>
+                Liker
+            </button>
+        </form>
+
+        <a class="btn btn-primary btn-sm"
+           asp-controller="Titre"
+           asp-action="Edit"
+           asp-route-id="@Model.Titre.IdTitre">
+            <i class="bi bi-pencil-square"></i>
+            Éditer
+        </a>
+    </span>
+</div>
+
+<br class="mb-1" />
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-8">
+        <h2 class="h5">Chronique</h2>
+        <p class="mb-4" style="white-space: pre-line;">@Model.Titre.Chronique</p>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Titre.UrlEcoute))
+        {
+            <div class="ratio ratio-16x9">
+                <iframe src="@Model.Titre.UrlEcoute" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        }
+    </div>
+
+    <div class="col-12 col-lg-4 d-flex justify-content-lg-end">
+        @if (!string.IsNullOrWhiteSpace(Model.Titre.UrlJaquette))
+        {
+            <img src="@Model.Titre.UrlJaquette" alt="Jaquette" class="img-fluid rounded titre-detail-cover" />
+        }
+    </div>
+</div>
+
+<div class="mb-5">
+    <h1 class="h5 mb-3">Donne ton avis sur le titre</h1>
+
+    <form asp-controller="Home" asp-action="AjouterCommentaire" asp-route-id="@Model.Titre.IdTitre" method="post" class="row g-3">
+        <div class="col-12">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-2">
+                    <label asp-for="Auteur" class="col-form-label"></label>
+                    <span class="text-danger">*</span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <input asp-for="Auteur" class="form-control" placeholder="Votre nom (exemple : Emmanuel)" required />
+                    <span asp-validation-for="Auteur" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-2">
+                    <label asp-for="Contenu" class="col-form-label"></label>
+                    <span class="text-danger">*</span>
+                </div>
+                <div class="col-12 col-md-8">
+                    <textarea asp-for="Contenu" class="form-control" rows="3" placeholder="Votre commentaire..." required></textarea>
+                    <span asp-validation-for="Contenu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-2"></div>
+                <div class="col-12 col-md-6">
+                    <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="mb-4">
+    <h2 class="h5">Commentaires</h2>
+
+    @if (Model.Commentaires == null || !Model.Commentaires.Any())
+    {
+        <p class="text-muted">Aucun commentaire. Soyez le premier à réagir !</p>
+    }
+    else
+    {
+        <div class="d-grid gap-3">
+            @foreach (var c in Model.Commentaires.OrderByDescending(x => x.DateCreation))
+            {
+                <div class="d-flex gap-3">
+                    <div class="text-primary" style="font-size: 2.5rem; line-height: 1;">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">
+                            @c.Auteur
+                            <span class="text-muted small">le @c.DateCreation.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div>@c.Contenu</div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<br class="my-1"/>
