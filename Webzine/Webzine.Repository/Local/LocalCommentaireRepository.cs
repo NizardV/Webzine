@@ -27,8 +27,8 @@ namespace Webzine.Repository.Local
         /// <param name="data">La source de données WebzineData utilisée pour accéder aux commentaires. Ne peut pas être null.</param>
         public LocalCommentaireRepository(WebzineData data, ILogger<LocalCommentaireRepository> logger)
         {
-            _logger = logger;
-            _data = data;
+            this._logger = logger;
+            this._data = data;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Webzine.Repository.Local
                     "Recherche du commentaire d'identifiant {IdCommentaire} dans le repository local.",
                     id);
 
-                var commentaire = _data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
+                var commentaire = this._data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
 
                 if ( commentaire == null)
                 {
@@ -101,7 +101,7 @@ namespace Webzine.Repository.Local
                 this._logger.LogDebug(
                     "Récupération de tous les commentaires depuis le repository local.");
 
-                return _data.commentaires.ToList();
+                return this._data.commentaires.ToList();
             }
             catch (Exception ex)
             {

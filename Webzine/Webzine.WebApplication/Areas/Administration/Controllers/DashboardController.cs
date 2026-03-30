@@ -21,11 +21,17 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         private readonly IArtisteRepository _artisteRepository;
         private readonly IStyleRepository _styleRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the DashboardController class with the specified repositories.
+        /// </summary>
+        /// <param name="titreRepository">The repository used to access and manage titre data.</param>
+        /// <param name="artisteRepository">The repository used to access and manage artiste data.</param>
+        /// <param name="styleRepository">The repository used to access and manage style data.</param>
         public DashboardController(ITitreRepository titreRepository, IArtisteRepository artisteRepository, IStyleRepository styleRepository)
         {
-            _titreRepository = titreRepository;
-            _artisteRepository = artisteRepository;
-            _styleRepository = styleRepository;
+            this._titreRepository = titreRepository;
+            this._artisteRepository = artisteRepository;
+            this._styleRepository = styleRepository;
         }
 
         /// <summary>
@@ -41,9 +47,9 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         public IActionResult Dashboard()
         {
 
-            var titres = _titreRepository.FindAll().ToList();
-            var artistes = _artisteRepository.FindAll().ToList();
-            var styles = _styleRepository.FindAll().ToList();
+            var titres = this._titreRepository.FindAll().ToList();
+            var artistes = this._artisteRepository.FindAll().ToList();
+            var styles = this._styleRepository.FindAll().ToList();
 
             var model = new DashboardViewModel
             {

@@ -26,7 +26,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="commentaireRepository">Le référentiel utilisé pour accéder et gérer les entités de commentaires. Ne peut pas être null.</param>
         public CommentaireController(ICommentaireRepository commentaireRepository)
         {
-            _commentaireRepository = commentaireRepository;
+            this._commentaireRepository = commentaireRepository;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("commentaires")]
         public IActionResult Commentaires()
         {
-            var commentaires = _commentaireRepository.FindAll().ToList();
-            return View(commentaires);
+            var commentaires = this._commentaireRepository.FindAll().ToList();
+            return this.View(commentaires);
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         [Route("commentaire/delete/{id}")]
         public IActionResult Supprimer(int id)
         {
-            var commentaire = _commentaireRepository.Find(id);
+            var commentaire = this._commentaireRepository.Find(id);
             if (commentaire is not null)
             {
-                return View(commentaire);
+                return this.View(commentaire);
             }
             else
             {
-                return NotFound();
+                return this.NotFound();
             }
         }
 
@@ -77,17 +77,17 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
 
-            var commentaire = _commentaireRepository.Find(id);
+            var commentaire = this._commentaireRepository.Find(id);
             if (commentaire is not null)
             {
-                _commentaireRepository.Delete(commentaire);
+                this._commentaireRepository.Delete(commentaire);
 
                 // On redirige vers l'action qui liste les commentaires
-                return RedirectToAction(nameof(Commentaires));
+                return this.RedirectToAction(nameof(this.Commentaires));
             }
             else
             {
-                return NotFound();
+                return this.NotFound();
             }
         }
     }

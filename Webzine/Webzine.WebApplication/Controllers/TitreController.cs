@@ -16,10 +16,16 @@ namespace Webzine.WebApplication.Controllers
     {
         private ITitreRepository _titreRepository;
         private ICommentaireRepository _commentaireRepository;
+
+        /// <summary>
+        /// Initializes a new instance of the TitreController class with the specified repositories.
+        /// </summary>
+        /// <param name="titreRepository">The repository used to access and manage titre entities. Cannot be null.</param>
+        /// <param name="commentaireRepository">The repository used to access and manage commentaire entities. Cannot be null.</param>
         public TitreController(ITitreRepository titreRepository, ICommentaireRepository commentaireRepository)
         {
-            _titreRepository = titreRepository;
-            _commentaireRepository = commentaireRepository;
+            this._titreRepository = titreRepository;
+            this._commentaireRepository = commentaireRepository;
         }
 
         [HttpPost]
@@ -31,14 +37,14 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="id">Identifiant du titre.</param>
         public IActionResult Like(int id)
         {
-            var titre = _titreRepository.Find(id);
+            var titre = this._titreRepository.Find(id);
             if (titre is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            _titreRepository.IncrementNbLikes(titre);
+            this._titreRepository.IncrementNbLikes(titre);
 
-            return RedirectToAction(nameof(Details), new { id });
+            return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
         [HttpGet]
@@ -49,12 +55,13 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="id">Identifiant du titre.</param>
         public IActionResult Edit(int id)
         {
-            var titre = _titreRepository.Find(id);
+            var titre = this._titreRepository.Find(id);
             if (titre is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return View(titre);
+
+            return this.View(titre);
         }
 
         [HttpPost]
@@ -66,13 +73,13 @@ namespace Webzine.WebApplication.Controllers
         /// <param name="chronique">Nouvelle chronique à afficher.</param>
         public IActionResult Edit(int id, [FromForm] string chronique)
         {
-            var titre = _titreRepository.Find(id);
+            var titre = this._titreRepository.Find(id);
             if (titre is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return RedirectToAction(nameof(Details), new { id });
+            return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
         [HttpGet]
@@ -80,14 +87,14 @@ namespace Webzine.WebApplication.Controllers
         public IActionResult Style(string libelle)
         {
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
-            var titres = _titreRepository.SearchByStyle(libelle);
+            var titres = this._titreRepository.SearchByStyle(libelle);
 
             if (titres == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
             // On envoie la liste filtrée à la vue
-            return View(titres);
+            return this.View(titres);
         }
 
         /// <summary>
@@ -98,14 +105,14 @@ namespace Webzine.WebApplication.Controllers
         [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
-            Titre? titre = _titreRepository.Find(id);
+            Titre? titre = this._titreRepository.Find(id);
 
             if (titre == null)
             {
                 return this.NotFound();
             }
 
-            var commentaires = _commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
+            var commentaires = this._commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
 
             TitreModel model = new TitreModel
             {
@@ -113,7 +120,7 @@ namespace Webzine.WebApplication.Controllers
                 Commentaires = commentaires,
             };
 
-            return View(model);
+            return this.View(model);
         }
     }
 }

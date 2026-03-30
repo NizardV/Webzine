@@ -6,6 +6,7 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
 {
+    /// <inheritdoc/>
     public class DbStyleRepository : IStyleRepository
     {
         /// <summary>
@@ -21,8 +22,8 @@ namespace Webzine.Repository.Db
         /// <param name="context"></param>
         public DbStyleRepository(WebzineDbContext context, ILogger<DbStyleRepository> logger)
         {
-            _context = context;
-            _logger = logger;
+            this._context = context;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace Webzine.Repository.Db
                     "Recherche du style {IdStyle} dans le repository base de données.",
                     id);
 
-                var style = _context.Styles.FirstOrDefault(s => s.IdStyle == id);
+                var style = this._context.Styles.FirstOrDefault(s => s.IdStyle == id);
 
                 if (style == null)
                 {
@@ -112,7 +113,7 @@ namespace Webzine.Repository.Db
                 this._logger.LogDebug(
                     "Récupération de tous les styles depuis le repository base de données.");
 
-                return _context.Styles.ToList();
+                return this._context.Styles.ToList();
             }
             catch (Exception ex)
             {

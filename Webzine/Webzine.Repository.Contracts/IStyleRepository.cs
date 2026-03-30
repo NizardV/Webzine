@@ -6,6 +6,9 @@ using Webzine.Entity;
 
 namespace Webzine.Repository.Contracts
 {
+    /// <summary>
+    /// Définit les opérations de persistance applicables aux styles du webzine.
+    /// </summary>
     public interface IStyleRepository
     {
         /// <summary>
