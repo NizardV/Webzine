@@ -99,8 +99,9 @@ namespace Webzine.Repository.Local
         {
             try
             {
-                var titres = _data.titres.Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle));
-                this._logger.LogDebug($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
+                var titres = _data.titres
+                                .Where(t => t.Styles.Any(s => s.Libelle.ToLower() == libelle.ToLower()));
+                this._logger.LogInformation($"Recherche de titres avec le style : {libelle} - {titres.Count()} résultats trouvés");
                 return titres;
             }
             catch (Exception)
