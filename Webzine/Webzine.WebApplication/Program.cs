@@ -8,6 +8,8 @@ using Webzine.Repository;
 using Webzine.Repository.Contracts;
 using Webzine.Repository.Db;
 using Webzine.Repository.Local;
+using Webzine.WebApplication.Middleware;
+using Webzine.WebApplication.Filters;
 
 var logger = LogManager.Setup()
     .LoadConfigurationFromAppSettings()
@@ -85,7 +87,15 @@ try
         // Ajoute la compilation des vues lors de l'ex�cution de l'application.
         // Cela nous �vite de recompiler l'application � chaque modification de vue.
         // N�cessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
-        .AddRazorRuntimeCompilation();
+        .AddRazorRuntimeCompilation()
+        // Enregistre le filtre d'exception global
+        .AddMvcOptions(options =>
+        {
+            options.Filters.Add<ExceptionFilter>();
+        });
+
+    // Enregistre le filtre comme service pour l'injection de dépendances
+    builder.Services.AddScoped<ExceptionFilter>();
 
     var app = builder.Build();
     logger.Info("Application construite avec succès.");
@@ -121,6 +131,12 @@ try
 
     // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
     app.UseStaticFiles();
+
+    // Enregistre les middlewares dans le pipeline
+    // Notre ExceptionFilter gère les exceptions, donc pas besoin de UseExceptionHandler()
+    app.UseHsts();
+    app.UseHttpsRedirection();
+    app.UseMiddleware<LoggingMiddleware>();
 
     app.UseRouting();
 
