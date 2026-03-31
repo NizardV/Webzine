@@ -35,7 +35,7 @@ namespace Webzine.Entity
         /// </summary>
         [Required]
         [Display(Name = "Date de création")]
-        public DateOnly DateCreation { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime DateCreation { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Contenu du commentaire.

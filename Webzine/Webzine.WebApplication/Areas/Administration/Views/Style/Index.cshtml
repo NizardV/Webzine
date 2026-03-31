@@ -1,31 +1,37 @@
 ﻿@model IEnumerable<Webzine.Entity.Style>
 
-
+@{
+    ViewData["Title"] = "Styles";
+}
 
 <div class="mt-4">
     <h2>Styles</h2>
-    <hr />
+
+    <hr class="mb-4" />
 
     <div class="mb-3">
         <a asp-area="Administration" asp-controller="Style" asp-action="Create" class="btn btn-primary">
-            + Ajouter un nouvel style
+            <i class="bi bi-plus"></i> Ajouter un nouveau style
         </a>
     </div>
 
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-hover align-middle border">
         <thead class="table-light">
             <tr>
                 <th>Libellé</th>
-                <th class="text-center" style="width: 100px;">Actions</th>
+                <th class="text-center" style="width: 150px;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var style in Model)
             {
                 <tr>
-                    <td class="align-middle">@style.Libelle</td>
-                    <td class="text-center align-middle">
-                        <a asp-area="Administration" asp-controller="Style" asp-action="Edit" asp-route-id="@style.IdStyle" class="text-primary text-decoration-none me-2" title="Éditer">
+                    <td>@style.Libelle</td>
+                    <td class="text-center">
+                        <a asp-area="Administration" asp-controller="Style" asp-action="Details" asp-route-id="@style.IdStyle" class="text-primary text-decoration-none me-3" title="Consulter">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a asp-area="Administration" asp-controller="Style" asp-action="Edit" asp-route-id="@style.IdStyle" class="text-primary text-decoration-none me-3" title="Éditer">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <a asp-area="Administration" asp-controller="Style" asp-action="Delete" asp-route-id="@style.IdStyle" class="text-primary text-decoration-none" title="Supprimer">

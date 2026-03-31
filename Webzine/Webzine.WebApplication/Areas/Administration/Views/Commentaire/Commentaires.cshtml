@@ -2,33 +2,75 @@
 @model List<Commentaire>
 
 @{
-    <h1>Commentaires</h1>
-    <hr class="hr" />
-    <table class="table table-striped table-bordered border-secondary text-center">
-        <thead>
-            <tr class="table-secondary fw-bold">
-                <td>Titre</td>
-                <td>Nom</td>
-                <td>Commentaire</td>
-                <td>Date de création</td>
-                <td>Actions</td>
+    ViewData["Title"] = "Commentaires";
+}
+
+<div class="mt-4">
+    <h2>Commentaires</h2>
+    <hr class="mb-4" />
+
+    <div class="mb-3">
+        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus"></i> Ajouter un nouveau commentaire
+        </a>
+    </div>
+
+    <table class="table table-striped table-hover align-middle border">
+        <thead class="table-light">
+            <tr>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Contenu</th>
+                <th>Date de création</th>
+                <th class="text-center" style="width: 150px;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var commentaire in Model)
             {
-                <tr class="table-light">
-                    <td><a asp-area="" asp-controller="Titre" asp-action="Details" asp-route-id="@commentaire.Titre.IdTitre">@commentaire.Titre.Libelle</a></td>
-                    <td>@commentaire.Auteur</td>
-                    <td>@commentaire.Contenu</td>
-                    <td>@commentaire.DateCreation</td>
+                <tr>
                     <td>
-                        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Supprimer" asp-route-id="@commentaire.IdCommentaire">
-                            <i class="bi bi-trash3-fill text-primary"></i>
+                        @if (commentaire.Titre != null)
+                        {
+                            <a asp-area="Administration" asp-controller="Titre" asp-action="Details" asp-route-id="@commentaire.Titre.IdTitre" class="text-decoration-none">
+                                @commentaire.Titre.Libelle
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Titre supprimé</span>
+                        }
+                    </td>
+                    <td>@commentaire.Auteur</td>
+                    <td>
+                        @{
+                            string contenu = commentaire.Contenu?.Length > 50 
+                                ? commentaire.Contenu.Substring(0, 50) + "..." 
+                                : commentaire.Contenu;
+                        }
+                        @contenu
+                    </td>
+                    <td>@commentaire.DateCreation.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-center">
+                        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Details" asp-route-id="@commentaire.IdCommentaire" class="text-primary text-decoration-none me-3" title="Consulter">
+                            <i class="bi bi-eye"></i>
                         </a>
-                    </td>            
+                        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Edit" asp-route-id="@commentaire.IdCommentaire" class="text-primary text-decoration-none me-3" title="Éditer">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Supprimer" asp-route-id="@commentaire.IdCommentaire" class="text-primary text-decoration-none" title="Supprimer">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-}
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Aucun commentaire pour le moment.
+        </div>
+    }
+</div>

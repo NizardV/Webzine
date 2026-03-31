@@ -46,6 +46,36 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         }
 
         /// <summary>
+        /// Retourne une vue qui affiche les détails d'un style de musique.
+        /// </summary>
+        /// <param name="id">L'identifiant du style de musique à afficher.</param>
+        /// <returns>Une vue contenant le style, ou une réponse NotFound si le style n'existe pas.</returns>
+        [HttpGet]
+        [Route("style/details/{id}")]
+        public IActionResult Details(int id)
+        {
+            try
+            {
+                this._logger.LogInformation("Demande d'affichage des détails du style {IdStyle}.", id);
+
+                var style = _styleRepository.Find(id);
+
+                if (style == null)
+                {
+                    this._logger.LogWarning("Aucun style trouvé avec l'id {IdStyle}.", id);
+                    return NotFound();
+                }
+
+                return View(style);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du chargement des détails du style {IdStyle}.", id);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
         /// Returne une vue pour créer un nouveau style.
         /// </summary>
         /// <returns>Une vue.</returns>
