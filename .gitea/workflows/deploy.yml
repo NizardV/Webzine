@@ -2,8 +2,8 @@ name: CI/CD Webzine DevSecOps
 on: [push]
 
 jobs:
-  build-and-deploy:
-    runs-on: linux
+  pipeline-execution:
+    runs-on: debian- 13 # Ton label de runner
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v4
