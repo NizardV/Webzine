@@ -6,6 +6,7 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
 {
+    /// <inheritdoc/>
     public class DbStyleRepository : IStyleRepository
     {
         /// <summary>
@@ -21,8 +22,8 @@ namespace Webzine.Repository.Db
         /// <param name="context"></param>
         public DbStyleRepository(WebzineDbContext context, ILogger<DbStyleRepository> logger)
         {
-            _context = context;
-            _logger = logger;
+            this._context = context;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -31,11 +32,28 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Add(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative d'ajout du style {Libelle}. Méthode non encore implémentée dans le repository base de données.",
-                style.Libelle);
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative d'ajout du style {Libelle} dans le repository base de données.",
+                    style.Libelle);
 
-            throw new NotImplementedException();
+                this._context.Styles.Add(style);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug(
+                    "Style {Libelle} ajouté avec succès (ID: {IdStyle}).",
+                    style.Libelle,
+                    style.IdStyle);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de l'ajout du style {Libelle} dans le repository base de données.",
+                    style.Libelle);
+                throw;
+            }
         }
 
         /// <summary>
@@ -80,7 +98,7 @@ namespace Webzine.Repository.Db
                     "Recherche du style {IdStyle} dans le repository base de données.",
                     id);
 
-                var style = _context.Styles.FirstOrDefault(s => s.IdStyle == id);
+                var style = this._context.Styles.FirstOrDefault(s => s.IdStyle == id);
 
                 if (style == null)
                 {
@@ -112,7 +130,7 @@ namespace Webzine.Repository.Db
                 this._logger.LogDebug(
                     "Récupération de tous les styles depuis le repository base de données.");
 
-                return _context.Styles.ToList();
+                return this._context.Styles.ToList();
             }
             catch (Exception ex)
             {
@@ -129,11 +147,27 @@ namespace Webzine.Repository.Db
         /// <param name="style"></param>
         public void Update(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative de modification du style {IdStyle}. Méthode non encore implémentée dans le repository base de données.",
-                style.IdStyle);
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de modification du style {IdStyle} dans le repository base de données.",
+                    style.IdStyle);
 
-            throw new NotImplementedException();
+                this._context.Styles.Update(style);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug(
+                    "Style {IdStyle} modifié avec succès.",
+                    style.IdStyle);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la modification du style {IdStyle} dans le repository base de données.",
+                    style.IdStyle);
+                throw;
+            }
         }
     }
 }

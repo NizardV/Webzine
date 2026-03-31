@@ -12,8 +12,8 @@ namespace Webzine.WebApplication.Controllers
 
         public SearchController(IArtisteRepository artisteRepository, ITitreRepository titreRepository)
         {
-            _artisteRepository = artisteRepository;
-            _titreRepository = titreRepository;
+            this._artisteRepository = artisteRepository;
+            this._titreRepository = titreRepository;
         }
 
         [HttpGet]
@@ -30,19 +30,19 @@ namespace Webzine.WebApplication.Controllers
 
             if (string.IsNullOrWhiteSpace(q))
             {
-                return View(model);
+                return this.View(model);
             }
 
-            model.Artistes = _artisteRepository.FindAll()
+            model.Artistes = this._artisteRepository.FindAll()
                 .Where(a => !string.IsNullOrWhiteSpace(a.Nom) && a.Nom.Contains(q, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            model.Titres = _titreRepository.FindAll()
+            model.Titres = this._titreRepository.FindAll()
                 .Where(t =>
                     (!string.IsNullOrWhiteSpace(t.Libelle) && t.Libelle.Contains(q, StringComparison.OrdinalIgnoreCase))
                     || (!string.IsNullOrWhiteSpace(t.Artiste?.Nom) && t.Artiste.Nom.Contains(q, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
-            return View(model);
+            return this.View(model);
         }
     }
 }

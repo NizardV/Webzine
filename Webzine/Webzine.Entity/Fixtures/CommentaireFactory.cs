@@ -26,7 +26,7 @@ namespace Webzine.Entity.Fixtures
             var commentaireFaker = new Faker<Commentaire>("fr") // "fr" pour générer du texte en français
                 .RuleFor(c => c.IdCommentaire, f => f.IndexGlobal + 1) // Auto-incrément : 1, 2, 3...
                 .RuleFor(c => c.Auteur, f => f.Internet.UserName()) // Génère un pseudo réaliste
-                .RuleFor(c => c.DateCreation, f => DateOnly.FromDateTime(f.Date.Recent(60))) // Une date dans les 60 derniers jours
+                .RuleFor(c => c.DateCreation, f => f.Date.Recent(60)) // Une date dans les 60 derniers jours
                 .RuleFor(c => c.Contenu, f => f.Lorem.Paragraph()) // Génère un paragraphe de "Lorem Ipsum"
                 .RuleFor(c => c.Titre, f => f.PickRandom(titres))
                 .RuleFor(c => c.IdTitre, (f,c) => c.Titre.IdTitre);

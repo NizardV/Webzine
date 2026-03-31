@@ -78,19 +78,37 @@
         [Display(Name = "Durée en secondes")]
         public TimeOnly Duree { get; set; }
 
+        /// <summary>
+        /// Nombre de lectures du titre.
+        /// Cette valeur est incrémentée à chaque consultation de la page du titre.
+        /// </summary>
         [Required]
         [Display(Name = "Nombre de lectures")]
         public int NbLectures { get; set; }
 
+        /// <summary>
+        /// Nombre de likes du titre.
+        /// Cette valeur représente le nombre de fois où le titre a été apprécié par les visiteurs.
+        /// </summary>
         [Required]
         [Display(Name = "Nombre de likes")]
         public int NbLikes { get; set; }
 
+        /// <summary>
+        /// Identifiant de l'artiste associé au titre.
+        /// Cette propriété représente la clé étrangère vers l'entité <see cref="Artiste"/>.
+        /// </summary>
         [ForeignKey("Artiste")]
         public int IdArtiste { get; set; }
 
+        /// <summary>
+        /// Artiste associé au titre.
+        /// </summary>
         public Artiste Artiste { get; set; }
 
+        /// <summary>
+        /// Nom de l'album auquel appartient le titre.
+        /// </summary>
         [Required]
         public string Album { get; set; } = string.Empty;
 
