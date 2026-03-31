@@ -8,7 +8,7 @@ on:
 
 jobs:
   pipeline-execution:
-    runs-on: ubuntu-latest # Ton label de runner
+    runs-on: debian # Ton label de runner
     steps:
       # --- ÉTAPE 1 : RÉCUPÉRATION (CI) ---
       - name: Checkout Source Code
