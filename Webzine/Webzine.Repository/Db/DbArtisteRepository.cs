@@ -175,5 +175,53 @@ namespace Webzine.Repository.Db
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public int CountWithBiography()
+        {
+            try
+            {
+                return this.context.Artistes.Count(a => a.Biographie != null && a.Biographie != "");
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Erreur lors du comptage des artistes avec biographie en base.");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public Artiste GetArtistePlusChronique()
+        {
+            try
+            {
+                return this.context.Artistes
+                       .AsNoTracking()
+                       .OrderByDescending(a => a.Titres.Count(t => t.Chronique != null && t.Chronique != ""))
+                       .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques.");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public Artiste GetArtistePlusAlbums()
+        {
+            try
+            {
+                return this.context.Artistes
+                       .AsNoTracking()
+                       .OrderByDescending(a => a.Titres.Select(t => t.Album).Distinct().Count())
+                       .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums.");
+                throw;
+            }
+        }
     }
 }

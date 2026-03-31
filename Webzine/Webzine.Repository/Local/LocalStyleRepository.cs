@@ -60,7 +60,7 @@ namespace Webzine.Repository.Local
             try
             {
                 this._logger.LogDebug(
-                    "Recherche du style d'identifiant {id} dans le repository local.", 
+                    "Recherche du style d'identifiant {id} dans le repository local.",
                     id);
 
                 var style = this._data.styles.FirstOrDefault(s => s.IdStyle == id);
@@ -115,6 +115,21 @@ namespace Webzine.Repository.Local
             this._logger.LogWarning(
                 "Tentative de modification du style {idStyle} dans le repository local. Opération non supportée.",
                 style.IdStyle);
+        }
+
+        public int Count()
+        {
+            try
+            {
+                return this._data.styles.Count();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors du comptage des styles dans le repository local.");
+                throw;
+            }
         }
     }
 }

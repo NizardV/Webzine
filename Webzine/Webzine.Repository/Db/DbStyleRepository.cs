@@ -136,5 +136,19 @@ namespace Webzine.Repository.Db
 
             throw new NotImplementedException();
         }
+
+        /// </inheritdoc/>
+        public int Count()
+        {
+            try
+            {
+                return this._context.Styles.Count();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du comptage des styles en base de données.");
+                throw;
+            }
+        }
     }
 }

@@ -114,5 +114,53 @@ namespace Webzine.Repository.Local
             this._logger.LogWarning(
                 "Tentative de mise à jour d'un style dans le repository local. Opération non supportée.");
         }
+
+        /// <inheritdoc/>
+        public int CountWithBiography()
+        {
+            try
+            {
+                return this._data.artistes.Count(a => a.Biographie != null && a.Biographie != "");
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du comptage des artistes avec biographie en base.");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public Artiste GetArtistePlusChronique()
+        {
+            try
+            {
+                return this._data.artistes
+                       .OrderByDescending(a => a.Titres.Count(t => t.Chronique != null && t.Chronique != ""))
+                       .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques.");
+                throw;
+            }
+        }
+
+
+        /// <inheritdoc/>
+        public Artiste GetArtistePlusAlbums()
+        {
+            try
+            {
+                return this._data.artistes
+                       .OrderByDescending(a => a.Titres.Select(t => t.Album).Distinct().Count())
+                       .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums.");
+                throw;
+            }
+        }
+
     }
 }

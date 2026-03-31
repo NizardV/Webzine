@@ -41,5 +41,11 @@ namespace Webzine.Repository.Contracts
         /// </summary>
         /// <param name="style"></param>
         void Update(Style style);
+
+        /// <summary>
+        /// Retourne le nombre total de styles de musique présents dans la collection de styles.
+        /// </summary>
+        /// /// <returns>Nombre total de styles de musique.</returns>
+        int Count();
     }
 }
