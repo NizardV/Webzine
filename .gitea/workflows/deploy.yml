@@ -1,23 +1,12 @@
-name: Webzine Professional Pipeline
-run-name: Build & Deploy by ${{ github.actor }}
-
-on:
-  push:
-    branches:
-      - dev
+name: Debug Pipeline
+on: [push, pull_request] # Se déclenche sur ABSOLUMENT TOUT
 
 jobs:
   pipeline-execution:
-    runs-on: linux # Ton label de runner
+    runs-on: linux # On utilise le label qui n'a pas d'espace
     steps:
-      # --- ÉTAPE 1 : RÉCUPÉRATION (CI) ---
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
-      # --- ÉTAPE 2 : CONSTRUCTION (CI) ---
-      - name: Docker Build (Clean & Fresh)
-        run: |
-          docker build --no-cache -t webzine-app:latest .
+      - name: Test Step
+        run: echo "Le runner a enfin reçu le signal !"
 
       # --- ÉTAPE 3 : AUDIT DE SÉCURITÉ (DevSecOps) ---
       - name: Security Scan with Trivy
