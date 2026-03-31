@@ -51,7 +51,7 @@ namespace Webzine.Entity
         /// Identifiant du titre auquel le commentaire est rattaché.
         /// Cette propriété représente la clé étrangère vers l'entité <see cref="Titre"/>.
         /// </summary>
-        [ForeignKey(nameof(Titre.IdTitre))]
+        [ForeignKey("Titre")]
         public int IdTitre { get; set; }
 
         /// <summary>

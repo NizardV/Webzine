@@ -105,22 +105,11 @@ namespace Webzine.WebApplication.Controllers
         [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
-            Titre? titre = this._titreRepository.Find(id);
+            Titre titre = _titreRepository.Find(id);
 
-            if (titre == null)
-            {
-                return this.NotFound();
-            }
-
-            var commentaires = this._commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
-
-            TitreModel model = new TitreModel
-            {
-                Titre = titre,
-                Commentaires = commentaires,
-            };
-
-            return this.View(model);
+            //Retourner un 404 personnalisé
+            
+            return View(titre);
         }
     }
 }
