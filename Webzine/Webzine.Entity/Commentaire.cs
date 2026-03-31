@@ -26,7 +26,7 @@ namespace Webzine.Entity
         [Display(Name = "Commentaire")]
         public string Contenu { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(Titre.IdTitre))]
+        [ForeignKey("Titre")]
         public int IdTitre { get; set; }
 
         [Required]

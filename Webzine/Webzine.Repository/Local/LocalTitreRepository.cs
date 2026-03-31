@@ -39,24 +39,24 @@ namespace Webzine.Repository.Local
                 this._logger.LogDebug($"Recherche du titre {idTitre} - {titre.Libelle}");
                 return titre;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                this._logger.LogError($"Erreur lors de la recherche du titre {idTitre}");
-                throw new Exception("Titre non trouvé");
+                this._logger.LogError($"Erreur lors de la recherche du titre", idTitre);
+                throw new Exception("Titre non trouvé", ex);
             }
         }
         public IEnumerable<Titre> FindTitres(int offset, int limit)
         {
             try
             {
-                var titres = _data.titres.Skip(offset).Take(limit).OrderBy(t => t.Libelle);
-                this._logger.LogDebug($"Recherche du titre {offset} - {limit}");
+                var titres = _data.titres.OrderBy(t => t.Libelle).Skip(offset).Take(limit);
+                this._logger.LogDebug($"Recherche du titre", offset, limit);
                 return titres;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                this._logger.LogError($"Erreur lors de la recherche du titre {offset} - {limit}");
-                throw new Exception("Impossible de retourner les titres demandés.");
+                this._logger.LogError($"Erreur lors de la recherche du titre", offset, limit);
+                throw new Exception("Impossible de retourner les titres demandés.", ex);
             }
         }
         public IEnumerable<Titre> FindAll()
@@ -86,7 +86,7 @@ namespace Webzine.Repository.Local
             try
             {
                 var titres = _data.titres.Where(t => t.Libelle.Contains(mot, StringComparison.OrdinalIgnoreCase) || t.Chronique.Contains(mot, StringComparison.OrdinalIgnoreCase));
-                this._logger.LogDebug($"Recherche de titres avec le mot : {mot} - {titres.Count()} résultats trouvés");
+                this._logger.LogDebug("Recherche de titres avec le mot : ", mot,titres.Count());
                 return titres;
             }
             catch (Exception)

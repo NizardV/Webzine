@@ -41,14 +41,14 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                this._logger.LogDebug($"Suppression du titre {titre.IdTitre} - {titre.Libelle}");
                 _context.Titres.Remove(titre);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
+                this._logger.LogInformation("Suppression du titre", titre.IdTitre, titre.Libelle);
             }
             catch (Exception ex)
             {
-                this._logger.LogError($"Erreur lors de la suppression du titre {titre.IdTitre} - {titre.Libelle}", ex);
-                throw new Exception("Impossible de supprimer le titre");
+                this._logger.LogError("Erreur lors de la suppression du titre", titre.IdTitre, titre.Libelle);
+                throw new Exception("Impossible de supprimer le titre", ex);
             }
         }
         public Titre Find(int idTitre)
@@ -60,14 +60,14 @@ namespace Webzine.Repository.Db
                     .Include(t=> t.Commentaires)
                     .Include(t=> t.Styles)
                     .FirstOrDefault(t => t.IdTitre == idTitre);
-                this._logger.LogDebug($"Recherche du titre {idTitre} - {titre.Libelle}");
+                this._logger.LogDebug($"Recherche du titre", idTitre, titre.Libelle);
 
                 return titre;
             }
             catch (Exception ex)
             {
                 this._logger.LogError($"Erreur lors de la recherche du titre {idTitre}", ex);
-                throw new Exception("Titre non trouvé");
+                throw new Exception("Titre non trouvé", ex);
             }
         }
         public IEnumerable<Titre> FindTitres(int offset, int limit)
@@ -136,7 +136,9 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                var titres = _context.Titres.Where(t => t.Libelle.Contains(mot, StringComparison.OrdinalIgnoreCase) || t.Chronique.Contains(mot, StringComparison.OrdinalIgnoreCase));
+                var titres = _context.Titres.Where(t => 
+                t.Libelle.Contains(mot, StringComparison.OrdinalIgnoreCase) || 
+                t.Chronique.Contains(mot, StringComparison.OrdinalIgnoreCase));
                 this._logger.LogDebug($"Recherche de titres avec le mot : {mot} - {titres.Count()} résultats trouvés");
                 return titres;
             }
