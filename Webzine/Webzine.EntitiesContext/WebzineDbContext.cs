@@ -59,13 +59,6 @@ namespace Webzine.EntitiesContext
                         j.ToTable("TitreStyle");
                     });
 
-            modelBuilder.Entity<Commentaire>()
-                .Property(c => c.DateCreation)
-                .HasConversion(
-                    d => d.ToDateTime(TimeOnly.MinValue),
-                    d => DateOnly.FromDateTime(d)
-                );
-
             modelBuilder.Entity<Titre>()
                 .Property(t => t.Duree)
                 .HasConversion(
