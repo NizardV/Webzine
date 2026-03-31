@@ -1,6 +1,11 @@
 name: CI/CD Webzine DevSecOps
 on: [push]
 
+on:
+  push:
+    branches:
+      - dev
+
 jobs:
   pipeline-execution:
     runs-on: linux # On utilise le label qui n'a pas d'espace
