@@ -9,17 +9,20 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Db
 {
+    /// <inheritdoc/>
     public class DbArtisteRepository : IArtisteRepository
     {
         private readonly WebzineDbContext context;
         private readonly ILogger<DbArtisteRepository> logger;
 
+        /// <inheritdoc/>
         public DbArtisteRepository(WebzineDbContext context, ILogger<DbArtisteRepository> logger)
         {
             this.context = context;
             this.logger = logger;
         }
 
+        /// <inheritdoc/>
         public void Add(Artiste artiste)
         {
             try
@@ -41,13 +44,14 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public int Count()
         {
             try
             {
                 var count = this.context.Artistes.Count();
                 this.logger.LogDebug("Comptage des artistes en base: {Count}.", count);
-                
+
                 return count;
             }
             catch (Exception ex)
@@ -57,6 +61,7 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public void Delete(Artiste artiste)
         {
             try
@@ -78,14 +83,16 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public Artiste? Find(int idArtiste)
         {
-            try { 
+            try
+            {
                 var artiste = this.context.Artistes
                     .Include(a => a.Titres)
                     .FirstOrDefault(a => a.IdArtiste == idArtiste);
                 this.logger.LogDebug("Recherche artiste en base par id {ArtisteId}. Trouvé: {Found}.", idArtiste, artiste != null);
-            
+
                 return artiste;
             }
             catch (Exception ex)
@@ -95,12 +102,13 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Artiste> FindAll()
         {
             try
             {
                 this.logger.LogDebug("Récupération de tous les artistes en base.");
-                
+
                 return this.context.Artistes
                     .Include(a => a.Titres)
                     .ToList();
@@ -112,6 +120,7 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public Artiste? FindByName(string nom)
         {
             try
@@ -136,6 +145,7 @@ namespace Webzine.Repository.Db
             }
         }
 
+        /// <inheritdoc/>
         public void Update(Artiste artiste)
         {
             try
