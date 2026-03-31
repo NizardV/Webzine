@@ -42,6 +42,19 @@
         /// </summary>
         /// <returns>Une vue.</returns>
         [HttpGet]
+        [Route("titre/details/{id}")]
+        public IActionResult Details(int id)
+        {
+            var titre = _titreRepository.Find(id);
+            if (titre == null)
+            {
+                return NotFound();
+            }
+
+            return View(titre);
+        }
+
+        [HttpGet]
         [Route("titre/create")]
         public IActionResult Create()
         {
