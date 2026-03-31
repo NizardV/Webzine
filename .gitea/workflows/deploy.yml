@@ -1,25 +1,54 @@
-name: CI/CD API dev .NET
-on: [push]
+name: Webzine Professional Pipeline
+run-name: Build & Deploy by ${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
-  build-and-deploy:
-    runs-on: debian-13
+  pipeline-execution:
+    runs-on: ubuntu-latest # Ton label de runner
     steps:
-      - name: Récupération du code
+      # --- ÉTAPE 1 : RÉCUPÉRATION (CI) ---
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Compilation et Publication
+      # --- ÉTAPE 2 : CONSTRUCTION (CI) ---
+      - name: Docker Build (Clean & Fresh)
         run: |
-          dotnet publish -c Release -o ./publish
+          docker build --no-cache -t webzine-app:latest .
 
-      - name: Déploiement Local
+      # --- ÉTAPE 3 : AUDIT DE SÉCURITÉ (DevSecOps) ---
+      - name: Security Scan with Trivy
         run: |
-          sudo rm -rf /var/www/api/*
-          sudo cp -r ./publish/* /var/www/api/
-          sudo chown -R www-data:www-data /var/www/api
+          # Vérifie si Trivy est là, sinon l'installe
+          if ! command -v trivy &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+            wget -qO - https://aquasecurity.github.io/trivy-repo/dabest.gpg | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+            echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+            sudo apt-get update && sudo apt-get install -y trivy
+          fi
+          # Scan de l'image et export du rapport en texte
+          trivy image --severity HIGH,CRITICAL webzine-app:latest > trivy-report.txt
+          echo "--- APERÇU DU RAPPORT DE SÉCURITÉ ---"
+          head -n 20 trivy-report.txt
 
-      - name: Redémarrage du service
+      # --- ÉTAPE 4 : DÉPLOIEMENT (CD) ---
+      - name: Stop & Remove Old Instance
         run: |
-          sudo systemctl restart api-dotnet
-          sudo systemctl status api-dotnet --no-pager
-          
+          docker rm -f webzine-app || true
+
+      - name: Launch New Production Container
+        run: |
+          docker run -d \
+            --name webzine-app \
+            --restart unless-stopped \
+            -p 80:8080 \
+            --security-opt "apparmor=docker-default" \
+            webzine-app:latest
+
+      # --- ÉTAPE 5 : NETTOYAGE ---
+      - name: System Prune
+        run: |
+          docker image prune -f
