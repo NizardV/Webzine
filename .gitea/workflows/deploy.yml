@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   pipeline-execution:
-    runs-on: linux # Ton label de runner
+    runs-on: linux # On utilise le label qui n'a pas d'espace
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v4
@@ -11,6 +11,10 @@ jobs:
       - name: 🏗️ Construction de l'image Docker
         run: |
           docker build -t webzine-app:latest .
+        run: |
+          docker build --no-cache -t webzine-app:latest .
+        run: |
+          docker build --no-cache -t webzine-app:latest .
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
