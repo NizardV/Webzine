@@ -142,5 +142,29 @@ namespace Webzine.Repository.Db
                 throw;
             }
         }
+
+        /// <summary>
+        /// Met à jour un commentaire existant dans la base de données.
+        /// </summary>
+        /// <remarks>Cette méthode enregistre les modifications apportées à un commentaire existant dans
+        /// la base de données. Le commentaire est identifié par son identifiant unique.</remarks>
+        /// <param name="commentaire">Le commentaire contenant les données mises à jour. Ne peut pas être null.</param>
+        public void Update(Commentaire commentaire)
+        {
+            try
+            {
+                this._logger.LogDebug("Tentative de mise à jour du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+
+                this._context.Commentaires.Update(commentaire);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug("Commentaire ID {IdCommentaire} mis à jour avec succès.", commentaire.IdCommentaire);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la mise à jour du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+                throw;
+            }
+        }
     }
 }

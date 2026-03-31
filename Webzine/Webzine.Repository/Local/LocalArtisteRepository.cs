@@ -20,8 +20,26 @@ namespace Webzine.Repository.Local
 
         public void Add(Artiste artiste)
         {
-            this._logger.LogWarning(
-                "Tentative d'ajout d'un artiste dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative d'ajout de l'artiste {Nom} dans le repository local.",
+                    artiste.Nom);
+
+                this._data.artistes.Add(artiste);
+
+                this._logger.LogDebug(
+                    "Artiste {Nom} ajouté avec succès au repository local.",
+                    artiste.Nom);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de l'ajout de l'artiste {Nom} au repository local.",
+                    artiste.Nom);
+                throw;
+            }
         }
 
         public int Count()
@@ -33,8 +51,29 @@ namespace Webzine.Repository.Local
 
         public void Delete(Artiste artiste)
         {
-            this._logger.LogWarning(
-                "Tentative de suppression d'un artiste dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de suppression de l'artiste {IdArtiste} du repository local.",
+                    artiste.IdArtiste);
+
+                var artisteASupprimer = this._data.artistes.FirstOrDefault(a => a.IdArtiste == artiste.IdArtiste);
+                if (artisteASupprimer != null)
+                {
+                    this._data.artistes.Remove(artisteASupprimer);
+                    this._logger.LogDebug(
+                        "Artiste {IdArtiste} supprimé avec succès du repository local.",
+                        artiste.IdArtiste);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la suppression de l'artiste {IdArtiste} du repository local.",
+                    artiste.IdArtiste);
+                throw;
+            }
         }
 
         public Artiste? Find(int idArtiste)
@@ -102,8 +141,30 @@ namespace Webzine.Repository.Local
 
         public void Update(Artiste artiste)
         {
-            this._logger.LogWarning(
-                "Tentative de mise à jour d'un style dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de mise à jour de l'artiste {IdArtiste} dans le repository local.",
+                    artiste.IdArtiste);
+
+                var artisteExistant = this._data.artistes.FirstOrDefault(a => a.IdArtiste == artiste.IdArtiste);
+                if (artisteExistant != null)
+                {
+                    artisteExistant.Nom = artiste.Nom;
+                    artisteExistant.Biographie = artiste.Biographie;
+                    this._logger.LogDebug(
+                        "Artiste {IdArtiste} mis à jour avec succès dans le repository local.",
+                        artiste.IdArtiste);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la mise à jour de l'artiste {IdArtiste} dans le repository local.",
+                    artiste.IdArtiste);
+                throw;
+            }
         }
     }
 }

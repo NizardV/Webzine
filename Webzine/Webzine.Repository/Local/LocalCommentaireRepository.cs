@@ -63,7 +63,7 @@ namespace Webzine.Repository.Local
             return _data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
         }
 
-       
+
         /// <summary>
         /// Returns a collection containing all available comments.
         /// </summary>
@@ -72,6 +72,24 @@ namespace Webzine.Repository.Local
         public IEnumerable<Commentaire> FindAll()
         {
             return _data.commentaires;
+        }
+
+        /// <summary>
+        /// Updates an existing comment in the local collection.
+        /// </summary>
+        /// <remarks>This method updates the properties of an existing comment in memory. If the comment
+        /// does not exist, no changes are made.</remarks>
+        /// <param name="commentaire">The comment containing the updated data. Cannot be null.</param>
+        public void Update(Commentaire commentaire)
+        {
+            var existingCommentaire = _data.commentaires.FirstOrDefault(c => c.IdCommentaire == commentaire.IdCommentaire);
+            if (existingCommentaire != null)
+            {
+                existingCommentaire.Auteur = commentaire.Auteur;
+                existingCommentaire.Contenu = commentaire.Contenu;
+                existingCommentaire.IdTitre = commentaire.IdTitre;
+                existingCommentaire.DateCreation = commentaire.DateCreation;
+            }
         }
     }
 }

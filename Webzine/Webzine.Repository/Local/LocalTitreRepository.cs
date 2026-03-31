@@ -21,7 +21,16 @@ namespace Webzine.Repository.Local
 
         public void Add(Titre titre)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _data.titres.Add(titre);
+                this._logger.LogDebug($"Titre {titre.Libelle} ajouté au repository local.");
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"Erreur lors de l'ajout du titre {titre.Libelle} au repository local.", ex);
+                throw;
+            }
         }
         public int Count()
         {
@@ -29,7 +38,20 @@ namespace Webzine.Repository.Local
         }
         public void Delete(Titre titre)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var titreASupprimer = _data.titres.FirstOrDefault(t => t.IdTitre == titre.IdTitre);
+                if (titreASupprimer != null)
+                {
+                    _data.titres.Remove(titreASupprimer);
+                    this._logger.LogDebug($"Titre {titre.IdTitre} supprimé du repository local.");
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"Erreur lors de la suppression du titre {titre.IdTitre} du repository local.", ex);
+                throw;
+            }
         }
         public Titre Find(int idTitre)
         {
@@ -110,10 +132,31 @@ namespace Webzine.Repository.Local
                 throw new Exception("Impossible de rechercher par style.");
             }
         }
-        
+
         public void Update(Titre titre)
         {
-            this._logger.LogWarning("Tentative de de mise à jour d'un titre dans le repository local. Opération non supportée.");
+            try
+            {
+                var titreExistant = _data.titres.FirstOrDefault(t => t.IdTitre == titre.IdTitre);
+                if (titreExistant != null)
+                {
+                    titreExistant.Libelle = titre.Libelle;
+                    titreExistant.Chronique = titre.Chronique;
+                    titreExistant.DateSortie = titre.DateSortie;
+                    titreExistant.NbLectures = titre.NbLectures;
+                    titreExistant.NbLikes = titre.NbLikes;
+                    titreExistant.IdArtiste = titre.IdArtiste;
+                    titreExistant.Artiste = titre.Artiste;
+                    titreExistant.Styles = titre.Styles;
+                    titreExistant.Commentaires = titre.Commentaires;
+                    this._logger.LogDebug($"Titre {titre.IdTitre} mis à jour dans le repository local.");
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"Erreur lors de la mise à jour du titre {titre.IdTitre} dans le repository local.", ex);
+                throw;
+            }
         }
     }
 }
