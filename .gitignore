@@ -417,3 +417,9 @@ FodyWeavers.xsd
 /Webzine/Webzine.WebApplication/wwwroot/lib/bootstrap
 /Webzine/Webzine.WebApplication/Data
 /Webzine/Webzine.WebApplication/appsettings.Development.json
+/Webzine/Webzine.WebApplication/appsettings.json
+/Webzine/Webzine.WebApplication/appsettings.Development.json
+/Webzine/Webzine.WebApplication/appsettings.Prod.json
+/Webzine/Webzine.WebApplication/appsettings.json
+/Webzine/Webzine.WebApplication/appsettings.Development.json
+/Webzine/Webzine.WebApplication/appsettings.Prod.json

@@ -23,8 +23,20 @@ namespace Webzine.Repository.Db
 
         public void Add(Titre titre)
         {
-            this._logger.LogWarning("Tentative d'ajout du style {titre}. Méthode non encore implémentée dans le repository base de données.", titre);
-            throw new NotImplementedException();
+            try
+            {
+                this._logger.LogDebug($"Tentative d'ajout du titre {titre.Libelle} dans le repository base de données.");
+
+                this._context.Titres.Add(titre);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug($"Titre {titre.Libelle} ajouté avec succès (ID: {titre.IdTitre}).");
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"Erreur lors de l'ajout du titre {titre.Libelle} dans le repository base de données.", ex);
+                throw;
+            }
         }
         public int Count()
         {
@@ -177,8 +189,20 @@ namespace Webzine.Repository.Db
         }
         public void Update(Titre titre)
         {
-            this._logger.LogWarning("Tentative de modification du style {titre}. Méthode non encore implémentée dans le repository base de données.", titre);
-            throw new NotImplementedException();
+            try
+            {
+                this._logger.LogDebug($"Tentative de modification du titre {titre.IdTitre} dans le repository base de données.");
+
+                this._context.Titres.Update(titre);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug($"Titre {titre.IdTitre} modifié avec succès.");
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"Erreur lors de la modification du titre {titre.IdTitre} dans le repository base de données.", ex);
+                throw;
+            }
         }
     }
 }
