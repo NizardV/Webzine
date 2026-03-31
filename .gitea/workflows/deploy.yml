@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   pipeline-execution:
-    runs-on: debian- 13 # Ton label de runner
+    runs-on: debian-13 # Ton label de runner
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v4
