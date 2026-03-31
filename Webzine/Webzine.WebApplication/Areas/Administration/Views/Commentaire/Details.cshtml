@@ -1,0 +1,53 @@
+@model Webzine.Entity.Commentaire
+
+@{
+    ViewData["Title"] = "Détails du commentaire";
+}
+
+<div class="mt-4">
+    <h2>Détails du commentaire</h2>
+
+    <hr class="mb-4" />
+
+    <div class="row mb-4">
+        <div class="col-sm-2 fw-bold">Auteur</div>
+        <div class="col-sm-10">@Model.Auteur</div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-sm-2 fw-bold">Titre</div>
+        <div class="col-sm-10">
+            @if (Model.Titre != null)
+            {
+                <a asp-area="Administration" asp-controller="Titre" asp-action="Details" asp-route-id="@Model.Titre.IdTitre" class="text-decoration-none">
+                    @Model.Titre.Libelle
+                </a>
+            }
+            else
+            {
+                <span>Titre non trouvé (ID: @Model.IdTitre)</span>
+            }
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-sm-2 fw-bold">Contenu</div>
+        <div class="col-sm-10">
+            <p class="mb-0">@Model.Contenu</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-sm-2 fw-bold">Date de création</div>
+        <div class="col-sm-10">@Model.DateCreation.ToString("dd/MM/yyyy HH:mm:ss")</div>
+    </div>
+
+    <div class="d-flex gap-2 mb-4">
+        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Edit" asp-route-id="@Model.IdCommentaire" class="btn btn-primary">
+            Éditer
+        </a>
+        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Commentaires" class="btn btn-outline-secondary">
+            Retour à la liste
+        </a>
+    </div>
+</div>

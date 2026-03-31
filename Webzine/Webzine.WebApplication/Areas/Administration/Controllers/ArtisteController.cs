@@ -19,7 +19,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         public IActionResult Index()
         {
             var artistes = this.artisteRepository.FindAll();
-            return View(artistes);
+            return this.View(artistes);
         }
 
         [HttpGet]
@@ -29,30 +29,30 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             var artiste = this.artisteRepository.Find(id);
             if (artiste == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(artiste);
+            return this.View(artiste);
         }
 
         [HttpGet]
         [Route("artiste/create")]
         public IActionResult Create()
         {
-            return View(new Artiste());
+            return this.View(new Artiste());
         }
 
         [HttpPost]
         [Route("artiste/create")]
         public IActionResult Create(Artiste artiste)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View(artiste);
+                return this.View(artiste);
             }
 
             this.artisteRepository.Add(artiste);
-            return RedirectToAction(nameof(Index));
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // Affiche le formulaire d'édition pré-rempli
@@ -64,10 +64,10 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
 
             if (artiste == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(artiste);
+            return this.View(artiste);
         }
 
         [HttpPost]
@@ -76,16 +76,16 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             if (id != artiste.IdArtiste)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View(artiste);
+                return this.View(artiste);
             }
 
             this.artisteRepository.Update(artiste);
-            return RedirectToAction(nameof(Index));
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         [HttpGet]
@@ -96,10 +96,10 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
 
             if (artiste == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(artiste);
+            return this.View(artiste);
         }
 
         [HttpPost]
@@ -112,7 +112,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
                 this.artisteRepository.Delete(artiste);
             }
 
-            return RedirectToAction(nameof(Index));
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

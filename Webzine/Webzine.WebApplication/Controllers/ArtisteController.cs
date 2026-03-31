@@ -14,10 +14,15 @@ namespace Webzine.WebApplication.Controllers
         private readonly IArtisteRepository _artisteRepository;
         private readonly ITitreRepository _titreRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the ArtisteController class with the specified repositories.
+        /// </summary>
+        /// <param name="artisteRepository">The repository used to access and manage artiste data. Cannot be null.</param>
+        /// <param name="titreRepository">The repository used to access and manage titre data. Cannot be null.</param>
         public ArtisteController(IArtisteRepository artisteRepository, ITitreRepository titreRepository)
         {
-            _artisteRepository = artisteRepository;
-            _titreRepository = titreRepository;
+            this._artisteRepository = artisteRepository;
+            this._titreRepository = titreRepository;
         }
         /// <summary>
         /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
@@ -26,13 +31,13 @@ namespace Webzine.WebApplication.Controllers
         [HttpGet("/artiste/{nom}")]
         public IActionResult DetailsArtiste(string nom)
         {
-            var artiste = _artisteRepository.FindByName(nom);
+            var artiste = this._artisteRepository.FindByName(nom);
             if (artiste == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var titres = _titreRepository.FindAll().Where(t =>t.IdArtiste == artiste.IdArtiste);
+            var titres = this._titreRepository.FindAll().Where(t => t.IdArtiste == artiste.IdArtiste);
 
             var model = new ArtisteModel { Artiste = artiste, Titres = titres };
 
@@ -44,11 +49,11 @@ namespace Webzine.WebApplication.Controllers
                 {
                     Album = g.Key.Album ?? "Album",
                     UrlJaquette = g.Key.UrlJaquette ?? "",
-                    Titres = g.ToList()
+                    Titres = g.ToList(),
                 })
                 .ToList();
 
-            return View(model);
+            return this.View(model);
         }
     }
 }

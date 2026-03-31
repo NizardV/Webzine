@@ -13,10 +13,15 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         private readonly IStyleRepository _styleRepository;
         private readonly ILogger<StyleController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the StyleController class with the specified style repository and logger.
+        /// </summary>
+        /// <param name="styleRepository">The repository used to access and manage style data. Cannot be null.</param>
+        /// <param name="logger">The logger used to record diagnostic and operational information. Cannot be null.</param>
         public StyleController(IStyleRepository styleRepository, ILogger<StyleController> logger)
         {
-            _styleRepository = styleRepository;
-            _logger = logger;
+            this._styleRepository = styleRepository;
+            this._logger = logger;
         }
 
 
@@ -30,12 +35,42 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             try
             {
                 this._logger.LogInformation("Consultation de la liste des styles.");
-                var styles = _styleRepository.FindAll().ToList();
-                return View(styles);
+                var styles = this._styleRepository.FindAll().ToList();
+                return this.View(styles);
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la récupération de la liste des styles.");
+                return this.StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Retourne une vue qui affiche les détails d'un style de musique.
+        /// </summary>
+        /// <param name="id">L'identifiant du style de musique à afficher.</param>
+        /// <returns>Une vue contenant le style, ou une réponse NotFound si le style n'existe pas.</returns>
+        [HttpGet]
+        [Route("style/details/{id}")]
+        public IActionResult Details(int id)
+        {
+            try
+            {
+                this._logger.LogInformation("Demande d'affichage des détails du style {IdStyle}.", id);
+
+                var style = _styleRepository.Find(id);
+
+                if (style == null)
+                {
+                    this._logger.LogWarning("Aucun style trouvé avec l'id {IdStyle}.", id);
+                    return NotFound();
+                }
+
+                return View(style);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du chargement des détails du style {IdStyle}.", id);
                 return StatusCode(500);
             }
         }
@@ -49,7 +84,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         public IActionResult Create()
         {
             this._logger.LogInformation("Affichage du formulaire de création d'un style.");
-            return View();
+            return this.View();
         }
 
         /// <summary>
@@ -63,22 +98,22 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!this.ModelState.IsValid)
                 {
                     this._logger.LogWarning("Échec de création d'un style : modèle invalide.");
 
-                    return View(style);
+                    return this.View(style);
                 }
 
-                _styleRepository.Add(style);
+                this._styleRepository.Add(style);
 
                 this._logger.LogInformation("Création du style réussie. Libellé : {Libelle}.", style.Libelle);
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la création du style {Libelle}.", style.Libelle);
-                return StatusCode(500);
+                return this.StatusCode(500);
             }
         }
 
@@ -94,20 +129,20 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             {
                 this._logger.LogInformation("Demande d'affichage du formulaire de modification du style {IdStyle}.", id);
 
-                var style = _styleRepository.Find(id);
+                var style = this._styleRepository.Find(id);
 
                 if (style == null)
                 {
                     this._logger.LogWarning("Aucun style trouvé pour l'id {IdStyle}.", id);
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                return View(style);
+                return this.View(style);
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors du chargement du style {IdStyle}.", id);
-                return StatusCode(500);
+                return this.StatusCode(500);
             }
         }
 
@@ -129,32 +164,32 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
                             "Échec de modification : incohérence entre l'id de route {RouteId} et l'id du style {StyleId}.",
                             id,
                             style.IdStyle);
-                    return BadRequest();
+                    return this.BadRequest();
                 }
 
-                if (!ModelState.IsValid)
+                if (!this.ModelState.IsValid)
                 {
                     this._logger.LogWarning("Échec de modification du style {IdStyle} : modèle invalide.", id);
-                    return View(style);
+                    return this.View(style);
                 }
 
-                var styleExistant = _styleRepository.Find(id);
+                var styleExistant = this._styleRepository.Find(id);
 
                 if (styleExistant == null)
                 {
                     this._logger.LogWarning("Échec de modification : aucun style trouvé pour l'id {IdStyle}.", id);
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                _styleRepository.Update(style);
+                this._styleRepository.Update(style);
 
                 this._logger.LogInformation("Modification du style {IdStyle} réussie.", id);
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la modification du style {IdStyle}.", id);
-                return StatusCode(500);
+                return this.StatusCode(500);
             }
         }
 
@@ -171,20 +206,20 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             {
                 this._logger.LogInformation("Demande d'affichage de la confirmation de suppression du style {IdStyle}.", id);
 
-                var style = _styleRepository.Find(id);
+                var style = this._styleRepository.Find(id);
 
                 if (style == null)
                 {
                     this._logger.LogWarning("Aucun style trouvé pour suppression avec l'id {IdStyle}.", id);
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                return View(style);
+                return this.View(style);
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors du chargement du style {IdStyle} pour suppression.", id);
-                return StatusCode(500);
+                return this.StatusCode(500);
             }
         }
 
@@ -199,23 +234,23 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         {
             try
             {
-                var style = _styleRepository.Find(id);
+                var style = this._styleRepository.Find(id);
 
                 if (style == null)
                 {
                     this._logger.LogWarning("Échec de suppression : aucun style trouvé pour l'id {IdStyle}.", id);
-                    return NotFound();
+                    return this.NotFound();
                 }
 
-                _styleRepository.Delete(style);
+                this._styleRepository.Delete(style);
 
                 this._logger.LogInformation("Suppression du style {IdStyle} réussie.", id);
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la suppression du style {IdStyle}.", id);
-                return StatusCode(500);
+                return this.StatusCode(500);
             }
         }
     }
