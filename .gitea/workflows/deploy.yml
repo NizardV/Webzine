@@ -1,43 +1,31 @@
-name: Debug Pipeline
-on: [push, pull_request] # Se déclenche sur ABSOLUMENT TOUT
+name: Webzine Prod Pipeline
+on: [push]
 
 jobs:
   pipeline-execution:
-    runs-on: linux # On utilise le label qui n'a pas d'espace
+    runs-on: linux  # On garde le label qui marche !
     steps:
-      - name: Test Step
-        run: echo "Le runner a enfin reçu le signal !"
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
 
-      # --- ÉTAPE 3 : AUDIT DE SÉCURITÉ (DevSecOps) ---
-      - name: Security Scan with Trivy
+      - name: 🏗️ Docker Build
         run: |
-          # Vérifie si Trivy est là, sinon l'installe
+          # On build l'image AVANT de la scanner
+          docker build -t webzine-app:latest .
+
+      - name: 🛡️ Security Scan with Trivy
+        run: |
+          # 1. Installation de Trivy si absent
           if ! command -v trivy &> /dev/null; then
             sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
             wget -qO - https://aquasecurity.github.io/trivy-repo/dabest.gpg | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
             echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
             sudo apt-get update && sudo apt-get install -y trivy
           fi
-          # Scan de l'image et export du rapport en texte
-          trivy image --severity HIGH,CRITICAL webzine-app:latest > trivy-report.txt
-          echo "--- APERÇU DU RAPPORT DE SÉCURITÉ ---"
-          head -n 20 trivy-report.txt
+          # 2. Scan de l'image (on ne bloque pas la pipeline même s'il y a des failles pour l'instant)
+          trivy image --severity HIGH,CRITICAL webzine-app:latest
 
-      # --- ÉTAPE 4 : DÉPLOIEMENT (CD) ---
-      - name: Stop & Remove Old Instance
+      - name: 🚀 Deployment
         run: |
           docker rm -f webzine-app || true
-
-      - name: Launch New Production Container
-        run: |
-          docker run -d \
-            --name webzine-app \
-            --restart unless-stopped \
-            -p 80:8080 \
-            --security-opt "apparmor=docker-default" \
-            webzine-app:latest
-
-      # --- ÉTAPE 5 : NETTOYAGE ---
-      - name: System Prune
-        run: |
-          docker image prune -f
+          docker run -d --name webzine-app --restart unless-stopped -p 8080:8080 webzine-app:latest
