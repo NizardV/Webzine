@@ -1,22 +1,16 @@
 name: CI/CD Webzine DevSecOps
 on: [push]
 
-on:
-  push:
-    branches:
-      - dev
-
 jobs:
-  pipeline-execution:
-    runs-on: linux # On utilise le label qui n'a pas d'espace
+  build-and-deploy:
+    runs-on: linux
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v4
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          # On précise où est le fichier avec -f
-          docker build -t webzine-app:latest -f ./Webzine/Dockerfile .
+          docker build -t webzine-app:latest .          
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
@@ -24,7 +18,7 @@ jobs:
             echo "Installation propre de Trivy..."
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           fi
-          trivy image --severity HIGH,CRITICAL webzine-app:latest
+          trivy image --severity HIGH,CRITICAL webzine-app:latest          
 
       - name: 🚀 Déploiement du conteneur
         run: |
@@ -42,4 +36,4 @@ jobs:
             -e AppConfig__Environment=Development \
             -e AppConfig__Repository=Local \
             -e AppConfig__Seeder=Factories \
-            webzine-app:latest
+            webzine-app:latest          
