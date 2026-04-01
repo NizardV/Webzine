@@ -10,7 +10,7 @@ jobs:
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          docker build -t webzine-app:latest .
+          docker build -t webzine-app:latest .          
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
@@ -18,7 +18,7 @@ jobs:
             echo "Installation propre de Trivy..."
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           fi
-          trivy image --severity HIGH,CRITICAL webzine-app:latest
+          trivy image --severity HIGH,CRITICAL webzine-app:latest          
 
       - name: 🚀 Déploiement du conteneur
         run: |
@@ -36,4 +36,4 @@ jobs:
             -e AppConfig__Environment=Development \
             -e AppConfig__Repository=Local \
             -e AppConfig__Seeder=Factories \
-            webzine-app:latest
+            webzine-app:latest          
