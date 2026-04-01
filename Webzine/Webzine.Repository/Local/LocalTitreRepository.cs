@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Webzine.Entity;
 using Webzine.Repository.Contracts;
 
@@ -181,6 +178,47 @@ namespace Webzine.Repository.Local
             catch (Exception ex)
             {
                 this._logger.LogError($"Erreur lors de la mise à jour du titre {titre.IdTitre} dans le repository local.", ex);
+                throw;
+            }
+        }
+
+        public int SumLikes()
+        {
+            try
+            {
+                var totalLikes = this._data.titres.Sum(t => t.NbLikes);
+                this._logger.LogDebug("Calcul du nombre total de likes sur tous les titres - Total : {totalLikes}", totalLikes);
+                return totalLikes;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du calcul du nombre total de likes sur tous les titres");
+                throw;
+            }
+        }
+
+        public int SumLectures()
+        {
+            try
+            {
+                return this._data.titres.Sum(t => t.NbLectures);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du calcul du nombre total de lectures sur tous les titres");
+                throw;
+            }
+        }
+
+        public Titre GetTitrePlusLu()
+        {
+            try
+            {
+                return this._data.titres.OrderByDescending(t => t.NbLectures).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la récupération du titre le plus lu");
                 throw;
             }
         }

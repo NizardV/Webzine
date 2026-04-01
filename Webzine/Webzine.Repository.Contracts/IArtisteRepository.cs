@@ -50,5 +50,24 @@ namespace Webzine.Repository.Contracts
         /// </summary>
         /// <param name="artiste">Artiste à mettre à jour.</param>
         void Update(Artiste artiste);
+
+        /// <summary>
+        /// Obtient le nombre total de biographies d'artistes disponibles.
+        /// </summary>
+        /// <returns>Le nombre de biographies d'artistes actuellement enregistrées. La valeur retournée est toujours supérieure
+        /// ou égale à zéro.</returns>
+        int CountWithBiography();
+
+        /// <summary>
+        /// Obtient l'artiste ayant le plus grand nombre de chroniques.
+        /// </summary>
+        /// <returns>L'instance de l'artiste avec le plus de chroniques. Retourne null si aucun artiste n'est disponible.</returns>
+        Artiste? GetArtistePlusChronique();
+
+        /// <summary>
+        /// Obtient l'artiste ayant le plus grand nombre d'albums.
+        /// </summary>
+        /// <returns>L'instance de l'artiste avec le plus d'albums. Retourne null si aucun artiste n'est disponible.</returns>
+        Artiste? GetArtistePlusAlbums();
     }
 }

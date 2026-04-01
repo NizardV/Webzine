@@ -4,46 +4,51 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.WebApplication.Areas.Administration.Controllers
 {
-    [Area("Administration")]
-    [Route("administration")]
+    /// <summary>
+    /// Contrôleur ASP.NET Core MVC pour la gestion des entités Artiste dans la zone d'administration. Fournit des
+    /// actions pour afficher, créer, modifier et supprimer des artistes via l'interface d'administration.
+    /// </summary>
+    /// <remarks>Ce contrôleur utilise un référentiel d'artistes pour accéder et manipuler les données des
+    /// artistes. Toutes les actions sont restreintes à la zone "administration". Les méthodes prennent en charge la
+    /// validation du modèle et gèrent les cas d'entités non trouvées ou d'identifiants non valides. Ce contrôleur est
+    /// destiné à être utilisé dans un contexte d'administration sécurisé.</remarks>
+    [Area("administration")]
     public class ArtisteController : Controller
     {
         private readonly IArtisteRepository artisteRepository;
 
+        /// <summary>
+        /// Initialise une nouvelle instance de la classe ArtisteController avec le référentiel d'artistes spécifié.
+        /// </summary>
+        /// <param name="artisteRepository">Le référentiel utilisé pour accéder et gérer les données des artistes. Ne peut pas être null.</param>
         public ArtisteController(IArtisteRepository artisteRepository)
         {
             this.artisteRepository = artisteRepository;
         }
 
-        [Route("artistes")]
+        /// <summary>
+        /// Handles HTTP GET requests for the default page and displays a list of all artistes.
+        /// </summary>
+        /// <returns>A view that renders the list of artistes retrieved from the repository.</returns>
         public IActionResult Index()
         {
             var artistes = this.artisteRepository.FindAll();
             return this.View(artistes);
         }
 
-        [HttpGet]
-        [Route("artiste/details/{id}")]
-        public IActionResult Details(int id)
-        {
-            var artiste = this.artisteRepository.Find(id);
-            if (artiste == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(artiste);
-        }
-
-        [HttpGet]
-        [Route("artiste/create")]
+        /// <summary>
+        /// Returns a view for creating a new artiste.
+        /// </summary>
+        /// <remarks>The returned view is initialized with a new instance of the Artiste model. This
+        /// method is typically used to render the creation form in response to a GET request.</remarks>
+        /// <returns>A view that displays a form for entering details of a new artiste.</returns>
         public IActionResult Create()
         {
             return this.View(new Artiste());
         }
 
+        
         [HttpPost]
-        [Route("artiste/create")]
         public IActionResult Create(Artiste artiste)
         {
             if (!this.ModelState.IsValid)
@@ -55,9 +60,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // Affiche le formulaire d'édition pré-rempli
-        [HttpGet]
-        [Route("artiste/edit/{id}")]
         public IActionResult Edit(int id)
         {
             var artiste = this.artisteRepository.Find(id);
@@ -71,7 +73,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        [Route("artiste/edit/{id}")]
         public IActionResult Edit(int id, Artiste artiste)
         {
             if (id != artiste.IdArtiste)
@@ -88,8 +89,8 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        
         [HttpGet]
-        [Route("artiste/delete/{id}")]
         public IActionResult Delete(int id)
         {
             var artiste = this.artisteRepository.Find(id);
@@ -103,7 +104,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        [Route("artiste/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
             var artiste = this.artisteRepository.Find(id);

@@ -1,25 +1,39 @@
-name: CI/CD API dev .NET
+name: CI/CD Webzine DevSecOps
 on: [push]
 
 jobs:
   build-and-deploy:
-    runs-on: debian-13
+    runs-on: linux
     steps:
-      - name: Récupération du code
+      - name: 📥 Récupération du code
         uses: actions/checkout@v4
 
-      - name: Compilation et Publication
+      - name: 🏗️ Construction de l'image Docker
         run: |
-          dotnet publish -c Release -o ./publish
+          docker build -t webzine-app:latest .          
 
-      - name: Déploiement Local
+      - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
-          sudo rm -rf /var/www/api/*
-          sudo cp -r ./publish/* /var/www/api/
-          sudo chown -R www-data:www-data /var/www/api
+          if ! command -v trivy &> /dev/null; then
+            echo "Installation propre de Trivy..."
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          fi
+          trivy image --severity HIGH,CRITICAL webzine-app:latest          
 
-      - name: Redémarrage du service
+      - name: 🚀 Déploiement du conteneur
         run: |
-          sudo systemctl restart api-dotnet
-          sudo systemctl status api-dotnet --no-pager
+          # 1. On nettoie l'ancien conteneur s'il existe
+          docker stop webzine-app || true
+          docker rm webzine-app || true
           
+          # 2. On lance le nouveau avec les variables de configuration
+          # On utilise la double barre du bas (__) pour descendre dans l'arborescence du JSON AppConfig:Repository
+          docker run -d \
+            --name webzine-app \
+            --restart always \
+            -p 8080:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Development \
+            -e AppConfig__Environment=Development \
+            -e AppConfig__Repository=Local \
+            -e AppConfig__Seeder=Factories \
+            webzine-app:latest          

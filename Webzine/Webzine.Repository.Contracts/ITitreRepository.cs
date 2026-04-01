@@ -1,4 +1,6 @@
-﻿using Webzine.Entity;
+﻿using System.Timers;
+using Webzine.Entity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Webzine.Repository.Contracts
 {
@@ -80,5 +82,23 @@ namespace Webzine.Repository.Contracts
         /// </summary>
         /// <param name="titre">Titre à mettre à jour.</param>
         void Update(Titre titre);
+
+        /// <summary>
+        /// Calculates the total number of likes across all items.
+        /// </summary>
+        /// <returns>The sum of likes for all items. Returns 0 if there are no items.</returns>
+        int SumLikes();
+
+        /// <summary>
+        /// Calculates the total number of lectures.
+        /// </summary>
+        /// <returns>The sum of all lectures. Returns 0 if there are no lectures.</returns>
+        int SumLectures();
+
+        /// <summary>
+        /// Retourne le titre ayant été lu le plus grand nombre de fois.
+        /// </summary>
+        ///<returns>Le titre avec le plus grand nombre de lectures, ou null si aucun titre n'est disponible.</returns>
+        Titre GetTitrePlusLu();
     }
 }
