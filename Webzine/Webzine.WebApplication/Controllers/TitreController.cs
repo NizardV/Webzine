@@ -98,22 +98,34 @@ namespace Webzine.WebApplication.Controllers
         [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
-            Titre? titre = _titreRepository.Find(id);
+            Titre titre = this._titreRepository.Find(id);
+            var model = new TitreModel{Titre = titre};
 
-            if (titre == null)
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Route("titre/commenter")]
+        public IActionResult AjouterCommentaire(int id, TitreModel viewModel)
+        {
+            ModelState.Remove("Titre");
+
+            if (!ModelState.IsValid)
             {
-                return this.NotFound();
+                Titre titre = this._titreRepository.Find(id);
+                return View("Details", viewModel);
             }
-
-            var commentaires = _commentaireRepository.FindAll().Where(c => c.IdTitre == id).ToList();
-
-            TitreModel model = new TitreModel
+            var nouveauCommentaire = new Commentaire
             {
-                Titre = titre,
-                Commentaires = commentaires,
+                IdTitre = id,
+                Auteur = viewModel.Auteur,
+                Contenu = viewModel.Contenu,
+                DateCreation = DateTime.Now
             };
 
-            return View(model);
+            this._commentaireRepository.Add(nouveauCommentaire);
+
+            return RedirectToAction(nameof(Details), new { id = id });
         }
     }
 }

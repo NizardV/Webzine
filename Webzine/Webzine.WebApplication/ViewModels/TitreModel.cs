@@ -11,8 +11,6 @@
         /// </summary>
         public Titre Titre { get; set; }
 
-        public List<Commentaire> Commentaires { get; set; } = new();
-
         [Display(Name = "Nom")]
         [Required]
         [MinLength(2)]

@@ -62,7 +62,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             }
             else
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -83,12 +83,8 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
                 _commentaireRepository.Delete(commentaire);
 
                 // On redirige vers l'action qui liste les commentaires
-                return RedirectToAction(nameof(Commentaires));
-            }
-            else
-            {
-                return NotFound();
-            }
+            };
+            return RedirectToAction(nameof(Index));
         }
     }
 }
