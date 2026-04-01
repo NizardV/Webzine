@@ -10,11 +10,13 @@ jobs:
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          # Cette ligne magique insère app.UsePathBase("/web-dev"); juste après la création de l'objet 'app'
-          sed -i '/var app = builder.Build();/a \    app.UsePathBase("/web-dev");' Webzine.WebApplication/Program.cs
+          # 🥷 On cherche le fichier Program.cs et on injecte la ligne magique
+          find . -name "Program.cs" -exec sed -i '/var app = builder.Build();/a \    app.UsePathBase("/web-dev");' {} +
           
-          docker build -t webzine-app:latest .   
-
+          # On affiche le contenu pour vérifier (optionnel, mais rassurant pour les logs)
+          find . -name "Program.cs" -exec grep -H "UsePathBase" {} +
+          
+          docker build -t webzine-app:latest .
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
           if ! command -v trivy &> /dev/null; then
