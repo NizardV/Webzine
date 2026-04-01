@@ -13,16 +13,15 @@ jobs:
           # On build l'image en utilisant ton Dockerfile multi-stage
           docker build -t webzine-app:latest .
 
-      - name: 🛡️ Analyse de sécurité (Trivy)
+    - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
-          # Installation rapide de Trivy si absent
+          # 1. Installation via le script officiel (Détecte seul la bonne version)
           if ! command -v trivy &> /dev/null; then
-            sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
-            wget -qO - https://aquasecurity.github.io/trivy-repo/dabest.gpg | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
-            echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-            sudo apt-get update && sudo apt-get install -y trivy
+            echo "Installation propre de Trivy..."
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           fi
-          # Scan de l'image. On affiche les vulnérabilités mais on ne bloque pas encore le build.
+          
+          # 2. Exécution du scan sur ton image
           trivy image --severity HIGH,CRITICAL webzine-app:latest
 
       - name: 🚀 Déploiement du conteneur
