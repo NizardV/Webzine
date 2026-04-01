@@ -35,8 +35,26 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Add(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative d'ajout d'un style dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative d'ajout du style {Libelle} dans le repository local.",
+                    style.Libelle);
+
+                _data.styles.Add(style);
+
+                this._logger.LogDebug(
+                    "Style {Libelle} ajouté avec succès au repository local.",
+                    style.Libelle);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de l'ajout du style {Libelle} au repository local.",
+                    style.Libelle);
+                throw;
+            }
         }
 
         /// <summary>
@@ -45,9 +63,29 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Delete(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative de suppression du style {IdStyle} dans le repository local. Opération non supportée.",
-                style.IdStyle);
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de suppression du style {IdStyle} du repository local.",
+                    style.IdStyle);
+
+                var styleASupprimer = _data.styles.FirstOrDefault(s => s.IdStyle == style.IdStyle);
+                if (styleASupprimer != null)
+                {
+                    _data.styles.Remove(styleASupprimer);
+                    this._logger.LogDebug(
+                        "Style {IdStyle} supprimé avec succès du repository local.",
+                        style.IdStyle);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la suppression du style {IdStyle} du repository local.",
+                    style.IdStyle);
+                throw;
+            }
         }
 
         /// <summary>
@@ -112,9 +150,29 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Update(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative de modification du style {idStyle} dans le repository local. Opération non supportée.",
-                style.IdStyle);
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de modification du style {IdStyle} dans le repository local.",
+                    style.IdStyle);
+
+                var styleExistant = _data.styles.FirstOrDefault(s => s.IdStyle == style.IdStyle);
+                if (styleExistant != null)
+                {
+                    styleExistant.Libelle = style.Libelle;
+                    this._logger.LogDebug(
+                        "Style {IdStyle} modifié avec succès dans le repository local.",
+                        style.IdStyle);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la modification du style {IdStyle} dans le repository local.",
+                    style.IdStyle);
+                throw;
+            }
         }
     }
 }

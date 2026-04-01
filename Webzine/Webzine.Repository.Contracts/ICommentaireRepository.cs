@@ -33,5 +33,6 @@ namespace Webzine.Repository.Contracts
         /// </summary>
         /// <returns>Collection de tous les commentaires.</returns>
         IEnumerable<Commentaire> FindAll();
+        void Update(Commentaire commentaire);
     }
 }
