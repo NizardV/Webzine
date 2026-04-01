@@ -10,8 +10,8 @@ jobs:
 
       - name: 🏗️ Docker Build
         run: |
-          # On build l'image AVANT de la scanner
-          docker build -t webzine-app:latest .
+          # On précise où est le fichier avec -f
+          docker build -t webzine-app:latest -f ./Webzine/Dockerfile .
 
       - name: 🛡️ Security Scan with Trivy
         run: |
@@ -21,7 +21,6 @@ jobs:
             wget -qO - https://aquasecurity.github.io/trivy-repo/dabest.gpg | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
             echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
             sudo apt-get update && sudo apt-get install -y trivy
-          fi
           # 2. Scan de l'image (on ne bloque pas la pipeline même s'il y a des failles pour l'instant)
           trivy image --severity HIGH,CRITICAL webzine-app:latest
 
