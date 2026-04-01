@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using NLog;
 using NLog.Web;
+using Webzine.Business.Contracts.Services;
 using Webzine.EntitiesContext;
 using Webzine.EntitiesContext.Seeders;
-using Webzine.Repository;
 using Webzine.Repository.Contracts;
 using Webzine.Repository.Db;
+using Webzine.Repository.Deezer;
 using Webzine.Repository.Local;
+using Webzine.Business.Services;
 
 var logger = LogManager.Setup()
     .LoadConfigurationFromAppSettings()
@@ -27,6 +28,7 @@ try
     var environment = config["Environment"];
     var repoMode = config["Repository"];
     var dataSource = config["Seeder"];
+    var deezerApiBaseUrl = config["DeezerApi"];
 
     if (repoMode == "Local")
     {
@@ -78,7 +80,14 @@ try
         builder.Services.AddScoped<ICommentaireRepository, DbCommentaireRepository>();
         builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
     }
-
+    if (dataSource == "Deezer")
+    {
+        builder.Services.AddScoped<IDeezerRepository, DeezerRepository>();
+        builder.Services.AddHttpClient<IDeezerRepository, DeezerRepository>(client => {
+            client.BaseAddress = new Uri(deezerApiBaseUrl);
+        });
+        builder.Services.AddScoped<IDeezerService, DeezerService>();
+    }
     // Ajoute les services n�cessaires pour permettfre l'utilisation des
     // controllers avec des vues.
     builder.Services.AddControllersWithViews()
@@ -97,25 +106,26 @@ try
 
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<WebzineDbContext>();
+        if (environment == "Development")
+        {
+            logger.Warn("Suppression et recréation de la base en environnement Development avant seeding.");
 
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            logger.Info("Base SQLite recréée et seedée avec les données Factories.");
+
+        }
         if (dataSource == "Factories")
         {
-            if (environment == "Development")
-            {
-                logger.Warn("Suppression et recréation de la base en environnement Development avant seeding.");
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-                SeedDataDb.Initialize(context);
-
-                logger.Info("Base SQLite recréée et seedée avec les données Factories.");
-
-            }
+            SeedDataDb.Initialize(context);
         }
-        //    else if (dataSource == "Spotify")
-        //    {
-        //        SeedDataSpotify.InitializeDb(context);
-        //    }
+        else if (dataSource == "Deezer")
+        {
+            var deezerService = scope.ServiceProvider.GetRequiredService<IDeezerService>();
+
+            SeedDataDbDeezer.Seed(deezerService, context, logger);
+        }
     }
 
 

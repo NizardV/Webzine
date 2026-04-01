@@ -9,3 +9,23 @@
 	- Se rendre dans le appSettings.Development.json
 	- Pour utiliser une base de données mettre "Database" dans Repository, sinon mettre "Local"
 	- Pour utiliser les factories mettre "Factory" dans Seeder, sinon mettre "Spotify" (pas encore disponible, dispo au jalon 3).
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "version": "2.0",
+  "AppConfig": {
+    "Environment": "Development", //"Production", "Development"
+    "Repository": "Local", // "Local" "Database"
+    "Seeder": "Factories" // "Factories", "Spotify"
+  },
+
+  "ConnectionStrings": {
+    "Postgres": "", //  Ex : "Host=;Database=;Username=;Password="
+    "Sqlite": "Data Source=./Data/Webzine.sqlite" // Ex : "Data Source=webzine.db"
+  }
+}
