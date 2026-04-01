@@ -5,8 +5,7 @@
     using Webzine.Business.Contracts.Services;
     using Webzine.Repository.Contracts;
 
-    [Area("Administration")]
-    [Route("administration")]
+    [Area("administration")]
     /// <summary>
     /// Contrôleur d'administration des titres.
     /// Cette partie est orientée IHM : aucune persistance n'est effectuée.
@@ -30,32 +29,13 @@
         /// Retourne la vue qui affiche la liste de tous les titres disponibles.
         /// </summary>
         /// <returns>Une vue.</returns>
-        [Route("titres")]
         public IActionResult Index()
         {
             var titres = this._titreRepository.FindAll();
             return this.View(titres);
         }
 
-        /// <summary>
-        /// Retourne la vue pour créer un nouveau titre.
-        /// </summary>
-        /// <returns>Une vue.</returns>
         [HttpGet]
-        [Route("titre/details/{id}")]
-        public IActionResult Details(int id)
-        {
-            var titre = _titreRepository.Find(id);
-            if (titre == null)
-            {
-                return NotFound();
-            }
-
-            return View(titre);
-        }
-
-        [HttpGet]
-        [Route("titre/create")]
         public IActionResult Create()
         {
             return this.View();
@@ -67,7 +47,6 @@
         /// <param name="titre">L'entité titre a créer.</param>
         /// <returns>Une redirection sur la page index.</returns>
         [HttpPost]
-        [Route("titre/create")]
         public IActionResult Create(Titre titre)
         {
             if (!this.ModelState.IsValid)
@@ -86,7 +65,6 @@
         /// <param name="id">L'identifiant du titre à modifier.</param>
         /// <returns>Une vue.</returns>
         [HttpGet]
-        [Route("titre/edit/{id}")]
         public IActionResult Edit(int id)
         {
             var titre = this._titreRepository.Find(id);
@@ -105,7 +83,6 @@
         /// <param name="titre">L'objet titre à modifier</param>
         /// <returns>Une redirection sur la page index.</returns>
         [HttpPost]
-        [Route("titre/edit/{id}")]
         public IActionResult Edit(int id, Titre titre)
         {
             if (id != titre.IdTitre)
@@ -128,8 +105,6 @@
         /// </summary>
         /// <param name="id">L'identifiant du titre à modifier.</param>
         /// <returns>Une vue.</returns>
-        [HttpGet]
-        [Route("titre/delete/{id}")]
         public IActionResult Delete(int id)
         {
             var titre = this._titreRepository.Find(id);
@@ -147,7 +122,6 @@
         /// <param name="id">L'identifiant du titre à supprimer</param>
         /// <returns>Une redirection sur la page index.</returns>
         [HttpPost]
-        [Route("titre/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
             var titre = this._titreRepository.Find(id);

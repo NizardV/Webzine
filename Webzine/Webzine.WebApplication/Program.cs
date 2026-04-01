@@ -87,6 +87,12 @@ try
         // N�cessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
         .AddRazorRuntimeCompilation();
 
+    // Pour mettre les urls en minuscule
+    builder.Services.AddRouting(options =>
+    {
+        options.LowercaseUrls = true;
+    });
+
     var app = builder.Build();
     logger.Info("Application construite avec succès.");
 
@@ -123,6 +129,30 @@ try
     app.UseStaticFiles();
 
     app.UseRouting();
+
+    app.MapAreaControllerRoute(
+    name: "admin_titres_list",
+    areaName: "Administration",
+    pattern: "administration/titres",
+    defaults: new { controller = "Titre", action = "Index" });
+
+    app.MapAreaControllerRoute(
+    name: "admin_styles_list",
+    areaName: "Administration",
+    pattern: "administration/styles",
+    defaults: new { controller = "Style", action = "Index" });
+
+    app.MapAreaControllerRoute(
+    name: "admin_artistes_list",
+    areaName: "Administration",
+    pattern: "administration/artistes",
+    defaults: new { controller = "Artiste", action = "Index" });
+
+    app.MapAreaControllerRoute(
+    name: "admin_commentaires_list",
+    areaName: "Administration",
+    pattern: "administration/commentaires",
+    defaults: new { controller = "Commentaire", action = "Index" });
 
     // Configure le routage pour les zones (areas)
     app.MapControllerRoute(

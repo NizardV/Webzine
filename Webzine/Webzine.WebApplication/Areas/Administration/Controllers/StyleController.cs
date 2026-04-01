@@ -6,8 +6,7 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.WebApplication.Areas.Administration.Controllers
 {
-    [Area("Administration")]
-    [Route("administration")]
+    [Area("administration")]
     public class StyleController : Controller
     {
         private readonly IStyleRepository _styleRepository;
@@ -29,7 +28,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// Retourne une vue qui affiche la liste de tous les styles de musique présents dans la collection de styles.
         /// </summary>
         /// <returns>Une vue.</returns>
-        [Route("styles")]
         public IActionResult Index()
         {
             try
@@ -46,41 +44,9 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         }
 
         /// <summary>
-        /// Retourne une vue qui affiche les détails d'un style de musique.
-        /// </summary>
-        /// <param name="id">L'identifiant du style de musique à afficher.</param>
-        /// <returns>Une vue contenant le style, ou une réponse NotFound si le style n'existe pas.</returns>
-        [HttpGet]
-        [Route("style/details/{id}")]
-        public IActionResult Details(int id)
-        {
-            try
-            {
-                this._logger.LogInformation("Demande d'affichage des détails du style {IdStyle}.", id);
-
-                var style = _styleRepository.Find(id);
-
-                if (style == null)
-                {
-                    this._logger.LogWarning("Aucun style trouvé avec l'id {IdStyle}.", id);
-                    return NotFound();
-                }
-
-                return View(style);
-            }
-            catch (Exception ex)
-            {
-                this._logger.LogError(ex, "Erreur lors du chargement des détails du style {IdStyle}.", id);
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
         /// Returne une vue pour créer un nouveau style.
         /// </summary>
         /// <returns>Une vue.</returns>
-        [HttpGet]
-        [Route("style/create")]
         public IActionResult Create()
         {
             this._logger.LogInformation("Affichage du formulaire de création d'un style.");
@@ -93,7 +59,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="style"></param>
         /// <returns>Redirection vers l'affichage de tous les styles</returns>
         [HttpPost]
-        [Route("style/create")]
         public IActionResult Create(Style style)
         {
             try
@@ -122,8 +87,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// </summary>
         /// <param name="id">L'identifiant du style de musique à modifier.</param>
         /// <returns>Une vue contenant le style à modifier, ou une réponse NotFound si le style n'existe pas.</returns>
-        [HttpGet]
-        [Route("style/edit/{id}")]
         public IActionResult Edit(int id) {
             try
             {
@@ -153,7 +116,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="style">Le style de musique contenant les nouvelles données.</param>
         /// <returns>Redirection vers l'affichage de tous les styles si les données sont valides ; sinon retourne la vue avec les données saisies.</returns>
         [HttpPost]
-        [Route("style/edit/{id}")]
         public IActionResult Edit(int id, Style style)
         {
             try
@@ -199,7 +161,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="id">L'identifiant du style de musique à supprimer.</param>
         /// <returns>Une vue contenant le style à supprimer, ou une réponse NotFound si le style n'existe pas.</returns>
         [HttpGet]
-        [Route("style/delete/{id}")]
         public IActionResult Delete(int id)
         {
             try
@@ -229,7 +190,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="id">L'identifiant du style de musique à supprimer.</param>
         /// <returns>Redirection vers l'affichage de tous les styles si la suppression est effectuée ; sinon retourne une réponse NotFound.</returns>
         [HttpPost]
-        [Route("style/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
             try
