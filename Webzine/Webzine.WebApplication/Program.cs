@@ -2,12 +2,15 @@
 using Microsoft.Extensions.FileProviders;
 using NLog;
 using NLog.Web;
+using System.Threading.RateLimiting;
 using Webzine.EntitiesContext;
 using Webzine.EntitiesContext.Seeders;
 using Webzine.Repository;
 using Webzine.Repository.Contracts;
 using Webzine.Repository.Db;
 using Webzine.Repository.Local;
+using Webzine.WebApplication.Middleware;
+using Webzine.WebApplication.Filters;
 
 var logger = LogManager.Setup()
     .LoadConfigurationFromAppSettings()
@@ -24,9 +27,12 @@ try
     builder.Host.UseNLog();
 
     var config = builder.Configuration.GetSection("AppConfig");
-    var environment = config["Environment"];
-    var repoMode = config["Repository"];
-    var dataSource = config["Seeder"];
+    var environment = config["Environment"] ?? "Development";
+    var repoMode = config["Repository"] ?? "Local";
+    var dataSource = config["Seeder"] ?? "Factories";
+
+    logger.Info("Configuration chargée - Environnement: {Environment}, Repository: {RepoMode}, Seeder: {DataSource}", 
+        environment, repoMode, dataSource);
 
     if (repoMode == "Local")
     {
@@ -79,13 +85,43 @@ try
         builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
     }
 
-    // Ajoute les services n�cessaires pour permettfre l'utilisation des
+    // Ajoute les services nécessaires pour permettfre l'utilisation des
     // controllers avec des vues.
     builder.Services.AddControllersWithViews()
-        // Ajoute la compilation des vues lors de l'ex�cution de l'application.
-        // Cela nous �vite de recompiler l'application � chaque modification de vue.
-        // N�cessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
-        .AddRazorRuntimeCompilation();
+        // Ajoute la compilation des vues lors de l'exécution de l'application.
+        // Cela nous évite de recompiler l'application à chaque modification de vue.
+        // Nécessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
+        .AddRazorRuntimeCompilation()
+        // Enregistre le filtre d'exception global
+        .AddMvcOptions(options =>
+        {
+            options.Filters.Add<ExceptionFilter>();
+        });
+
+    // Enregistre le filtre comme service pour l'injection de dépendances
+    builder.Services.AddScoped<ExceptionFilter>();
+
+    // Configure la compression des réponses
+    builder.Services.AddResponseCompression(options =>
+    {
+        options.EnableForHttps = true;
+    });
+
+    // Configure le Rate Limiting
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: httpContext.Request.Path.ToString(),
+                factory: partition => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 100,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 2
+                }));
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    });
 
     var app = builder.Build();
     logger.Info("Application construite avec succès.");
@@ -121,6 +157,13 @@ try
 
     // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
     app.UseStaticFiles();
+
+    // Enregistre les middlewares dans le pipeline
+    app.UseRateLimiter();
+    app.UseHsts();
+    app.UseHttpsRedirection();
+    app.UseMiddleware<SecurityHeadersMiddleware>();
+    app.UseMiddleware<LoggingMiddleware>();
 
     app.UseRouting();
 
