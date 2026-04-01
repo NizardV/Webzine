@@ -14,18 +14,15 @@ jobs:
           docker build -t webzine-app:latest .
 
       - name: 🛡️ Analyse de sécurité (Trivy)
-        run: |
-          # 1. Téléchargement direct du binaire (plus rapide que apt)
-          if ! command -v trivy &> /dev/null; then
-            echo "Installation rapide de Trivy..."
-            wget https://github.com/aquasecurity/trivy/releases/download/v0.48.3/trivy_0.48.3_Linux-64bit.tar.gz
-            tar zxvf trivy_0.48.3_Linux-64bit.tar.gz
-            sudo mv trivy /usr/local/bin/
-          fi
-          
-          # 2. Scan de l'image
-          trivy image --severity HIGH,CRITICAL webzine-app:latest
-
+              run: |
+                # 1. Installation via le script officiel (ultra robuste)
+                if ! command -v trivy &> /dev/null; then
+                  echo "Installation de Trivy via le script officiel..."
+                  curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+                fi
+                
+                # 2. Exécution du scan
+                trivy image --severity HIGH,CRITICAL webzine-app:latest
       - name: 🚀 Déploiement du conteneur
         run: |
           # On arrête l'ancien conteneur s'il existe
