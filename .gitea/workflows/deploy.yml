@@ -22,11 +22,18 @@ jobs:
 
       - name: 🚀 Déploiement du conteneur
         run: |
+          # 1. On nettoie l'ancien conteneur s'il existe
           docker stop webzine-app || true
           docker rm webzine-app || true
+          
+          # 2. On lance le nouveau avec les variables de configuration
+          # On utilise la double barre du bas (__) pour descendre dans l'arborescence du JSON AppConfig:Repository
           docker run -d \
             --name webzine-app \
             --restart always \
             -p 8080:8080 \
             -e ASPNETCORE_ENVIRONMENT=Development \
+            -e AppConfig__Environment=Development \
+            -e AppConfig__Repository=Local \
+            -e AppConfig__Seeder=Factories \
             webzine-app:latest
