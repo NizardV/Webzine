@@ -2,9 +2,10 @@
 using Microsoft.Extensions.FileProviders;
 using NLog;
 using NLog.Web;
+using Webzine.Business.Contracts.Services;
+using Webzine.Business.Services;
 using Webzine.EntitiesContext;
 using Webzine.EntitiesContext.Seeders;
-using Webzine.Repository;
 using Webzine.Repository.Contracts;
 using Webzine.Repository.Db;
 using Webzine.Repository.Local;
@@ -45,6 +46,7 @@ try
         builder.Services.AddSingleton(data);
 
         //Injecter les repo locaux
+        builder.Services.AddScoped<IDashboardService, DashboardService>();
         builder.Services.AddScoped<ITitreRepository, LocalTitreRepository>();
         builder.Services.AddScoped<IArtisteRepository, LocalArtisteRepository>();
         builder.Services.AddScoped<IStyleRepository, LocalStyleRepository>();
@@ -72,7 +74,7 @@ try
         }
 
         // Injection des repos DB
-        //builder.Services.AddScoped<ITitreRepository, DbTitreRepository>();
+        builder.Services.AddScoped<IDashboardService, DashboardService>();
         builder.Services.AddScoped<IArtisteRepository, DbArtisteRepository>();
         builder.Services.AddScoped<IStyleRepository, DbStyleRepository>();
         builder.Services.AddScoped<ICommentaireRepository, DbCommentaireRepository>();

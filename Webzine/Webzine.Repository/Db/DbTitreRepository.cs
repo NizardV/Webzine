@@ -107,7 +107,7 @@ namespace Webzine.Repository.Db
                     .Include(t => t.Artiste)
                     .Include(t => t.Styles)
                     .Include(t => t.Commentaires);
-                
+
                 return titres;
             }
             catch (Exception ex)
@@ -150,7 +150,7 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                var titres = this._context.Titres.Where(t => 
+                var titres = this._context.Titres.Where(t =>
                 t.Libelle.Contains(mot, StringComparison.OrdinalIgnoreCase) ||
                 t.Chronique.Contains(mot, StringComparison.OrdinalIgnoreCase));
                 this._logger.LogDebug("Recherche de titres avec le mot : {mot} - {nbTitres} résultats trouvés", mot, titres.Count());
@@ -201,6 +201,46 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this._logger.LogError($"Erreur lors de la modification du titre {titre.IdTitre} dans le repository base de données.", ex);
+                throw;
+            }
+        }
+
+        public int SumLikes()
+        {
+            try
+            {
+                return this._context.Titres.Sum(t => t.NbLikes);
+
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du calcul du nombre total de likes sur tous les titres");
+                throw;
+            }
+        }
+
+        public int SumLectures()
+        {
+            try
+            {
+                return this._context.Titres.Sum(t => t.NbLectures);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du calcul du nombre total de lectures sur tous les titres");
+                throw;
+            }
+        }
+
+        public Titre GetTitrePlusLu()
+        {
+            try
+            {
+                 return this._context.Titres.OrderByDescending(t => t.NbLectures).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la récupération du titre le plus lu");
                 throw;
             }
         }
