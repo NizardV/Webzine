@@ -10,11 +10,8 @@ jobs:
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          docker build -t webzine-app:latest .
-        run: |
-          docker build --no-cache -t webzine-app:latest .
-        run: |
-          docker build --no-cache -t webzine-app:latest .
+          # On précise où est le fichier avec -f
+          docker build -t webzine-app:latest -f ./Webzine/Dockerfile .
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
