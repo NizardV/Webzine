@@ -3,44 +3,30 @@ on: [push]
 
 jobs:
   build-and-deploy:
-    runs-on: linux  # On utilise le label qui fonctionne
+    runs-on: linux
     steps:
       - name: 📥 Récupération du code
         uses: actions/checkout@v4
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          # On build l'image en utilisant ton Dockerfile multi-stage
           docker build -t webzine-app:latest .
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
-          # 1. Téléchargement direct du binaire (plus rapide que apt)
           if ! command -v trivy &> /dev/null; then
-            echo "Installation rapide de Trivy..."
-            wget https://github.com/aquasecurity/trivy/releases/download/v0.48.3/trivy_0.48.3_Linux-64bit.tar.gz
-            tar zxvf trivy_0.48.3_Linux-64bit.tar.gz
-            sudo mv trivy /usr/local/bin/
+            echo "Installation propre de Trivy..."
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           fi
-          
-          # 2. Scan de l'image
           trivy image --severity HIGH,CRITICAL webzine-app:latest
 
       - name: 🚀 Déploiement du conteneur
         run: |
-          # On arrête l'ancien conteneur s'il existe
           docker stop webzine-app || true
           docker rm webzine-app || true
-          
-          # On lance le nouveau conteneur
-          # On mappe le port 8080 (défini dans ton Dockerfile) sur le port 80 de la VM (ou 8080 selon ton besoin)
           docker run -d \
             --name webzine-app \
             --restart always \
             -p 8080:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Development \
             webzine-app:latest
-
-      - name: ✅ Vérification du statut
-        run: |
-          docker ps | grep webzine-app
-          docker logs --tail 20 webzine-app

@@ -42,7 +42,6 @@
     <ProjectReference Include="..\Webzine.Entity\Webzine.Entity.csproj" />
     <ProjectReference Include="..\Webzine.Repository.Contracts\Webzine.Repository.Contracts.csproj" />
     <ProjectReference Include="..\Webzine.Repository\Webzine.Repository.csproj" />
-    <Folder Include="Data\" />
     <Folder Include="Views\Admin\" />
   </ItemGroup>
 
