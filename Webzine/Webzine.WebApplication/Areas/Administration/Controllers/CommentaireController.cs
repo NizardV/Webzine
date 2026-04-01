@@ -49,7 +49,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="id">L'identifiant unique du commentaire à supprimer.</param>
         /// <returns>Un objet View affichant la confirmation de suppression si le commentaire existe ; sinon, un résultat
         /// NotFound si aucun commentaire correspondant n'est trouvé.</returns>
-        [HttpGet]
         public IActionResult Delete(int id)
         {
             var commentaire = this._commentaireRepository.Find(id);
