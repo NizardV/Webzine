@@ -10,7 +10,10 @@ jobs:
 
       - name: 🏗️ Construction de l'image Docker
         run: |
-          docker build -t webzine-app:latest .          
+          # Cette ligne magique insère app.UsePathBase("/web-dev"); juste après la création de l'objet 'app'
+          sed -i '/var app = builder.Build();/a \    app.UsePathBase("/web-dev");' Webzine.WebApplication/Program.cs
+          
+          docker build -t webzine-app:latest .   
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
