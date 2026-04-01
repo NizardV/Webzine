@@ -1,25 +1,45 @@
-name: CI/CD API dev .NET
+name: CI/CD Webzine DevSecOps
 on: [push]
 
 jobs:
   build-and-deploy:
-    runs-on: debian-13
+    runs-on: linux  # On utilise le label qui fonctionne
     steps:
-      - name: Récupération du code
+      - name: 📥 Récupération du code
         uses: actions/checkout@v4
 
-      - name: Compilation et Publication
+      - name: 🏗️ Construction de l'image Docker
         run: |
-          dotnet publish -c Release -o ./publish
+          # On build l'image en utilisant ton Dockerfile multi-stage
+          docker build -t webzine-app:latest .
 
-      - name: Déploiement Local
+      - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
-          sudo rm -rf /var/www/api/*
-          sudo cp -r ./publish/* /var/www/api/
-          sudo chown -R www-data:www-data /var/www/api
+          # Installation rapide de Trivy si absent
+          if ! command -v trivy &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+            wget -qO - https://aquasecurity.github.io/trivy-repo/dabest.gpg | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+            echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+            sudo apt-get update && sudo apt-get install -y trivy
+          fi
+          # Scan de l'image. On affiche les vulnérabilités mais on ne bloque pas encore le build.
+          trivy image --severity HIGH,CRITICAL webzine-app:latest
 
-      - name: Redémarrage du service
+      - name: 🚀 Déploiement du conteneur
         run: |
-          sudo systemctl restart api-dotnet
-          sudo systemctl status api-dotnet --no-pager
+          # On arrête l'ancien conteneur s'il existe
+          docker stop webzine-app || true
+          docker rm webzine-app || true
           
+          # On lance le nouveau conteneur
+          # On mappe le port 8080 (défini dans ton Dockerfile) sur le port 80 de la VM (ou 8080 selon ton besoin)
+          docker run -d \
+            --name webzine-app \
+            --restart always \
+            -p 8080:8080 \
+            webzine-app:latest
+
+      - name: ✅ Vérification du statut
+        run: |
+          docker ps | grep webzine-app
+          docker logs --tail 20 webzine-app
