@@ -29,9 +29,11 @@ jobs:
 
       - name: 🚀 Déploiement du conteneur
         run: |
+          # Nettoyage
           docker stop webzine-app || true
           docker rm webzine-app || true
 
+          # Lancement (Syntaxe stricte)
           docker run -d \
             --name webzine-app \
             --restart always \
@@ -40,6 +42,6 @@ jobs:
             -e AppConfig__Environment=Production \
             -e AppConfig__Repository=Database \
             -e AppConfig__Seeder=Deezer \
-            -e AppConfig__DeezerApi='https://api.deezer.com' \
-            -e AppConfig__PostgresPassword=${{ secrets.POSTGRESQL }} \
+            -e AppConfig__DeezerApi="https://api.deezer.com" \
+            -e "AppConfig__PostgresPassword=${{ secrets.POSTGRESQL }}" \
             webzine-app:latest
