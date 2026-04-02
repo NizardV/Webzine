@@ -41,5 +41,5 @@ jobs:
             -e AppConfig__Repository=Database \
             -e AppConfig__Seeder=Deezer \
             -e AppConfig__DeezerApi='https://api.deezer.com' \
-            -e 'AppConfig__PostgresPassword=${{ secrets.POSTGRESQL }}' \
+            -e AppConfig__PostgresPassword=${{ secrets.POSTGRESQL }} \
             webzine-app:latest
