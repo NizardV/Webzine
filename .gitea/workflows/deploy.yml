@@ -1,4 +1,5 @@
 name: CI/CD Webzine DevSecOps
+
 on: [push]
 
 jobs:
@@ -10,30 +11,39 @@ jobs:
 
       - name: 🏗️ Construction de l'image Docker
         run: |
+          # 🥷 On cherche le fichier Program.cs et on injecte la ligne magique UsePathBase
+          find . -name "Program.cs" -exec sed -i '/var app = builder.Build();/a \    app.UsePathBase("/web-dev");' {} +
+          
+          # Vérification visuelle dans les logs de la pipeline
+          find . -name "Program.cs" -exec grep -H "UsePathBase" {} +
+
           docker build -t webzine-app:latest .          
 
       - name: 🛡️ Analyse de sécurité (Trivy)
         run: |
           if ! command -v trivy &> /dev/null; then
-            echo "Installation propre de Trivy..."
+            echo "Installation de Trivy..."
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           fi
-          trivy image --severity HIGH,CRITICAL webzine-app:latest          
+          trivy image --severity HIGH,CRITICAL webzine-app:latest                    
 
       - name: 🚀 Déploiement du conteneur
         run: |
-          # 1. On nettoie l'ancien conteneur s'il existe
+          # 1. Nettoyage de l'ancien conteneur
           docker stop webzine-app || true
           docker rm webzine-app || true
-          
-          # 2. On lance le nouveau avec les variables de configuration
-          # On utilise la double barre du bas (__) pour descendre dans l'arborescence du JSON AppConfig:Repository
+
+          # 2. Lancement du conteneur avec l'injection du secret POSTGRESQL
+          # Note : On utilise des doubles guillemets pour protéger les caractères spéciaux du mot de passe
           docker run -d \
             --name webzine-app \
             --restart always \
             -p 8080:8080 \
-            -e ASPNETCORE_ENVIRONMENT=Development \
-            -e AppConfig__Environment=Development \
-            -e AppConfig__Repository=Local \
-            -e AppConfig__Seeder=Factories \
-            webzine-app:latest          
+            -e ASPNETCORE_ENVIRONMENT=Production \
+            -e AppConfig__Environment=Production \
+            -e AppConfig__Repository=Database \
+            -e AppConfig__Seeder=Deezer \
+            -e AppConfig__DeezerApi="https://api.deezer.com" \
+            -e "AppConfig__PostgresPassword=${{ secrets.POSTGRESQL }}" \
+            -e "ConnectionStrings__Postgres=${{ secrets.POSTGRES_CONN_STRING }}" \
+            webzine-app:latest

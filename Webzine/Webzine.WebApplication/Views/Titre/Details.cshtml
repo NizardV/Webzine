@@ -88,11 +88,11 @@
 <div class="mb-5">
     <h1 class="h5 mb-3">Donne ton avis sur le titre</h1>
 
-    <form asp-controller="Home" asp-action="AjouterCommentaire" asp-route-id="@Model.Titre.IdTitre" method="post" class="row g-3">
+    <form asp-controller="Titre" asp-action="AjouterCommentaire" asp-route-id="@Model.Titre.IdTitre" method="post" class="row g-3">
         <div class="col-12">
             <div class="row g-2 align-items-center">
                 <div class="col-12 col-md-2">
-                    <label asp-for="Auteur" class="col-form-label"></label>
+                    <label for="auteur" class="col-form-label"></label>
                     <span class="text-danger">*</span>
                 </div>
                 <div class="col-12 col-md-6">
@@ -129,14 +129,14 @@
 <div class="mb-4">
     <h2 class="h5">Commentaires</h2>
 
-    @if (Model.Commentaires == null || !Model.Commentaires.Any())
+    @if (Model.Titre.Commentaires == null || !Model.Titre.Commentaires.Any())
     {
         <p class="text-muted">Aucun commentaire. Soyez le premier à réagir !</p>
     }
     else
     {
         <div class="d-grid gap-3">
-            @foreach (var c in Model.Commentaires.OrderByDescending(x => x.DateCreation))
+            @foreach (var c in Model.Titre.Commentaires.OrderByDescending(x => x.DateCreation))
             {
                 <div class="d-flex gap-3">
                     <div class="text-primary" style="font-size: 2.5rem; line-height: 1;">
