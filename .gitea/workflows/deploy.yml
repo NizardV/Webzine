@@ -37,8 +37,10 @@ jobs:
             --name webzine-app \
             --restart always \
             -p 8080:8080 \
-            -e ASPNETCORE_ENVIRONMENT=Development \
-            -e AppConfig__Environment=Development \
-            -e AppConfig__Repository=Local \
-            -e AppConfig__Seeder=Factories \
+            -e ASPNETCORE_ENVIRONMENT=Production \
+            -e AppConfig__Environment=Production \
+            -e AppConfig__Repository=Database \
+            -e AppConfig__Seeder=Deezer \
+            -e AppConfig__DeezerApi="https://api.deezer.com" \
+            -e "ConnectionStrings__Postgres=${{ secrets.POSTGRES_CONN_STRING }}" \
             webzine-app:latest          
