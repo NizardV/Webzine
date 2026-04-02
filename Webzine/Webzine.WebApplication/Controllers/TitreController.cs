@@ -122,15 +122,18 @@ namespace Webzine.WebApplication.Controllers
                 Titre titre = this._titreRepository.Find(id);
                 return View("Details", viewModel);
             }
+            var titreComm = _titreRepository.Find(id);
             var nouveauCommentaire = new Commentaire
             {
                 IdTitre = id,
                 Auteur = viewModel.Auteur,
                 Contenu = viewModel.Contenu,
-                DateCreation = DateTime.Now
+                DateCreation = DateTime.Now,
+                Titre = titreComm,
             };
-
             this._commentaireRepository.Add(nouveauCommentaire);
+            titreComm.Commentaires.Add(nouveauCommentaire);
+            this._titreRepository.Update(titreComm);
 
             return RedirectToAction(nameof(Details), new { id = id });
         }
