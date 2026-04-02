@@ -29,7 +29,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("titre/like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
         /// L'opération n'est pas persistée (Factory inchangées) et sert uniquement à refléter l'état dans l'interface.
@@ -47,8 +46,6 @@ namespace Webzine.WebApplication.Controllers
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
-        [HttpGet]
-        [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Affiche un formulaire d'édition légère (IHM) pour un titre.
         /// </summary>
@@ -65,7 +62,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Enregistre l'édition légère (IHM) d'un titre, sans persistance.
         /// </summary>
@@ -82,8 +78,6 @@ namespace Webzine.WebApplication.Controllers
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
-        [HttpGet]
-        [Route("titres/style/{libelle}")]
         public IActionResult Style(string libelle)
         {
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
@@ -105,11 +99,14 @@ namespace Webzine.WebApplication.Controllers
         [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
-            Titre titre = _titreRepository.Find(id);
+            Titre titre = this._titreRepository.Find(id);
 
-            //Retourner un 404 personnalisé
-            
-            return View(titre);
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(titre);
         }
     }
 }
