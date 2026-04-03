@@ -83,13 +83,14 @@ namespace Webzine.WebApplication.Controllers
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
             var titres = this._titreRepository.SearchByStyle(libelle);
 
-            if (titres == null)
+            var model = new TitresParStyleViewModel
             {
-                return this.NotFound();
-            }
+                NomDuStyle = libelle,
+                Titres = titres,
+            };
 
             // On envoie la liste filtrée à la vue
-            return this.View(titres);
+            return this.View(model);
         }
 
         /// <summary>
