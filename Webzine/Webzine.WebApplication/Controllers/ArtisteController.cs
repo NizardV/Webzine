@@ -24,11 +24,11 @@ namespace Webzine.WebApplication.Controllers
             this._artisteRepository = artisteRepository;
             this._titreRepository = titreRepository;
         }
+
         /// <summary>
         /// Retourne la vue Artiste.cshtml avec le nom passé en paramètre.
         /// </summary>
         /// <returns>Une Vue</returns>
-        [HttpGet("/artiste/{nom}")]
         public IActionResult DetailsArtiste(string nom)
         {
             var artiste = this._artisteRepository.FindByName(nom);

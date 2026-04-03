@@ -87,6 +87,7 @@ namespace Webzine.WebApplication.Controllers
             {
                 return this.NotFound();
             }
+
             // On envoie la liste filtrée à la vue
             return this.View(titres);
         }
@@ -96,27 +97,38 @@ namespace Webzine.WebApplication.Controllers
         /// </summary>
         /// <param name="id">Id du Titre</param>
         /// <returns>Une vue</returns>
-        [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
             Titre titre = this._titreRepository.Find(id);
+
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
             var model = new TitreModel{Titre = titre};
 
             return this.View(model);
         }
 
+
+        /// <summary>
+        /// Permet d'ajouter un commentaire à un titre spécifique. Le commentaire est créé à partir des données du formulaire soumis, puis ajouté à la base de données via le CommentaireRepository. Après l'ajout, l'utilisateur est redirigé vers la page de détails du titre pour voir le nouveau commentaire.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("titre/commenter")]
-        public IActionResult AjouterCommentaire(int id, TitreModel viewModel)
+        public IActionResult Commenter(int id, TitreModel viewModel)
         {
             ModelState.Remove("Titre");
 
             if (!ModelState.IsValid)
             {
                 Titre titre = this._titreRepository.Find(id);
-                return View("Details", viewModel);
+                return this.View("Details", viewModel);
             }
-            var titreComm = _titreRepository.Find(id);
+            var titreComm = this._titreRepository.Find(id);
             var nouveauCommentaire = new Commentaire
             {
                 IdTitre = id,

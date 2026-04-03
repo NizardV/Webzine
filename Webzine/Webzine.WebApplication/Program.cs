@@ -171,7 +171,6 @@ try
         }
     }
 
-
     // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
     app.UseStaticFiles();
 
@@ -186,6 +185,18 @@ try
     app.UseStatusCodePagesWithReExecute("/Error/Index", "?statusCode={0}");
 
     app.UseRouting();
+
+    // route publique qui affiche les détails d'un titre
+    app.MapControllerRoute(
+    name: "public_titre_details",
+    pattern: "titre/{id}",
+    defaults: new { controller = "Titre", action = "Details" });
+
+    // route publique qui va intercepter artiste/nom pour afficher les détails d'un artiste
+    app.MapControllerRoute(
+    name: "public_artiste_details",
+    pattern: "artiste/{nom}",
+    defaults: new { controller = "Artiste", action = "DetailsArtiste" });
 
     app.MapAreaControllerRoute(
     name: "admin_titres_list",
