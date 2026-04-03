@@ -23,6 +23,8 @@ namespace Webzine.WebApplication.Extensions
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<WebzineDbContext>();
 
+            context.Database.EnsureCreated();
+
             var hasData = context.Titres.Any() || context.Artistes.Any() || context.Styles.Any() || context.Commentaires.Any();
 
             if (!hasData)
