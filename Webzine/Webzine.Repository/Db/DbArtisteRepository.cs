@@ -39,8 +39,8 @@ namespace Webzine.Repository.Db
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Erreur lors de l'ajout d'un artiste en base.");
-                throw;
+                this.logger.LogError(ex, "Erreur lors de l'ajout d'un artiste en base (Id: {ArtisteId}).", artiste?.IdArtiste);
+                throw new Exception($"Impossible d'ajouter l'artiste {artiste?.IdArtiste} en base de données.", ex);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors du comptage des artistes en base.");
-                throw;
+                throw new Exception("Impossible de compter les artistes en base de données.", ex);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors de la suppression d'un artiste en base.");
-                throw;
+                throw new Exception($"Impossible de supprimer l'artiste {artiste?.IdArtiste} de la base de données.", ex);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors de la recherche d'un artiste en base par id {ArtisteId}.", idArtiste);
-                throw;
+                throw new Exception($"Impossible de rechercher l'artiste avec l'ID {idArtiste} en base de données.", ex);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors de la récupération de tous les artistes en base.");
-                throw;
+                throw new Exception("Impossible de récupérer tous les artistes de la base de données.", ex);
             }
         }
 
@@ -163,7 +163,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors de la recherche d'un artiste en base par nom {Nom}.", nom);
-                throw;
+                throw new Exception($"Impossible de rechercher l'artiste avec le nom '{nom}' en base de données.", ex);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors de la mise à jour d'un artiste en base (Id: {ArtisteId}).", artiste?.IdArtiste);
-                throw;
+                throw new Exception($"Impossible de mettre à jour l'artiste {artiste?.IdArtiste} en base de données.", ex);
             }
         }
 
@@ -203,12 +203,15 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                return this.context.Artistes.Count(a => a.Biographie != null && a.Biographie != "");
+                this.logger.LogDebug("Comptage des artistes avec biographie en base.");
+                var count = this.context.Artistes.Count(a => a.Biographie != null && a.Biographie != "");
+                this.logger.LogDebug("Comptage des artistes avec biographie: {Count}.", count);
+                return count;
             }
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Erreur lors du comptage des artistes avec biographie en base.");
-                throw;
+                throw new Exception("Impossible de compter les artistes avec biographie en base de données.", ex);
             }
         }
 
@@ -217,15 +220,27 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                return this.context.Artistes
+                this.logger.LogDebug("Récupération de l'artiste ayant le plus de chroniques en base.");
+                var artiste = this.context.Artistes
                        .AsNoTracking()
                        .OrderByDescending(a => a.Titres.Count(t => t.Chronique != null && t.Chronique != ""))
                        .FirstOrDefault();
+
+                if (artiste != null)
+                {
+                    this.logger.LogDebug("Artiste {ArtisteId} - {Nom} avec le plus de chroniques trouvé.", artiste.IdArtiste, artiste.Nom);
+                }
+                else
+                {
+                    this.logger.LogDebug("Aucun artiste trouvé en base.");
+                }
+
+                return artiste;
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques.");
-                throw;
+                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques en base.");
+                throw new Exception("Impossible de récupérer l'artiste ayant le plus de chroniques en base de données.", ex);
             }
         }
 
@@ -234,15 +249,27 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                return this.context.Artistes
+                this.logger.LogDebug("Récupération de l'artiste ayant le plus d'albums en base.");
+                var artiste = this.context.Artistes
                        .AsNoTracking()
                        .OrderByDescending(a => a.Titres.Select(t => t.Album).Distinct().Count())
                        .FirstOrDefault();
+
+                if (artiste != null)
+                {
+                    this.logger.LogDebug("Artiste {ArtisteId} - {Nom} avec le plus d'albums trouvé.", artiste.IdArtiste, artiste.Nom);
+                }
+                else
+                {
+                    this.logger.LogDebug("Aucun artiste trouvé en base.");
+                }
+
+                return artiste;
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums.");
-                throw;
+                this.logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums en base.");
+                throw new Exception("Impossible de récupérer l'artiste ayant le plus d'albums en base de données.", ex);
             }
         }
     }

@@ -41,16 +41,25 @@ namespace Webzine.Repository.Local
                     ex,
                     "Erreur lors de l'ajout de l'artiste {Nom} au repository local.",
                     artiste.Nom);
-                throw;
+                throw new Exception($"Impossible d'ajouter l'artiste '{artiste.Nom}' au repository local.", ex);
             }
         }
 
         /// <inheritdoc/>
         public int Count()
         {
-            var count = this._data.artistes.Count();
-            this._logger.LogDebug("Comptage des artistes: {Count}.", count);
-            return count;
+            try
+            {
+                this._logger.LogDebug("Comptage des artistes dans le repository local.");
+                var count = this._data.artistes.Count();
+                this._logger.LogDebug("Comptage des artistes: {Count}.", count);
+                return count;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors du comptage des artistes dans le repository local.");
+                throw new Exception("Impossible de compter les artistes du repository local.", ex);
+            }
         }
 
         /// <inheritdoc/>
@@ -77,7 +86,7 @@ namespace Webzine.Repository.Local
                     ex,
                     "Erreur lors de la suppression de l'artiste {IdArtiste} du repository local.",
                     artiste.IdArtiste);
-                throw;
+                throw new Exception($"Impossible de supprimer l'artiste {artiste.IdArtiste} du repository local.", ex);
             }
         }
 
@@ -87,19 +96,27 @@ namespace Webzine.Repository.Local
             try
             {
                 this._logger.LogDebug(
-                    "Recherche du style d'identifiant {IdStyle} dans le repository local.",
+                    "Recherche de l'artiste d'identifiant {IdArtiste} dans le repository local.",
                     idArtiste);
 
                 var artiste = this._data.artistes.FirstOrDefault(a => a.IdArtiste == idArtiste);
-                this._logger.LogDebug("Recherche artiste par id {ArtisteId}. Trouvé: {Found}.", idArtiste, artiste != null);
+                if (artiste != null)
+                {
+                    this._logger.LogDebug("Artiste {IdArtiste} - {Nom} trouvé.", idArtiste, artiste.Nom);
+                }
+                else
+                {
+                    this._logger.LogDebug("Aucun artiste trouvé pour l'identifiant {IdArtiste}.", idArtiste);
+                }
                 return artiste;
             }
             catch (Exception ex)
             {
                 this._logger.LogError(
                     ex,
-                    "Erreur lors de la recherche de l'artiste {idArtiste} dans le repository local.", idArtiste);
-                throw;
+                    "Erreur lors de la recherche de l'artiste {IdArtiste} dans le repository local.",
+                    idArtiste);
+                throw new Exception($"Impossible de rechercher l'artiste avec l'ID {idArtiste} dans le repository local.", ex);
             }
         }
 
@@ -118,7 +135,7 @@ namespace Webzine.Repository.Local
                 this._logger.LogError(
                     ex,
                     "Erreur lors de la récupération de tous les artistes depuis le repository local.");
-                throw;
+                throw new Exception("Impossible de récupérer tous les artistes du repository local.", ex);
             }
         }
         public IEnumerable<Artiste> FindArtistes(int offset, int limit)
@@ -152,8 +169,20 @@ namespace Webzine.Repository.Local
                     return null;
                 }
 
+                this._logger.LogDebug(
+                    "Recherche de l'artiste par nom {Nom} dans le repository local.",
+                    nom);
+
                 var artiste = this._data.artistes.FirstOrDefault(a => string.Equals(a.Nom, nom, StringComparison.OrdinalIgnoreCase));
-                this._logger.LogDebug("Recherche artiste par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
+
+                if (artiste != null)
+                {
+                    this._logger.LogDebug("Artiste {Nom} trouvé.", nom);
+                }
+                else
+                {
+                    this._logger.LogDebug("Aucun artiste trouvé pour le nom {Nom}.", nom);
+                }
 
                 return artiste;
             }
@@ -161,8 +190,9 @@ namespace Webzine.Repository.Local
             {
                 this._logger.LogError(
                     ex,
-                    "Erreur lors de la recherche de l'artiste par nom {nom} dans le repository local.", nom);
-                throw;
+                    "Erreur lors de la recherche de l'artiste par nom {Nom} dans le repository local.",
+                    nom);
+                throw new Exception($"Impossible de rechercher l'artiste avec le nom '{nom}' dans le repository local.", ex);
             }
         }
 
@@ -191,7 +221,7 @@ namespace Webzine.Repository.Local
                     ex,
                     "Erreur lors de la mise à jour de l'artiste {IdArtiste} dans le repository local.",
                     artiste.IdArtiste);
-                throw;
+                throw new Exception($"Impossible de mettre à jour l'artiste {artiste.IdArtiste} dans le repository local.", ex);
             }
         }
 
@@ -200,12 +230,15 @@ namespace Webzine.Repository.Local
         {
             try
             {
-                return this._data.artistes.Count(a => a.Biographie != null && a.Biographie != "");
+                this._logger.LogDebug("Comptage des artistes avec biographie dans le repository local.");
+                var count = this._data.artistes.Count(a => a.Biographie != null && a.Biographie != "");
+                this._logger.LogDebug("Comptage des artistes avec biographie: {Count}.", count);
+                return count;
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, "Erreur lors du comptage des artistes avec biographie en base.");
-                throw;
+                this._logger.LogError(ex, "Erreur lors du comptage des artistes avec biographie dans le repository local.");
+                throw new Exception("Impossible de compter les artistes avec biographie dans le repository local.", ex);
             }
         }
 
@@ -214,14 +247,26 @@ namespace Webzine.Repository.Local
         {
             try
             {
-                return this._data.artistes
+                this._logger.LogDebug("Récupération de l'artiste ayant le plus de chroniques dans le repository local.");
+                var artiste = this._data.artistes
                        .OrderByDescending(a => a.Titres.Count(t => t.Chronique != null && t.Chronique != ""))
                        .FirstOrDefault();
+
+                if (artiste != null)
+                {
+                    this._logger.LogDebug("Artiste {IdArtiste} - {Nom} avec le plus de chroniques trouvé.", artiste.IdArtiste, artiste.Nom);
+                }
+                else
+                {
+                    this._logger.LogDebug("Aucun artiste trouvé dans le repository local.");
+                }
+
+                return artiste;
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques.");
-                throw;
+                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus de chroniques dans le repository local.");
+                throw new Exception("Impossible de récupérer l'artiste ayant le plus de chroniques du repository local.", ex);
             }
         }
 
@@ -231,14 +276,26 @@ namespace Webzine.Repository.Local
         {
             try
             {
-                return this._data.artistes
+                this._logger.LogDebug("Récupération de l'artiste ayant le plus d'albums dans le repository local.");
+                var artiste = this._data.artistes
                        .OrderByDescending(a => a.Titres.Select(t => t.Album).Distinct().Count())
                        .FirstOrDefault();
+
+                if (artiste != null)
+                {
+                    this._logger.LogDebug("Artiste {IdArtiste} - {Nom} avec le plus d'albums trouvé.", artiste.IdArtiste, artiste.Nom);
+                }
+                else
+                {
+                    this._logger.LogDebug("Aucun artiste trouvé dans le repository local.");
+                }
+
+                return artiste;
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums.");
-                throw;
+                this._logger.LogError(ex, "Erreur lors de la récupération de l'artiste ayant le plus d'albums dans le repository local.");
+                throw new Exception("Impossible de récupérer l'artiste ayant le plus d'albums du repository local.", ex);
             }
         }
 
