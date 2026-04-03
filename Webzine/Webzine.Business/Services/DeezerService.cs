@@ -44,7 +44,7 @@ namespace Webzine.Business.Services
                     Libelle = track.Title,
                     Chronique = this._faker.Lorem.Paragraph(),
                     UrlJaquette = track.Album.CoverUrl ?? this._faker.Image.PicsumUrl(),
-                    UrlEcoute = "dQw4w9WgXcQ?si=FU0eogbWyit_ZPGs",
+                    UrlEcoute = track.Link.Remove(0, 23),
                     DateCreation = date,
                     DateSortie = this._faker.Date.Between(date, date.AddDays(30)),
                     Duree = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(track.Duration)),

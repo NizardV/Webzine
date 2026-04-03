@@ -74,7 +74,9 @@ namespace Webzine.WebApplication.Controllers
             {
                 return this.NotFound();
             }
-
+            titre.Chronique = chronique;
+            this._titreRepository.Update(titre);
+            TempData["nouvelleLecture"] = true;
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
@@ -107,7 +109,12 @@ namespace Webzine.WebApplication.Controllers
                 return this.NotFound();
             }
 
-            var model = new TitreModel{Titre = titre};
+            if (TempData["nouvelleLecture"] is null)
+            {
+                this._titreRepository.IncrementNbLectures(titre);
+            }
+
+            var model = new TitreModel { Titre = titre };
 
             return this.View(model);
         }
@@ -141,7 +148,7 @@ namespace Webzine.WebApplication.Controllers
             this._commentaireRepository.Add(nouveauCommentaire);
             titreComm.Commentaires.Add(nouveauCommentaire);
             this._titreRepository.Update(titreComm);
-
+            TempData["nouvelleLecture"] = true;
             return RedirectToAction(nameof(Details), new { id = id });
         }
     }

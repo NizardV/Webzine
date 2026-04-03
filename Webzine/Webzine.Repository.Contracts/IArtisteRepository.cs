@@ -38,6 +38,7 @@ namespace Webzine.Repository.Contracts
         /// <returns>Collection de tous les artistes.</returns>
         IEnumerable<Artiste> FindAll();
 
+        IEnumerable<Artiste> FindArtistes(int offset, int limit);
         /// <summary>
         /// Retourne un artiste à partir de son nom.
         /// </summary>

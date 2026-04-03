@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Webzine.Entity;
 using Webzine.Repository.Contracts;
+using Webzine.WebApplication.Areas.Administration.ViewModel.Artiste;
 
 namespace Webzine.WebApplication.Areas.Administration.Controllers
 {
@@ -30,10 +31,23 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// Handles HTTP GET requests for the default page and displays a list of all artistes.
         /// </summary>
         /// <returns>A view that renders the list of artistes retrieved from the repository.</returns>
-        public IActionResult Index()
+        public IActionResult Index(int page = 0)
         {
-            var artistes = this.artisteRepository.FindAll();
-            return this.View(artistes);
+            int limite = 50;
+            var totalArtistes = this.artisteRepository.Count();
+            var maxPage = (int)Math.Ceiling(totalArtistes / (double)limite) - 1;
+
+            if (page < 0) page = 0;
+            if (page > maxPage && maxPage >= 0) page = maxPage;
+
+            var artistes = this.artisteRepository.FindArtistes(page * limite, limite);
+            var viewModel = new AdminArtisteIndexViewModel
+            {
+                PagedArtistes = artistes,
+                CurrentPage = page,
+                MaxPage = maxPage
+            };
+            return this.View(viewModel);
         }
 
         /// <summary>
