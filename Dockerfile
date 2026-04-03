@@ -17,6 +17,12 @@ COPY . .
 
 # 3. On compile spécifiquement l'application Web
 WORKDIR "/src/Webzine/Webzine.WebApplication"
+# Installation de l'outil LibMan
+RUN dotnet tool install --global Microsoft.Web.LibraryManager.Cli
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Restauration des bibliothèques (Bootstrap, etc.)
+RUN libman restore
 RUN dotnet publish "Webzine.WebApplication.csproj" -c Release -o /app/publish
 
 # --- ÉTAPE 2 : RUNTIME ---

@@ -190,6 +190,9 @@ try
     app.UseMiddleware<SecurityHeadersMiddleware>();
     app.UseMiddleware<LoggingMiddleware>();
 
+    // L'intercepteur d'erreurs HTTP pour la page d'erreur personnalisée
+    app.UseStatusCodePagesWithReExecute("/Error/Index", "?statusCode={0}");
+
     app.UseRouting();
 
     app.MapAreaControllerRoute(
