@@ -22,7 +22,6 @@
         /// Retourne la vue principale de l'application.
         /// </summary>
         /// <returns>Un objet IActionResult qui rend la vue associée à la page d'accueil.</returns>
-        [HttpGet]
         public IActionResult Index(int page = 0)
         {
             const int pageSize = 3;

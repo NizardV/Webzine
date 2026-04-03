@@ -29,7 +29,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("titre/like/{id}")]
         /// <summary>
         /// Incrémente le compteur de likes côté IHM.
         /// L'opération n'est pas persistée (Factory inchangées) et sert uniquement à refléter l'état dans l'interface.
@@ -47,8 +46,6 @@ namespace Webzine.WebApplication.Controllers
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
-        [HttpGet]
-        [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Affiche un formulaire d'édition légère (IHM) pour un titre.
         /// </summary>
@@ -65,7 +62,6 @@ namespace Webzine.WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("Titre/Edit/{id}")]
         /// <summary>
         /// Enregistre l'édition légère (IHM) d'un titre, sans persistance.
         /// </summary>
@@ -82,8 +78,6 @@ namespace Webzine.WebApplication.Controllers
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
-        [HttpGet]
-        [Route("titres/style/{libelle}")]
         public IActionResult Style(string libelle)
         {
             // On utilise la méthode pour trouver le style correspondant au libellé de l'URL
@@ -93,6 +87,7 @@ namespace Webzine.WebApplication.Controllers
             {
                 return this.NotFound();
             }
+
             // On envoie la liste filtrée à la vue
             return this.View(titres);
         }
@@ -102,27 +97,38 @@ namespace Webzine.WebApplication.Controllers
         /// </summary>
         /// <param name="id">Id du Titre</param>
         /// <returns>Une vue</returns>
-        [Route("titre/{id}")]
         public IActionResult Details(int id)
         {
             Titre titre = this._titreRepository.Find(id);
+
+            if (titre == null)
+            {
+                return this.NotFound();
+            }
+
             var model = new TitreModel{Titre = titre};
 
             return this.View(model);
         }
 
+
+        /// <summary>
+        /// Permet d'ajouter un commentaire à un titre spécifique. Le commentaire est créé à partir des données du formulaire soumis, puis ajouté à la base de données via le CommentaireRepository. Après l'ajout, l'utilisateur est redirigé vers la page de détails du titre pour voir le nouveau commentaire.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("titre/commenter")]
-        public IActionResult AjouterCommentaire(int id, TitreModel viewModel)
+        public IActionResult Commenter(int id, TitreModel viewModel)
         {
             ModelState.Remove("Titre");
 
             if (!ModelState.IsValid)
             {
                 Titre titre = this._titreRepository.Find(id);
-                return View("Details", viewModel);
+                return this.View("Details", viewModel);
             }
-            var titreComm = _titreRepository.Find(id);
+            var titreComm = this._titreRepository.Find(id);
             var nouveauCommentaire = new Commentaire
             {
                 IdTitre = id,

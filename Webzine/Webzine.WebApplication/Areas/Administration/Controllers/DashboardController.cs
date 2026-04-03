@@ -12,7 +12,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
     /// <remarks>This controller is part of the Administration area and is intended for use by users with
     /// administrative privileges. It relies on an implementation of IDashboardService to retrieve dashboard data. The
     /// controller is typically accessed via the /Administration/Dashboard route.</remarks>
-    [Area("Administration")]
+    [Area("administration")]
     public class DashboardController : Controller
     {
         private readonly IDashboardService dashboardService;

@@ -50,7 +50,6 @@
             return this.View(viewModel);
         }
 
-        [HttpGet]
         public IActionResult Create()
         {
             return this.View();
@@ -79,7 +78,6 @@
         /// </summary>
         /// <param name="id">L'identifiant du titre à modifier.</param>
         /// <returns>Une vue.</returns>
-        [HttpGet]
         public IActionResult Edit(int id)
         {
             var titre = this._titreRepository.Find(id);

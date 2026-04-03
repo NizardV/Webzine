@@ -160,6 +160,7 @@ try
         // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
         app.UseStaticFiles();
 
+
         // Enregistre les middlewares dans le pipeline
         app.UseRateLimiter();
         app.UseHsts();
@@ -167,17 +168,13 @@ try
         app.UseMiddleware<SecurityHeadersMiddleware>();
         app.UseMiddleware<LoggingMiddleware>();
 
-        app.UseRouting();
+    app.UseRouting();
 
-        app.MapAreaControllerRoute(
-          name: "admin_titres_list",
-          areaName: "Administration",
-          pattern: "administration/titres",
-          defaults: new
-          {
-              controller = "Titre",
-              action = "Index"
-          });
+    app.MapAreaControllerRoute(
+    name: "admin_titres_list",
+    areaName: "Administration",
+    pattern: "administration/titres",
+    defaults: new { controller = "Titre", action = "Index" });
 
         app.MapAreaControllerRoute(
           name: "admin_styles_list",

@@ -89,8 +89,6 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        
-        [HttpGet]
         public IActionResult Delete(int id)
         {
             var artiste = this.artisteRepository.Find(id);

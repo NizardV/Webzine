@@ -73,7 +73,16 @@ namespace Webzine.Repository.Db
                     .Include(t => t.Commentaires)
                     .Include(t => t.Styles)
                     .FirstOrDefault(t => t.IdTitre == idTitre);
-                this._logger.LogDebug("Recherche du titre {idTitre} - {Libelle}", idTitre, titre.Libelle);
+
+                // On vérifie si on a trouvé quelque chose AVANT d'essayer de lire son Libellé
+                if (titre != null)
+                {
+                    this._logger.LogDebug("Recherche du titre {idTitre} - {Libelle} trouvée", idTitre, titre.Libelle);
+                }
+                else
+                {
+                    this._logger.LogDebug("Recherche du titre {idTitre} - Aucun résultat", idTitre);
+                }
 
                 return titre;
             }
