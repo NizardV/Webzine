@@ -1,17 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
-using Webzine.Business.Contracts.Services;
 using System.Threading.RateLimiting;
+using Webzine.Business.Contracts.Services;
+using Webzine.Business.Services;
 using Webzine.EntitiesContext;
 using Webzine.EntitiesContext.Seeders;
+using Webzine.Repository.Caching;
 using Webzine.Repository.Contracts;
+using Webzine.Repository.Contracts.Caching;
 using Webzine.Repository.Db;
 using Webzine.Repository.Deezer;
 using Webzine.Repository.Local;
-using Webzine.Business.Services;
-using Webzine.WebApplication.Middleware;
 using Webzine.WebApplication.Filters;
+using Webzine.WebApplication.Middleware;
 
 var logger = LogManager.Setup()
   .LoadConfigurationFromAppSettings()
@@ -78,6 +80,12 @@ try
     }
     if (dataSource == "Deezer")
     {
+        if (string.IsNullOrWhiteSpace(deezerApiBaseUrl))
+        {
+            throw new InvalidOperationException("La configuration 'AppConfig:DeezerApi' est requise quand la source de données est 'Deezer'. Veuillez vérifier votre fichier de configuration.");
+        }
+
+        builder.Services.AddScoped<ICacheService, MemoryCacheService>();
         builder.Services.AddScoped<IDeezerRepository, DeezerRepository>();
         builder.Services.AddHttpClient<IDeezerRepository, DeezerRepository>(client =>
         {
