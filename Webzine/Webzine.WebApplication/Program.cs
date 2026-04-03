@@ -176,31 +176,32 @@ try
         app.UseMiddleware<SecurityHeadersMiddleware>();
         app.UseMiddleware<LoggingMiddleware>();
 
-    app.UseRouting();
+        app.UseRouting();
 
-    // route publique qui affiche les détails d'un titre
-    app.MapControllerRoute(
-    name: "public_titre_details",
-    pattern: "titre/{id}",
-    defaults: new { controller = "Titre", action = "Details" });
 
-    // Route publique pour filtrer les titres par style
-    app.MapControllerRoute(
-        name: "public_titres_style",
-        pattern: "titre/style/{libelle}",
-        defaults: new { controller = "Titre", action = "Style" });
+        // route publique qui affiche les détails d'un titre
+        app.MapControllerRoute(
+        name: "public_titre_details",
+        pattern: "titre/{id}",
+        defaults: new { controller = "Titre", action = "Details" });
 
-    // route publique qui va intercepter artiste/nom pour afficher les détails d'un artiste
-    app.MapControllerRoute(
-    name: "public_artiste_details",
-    pattern: "artiste/{nom}",
-    defaults: new { controller = "Artiste", action = "DetailsArtiste" });
+        // Route publique pour filtrer les titres par style
+        app.MapControllerRoute(
+            name: "public_titres_style",
+            pattern: "titre/style/{libelle}",
+            defaults: new { controller = "Titre", action = "Style" });
 
-    app.MapAreaControllerRoute(
-    name: "admin_titres_list",
-    areaName: "Administration",
-    pattern: "administration/titres",
-    defaults: new { controller = "Titre", action = "Index" });
+        // route publique qui va intercepter artiste/nom pour afficher les détails d'un artiste
+        app.MapControllerRoute(
+        name: "public_artiste_details",
+        pattern: "artiste/{nom}",
+        defaults: new { controller = "Artiste", action = "DetailsArtiste" });
+
+        app.MapAreaControllerRoute(
+        name: "admin_titres_list",
+        areaName: "Administration",
+        pattern: "administration/titres",
+        defaults: new { controller = "Titre", action = "Index" });
 
         app.MapAreaControllerRoute(
           name: "admin_styles_list",

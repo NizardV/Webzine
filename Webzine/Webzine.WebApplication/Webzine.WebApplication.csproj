@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\favicon\" />
     <ProjectReference Include="..\Webzine.Business.Contracts\Webzine.Business.Contracts.csproj" />
     <ProjectReference Include="..\Webzine.Business\Webzine.Business.csproj" />
     <ProjectReference Include="..\Webzine.EntitiesContext\Webzine.EntitiesContext.csproj" />
@@ -43,6 +44,10 @@
     <ProjectReference Include="..\Webzine.Repository.Contracts\Webzine.Repository.Contracts.csproj" />
     <ProjectReference Include="..\Webzine.Repository\Webzine.Repository.csproj" />
     <Folder Include="Views\Admin\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\favicon\favicon.ico" />
   </ItemGroup>
 
 </Project>

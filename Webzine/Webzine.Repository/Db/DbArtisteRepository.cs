@@ -121,6 +121,26 @@ namespace Webzine.Repository.Db
             }
         }
 
+        public IEnumerable<Artiste> FindArtistes(int offset, int limit)
+        {
+            try
+            {
+                this.logger.LogDebug("Récupération de tous les artistes en base.");
+
+                return this.context.Artistes
+                    .Include(a => a.Titres)
+                    .OrderBy(a => a.Nom)
+                    .Skip(offset)
+                    .Take(limit)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Erreur lors de la récupération de tous les artistes en base.");
+                throw;
+            }
+        }
+
         /// <inheritdoc/>
         public Artiste? FindByName(string nom)
         {

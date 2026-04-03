@@ -9,26 +9,27 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/App.css" />
-    </head>
-    <body class="d-flex flex-column min-vh-100">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/App.css" />
+    <link rel="icon" type="image/x-icon" href="~/favicon/favicon.ico" />
+</head>
+<body class="d-flex flex-column min-vh-100">
     
-        <partial name="_Navbar" />
+    <partial name="_Navbar" />
 
-        <main class="container-fluid mt-4 flex-grow-1">
-            <div class="row g-4">
-                <div class="col-12 col-lg-9">
-                    @RenderBody()
-                </div>
-                <aside class="col-12 col-lg-3">
-                    @await Component.InvokeAsync("Sidebar")
-                </aside>
+    <main class="container-fluid mt-4 flex-grow-1">
+        <div class="row g-4">
+            <div class="col-12 col-lg-9">
+                @RenderBody()
             </div>
-        </main>
+            <aside class="col-12 col-lg-3">
+                @await Component.InvokeAsync("Sidebar")
+            </aside>
+        </div>
+    </main>
 
-        <partial name="_Footer" />
+    <partial name="_Footer" />
 
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+ </body>
 </html>
