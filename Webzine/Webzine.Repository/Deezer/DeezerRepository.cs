@@ -43,36 +43,44 @@ namespace Webzine.Repository.Deezer
         /// <returns>Les données de la playlist (morceaux, artistes, etc.)</returns>
         public async Task<PlaylistDto> GetPlaylistAsync(long playlistId)
         {
-            // Créer une clé de cache unique pour cette playlist
-            var cacheKey = $"{PlaylistCacheKeyPrefix}{playlistId}";
-
-            // Vérifier si la playlist est déjà en cache et n'a pas expiré
-            // Si oui, la retourner directement sans appel API
-            if (_cacheService.TryGetValue<PlaylistDto>(cacheKey, out var cachedPlaylist))
+            try
             {
-                _logger.Info($"[CACHE HIT] Playlist {playlistId} récupérée depuis le cache");
-                return cachedPlaylist;
+                // Créer une clé de cache unique pour cette playlist
+                var cacheKey = $"{PlaylistCacheKeyPrefix}{playlistId}";
+
+                // Vérifier si la playlist est déjà en cache et n'a pas expiré
+                // Si oui, la retourner directement sans appel API
+                if (_cacheService.TryGetValue<PlaylistDto>(cacheKey, out var cachedPlaylist))
+                {
+                    _logger.Info($"[CACHE HIT] Playlist {playlistId} récupérée depuis le cache");
+                    return cachedPlaylist;
+                }
+
+                // Si les données ne sont pas en cache, les récupérer depuis l'API Deezer
+                _logger.Info($"[CACHE MISS] Playlist {playlistId} non trouvée en cache, appel API Deezer...");
+                var response = await _httpClient.GetAsync($"/playlist/{playlistId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var playlist = JsonSerializer.Deserialize<PlaylistDto>(content);
+
+                    // Mettre les données en cache pour les appels futurs
+                    _cacheService.Set(cacheKey, playlist, DefaultCacheExpiration);
+                    _logger.Info($"[CACHE STORED] Playlist {playlistId} mise en cache pour {DefaultCacheExpiration.TotalHours}h");
+
+                    return playlist;
+                }
+                else
+                {
+                    _logger.Error($"Erreur API Deezer pour playlist {playlistId}: {response.StatusCode}");
+                    throw new Exception($"Impossible de retrouver la playlist : {playlistId}. erreur: {response.StatusCode}");
+                }
             }
-
-            // Si les données ne sont pas en cache, les récupérer depuis l'API Deezer
-            _logger.Info($"[CACHE MISS] Playlist {playlistId} non trouvée en cache, appel API Deezer...");
-            var response = await _httpClient.GetAsync($"/playlist/{playlistId}");
-            if (response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var playlist = JsonSerializer.Deserialize<PlaylistDto>(content);
-
-                // Mettre les données en cache pour les appels futurs
-                _cacheService.Set(cacheKey, playlist, DefaultCacheExpiration);
-                _logger.Info($"[CACHE STORED] Playlist {playlistId} mise en cache pour {DefaultCacheExpiration.TotalHours}h");
-
-                return playlist;
+                _logger.Error(ex, $"Erreur lors de la récupération de la playlist {playlistId} depuis l'API Deezer");
+                throw;
             }
-            else
-            {
-                _logger.Error($"Erreur API Deezer pour playlist {playlistId}: {response.StatusCode}");
-                throw new Exception($"Impossible de retrouver la playlist : {playlistId}. erreur: {response.StatusCode}");
-            };
         }
 
     }

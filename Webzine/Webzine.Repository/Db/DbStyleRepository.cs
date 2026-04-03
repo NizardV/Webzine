@@ -52,7 +52,7 @@ namespace Webzine.Repository.Db
                     ex,
                     "Erreur lors de l'ajout du style {Libelle} dans le repository base de données.",
                     style.Libelle);
-                throw;
+                throw new Exception($"Impossible d'ajouter le style '{style.Libelle}' en base de données.", ex);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Webzine.Repository.Db
                     ex,
                     "Erreur lors de la suppression du style {IdStyle} dans le repository base de données.",
                     style.IdStyle);
-                throw;
+                throw new Exception($"Impossible de supprimer le style {style.IdStyle} de la base de données.", ex);
             }
         }
 
@@ -100,9 +100,15 @@ namespace Webzine.Repository.Db
 
                 var style = this._context.Styles.FirstOrDefault(s => s.IdStyle == id);
 
-                if (style == null)
+                if (style != null)
                 {
-                    this._logger.LogWarning(
+                    this._logger.LogDebug(
+                        "Style {IdStyle} trouvé dans le repository base de données.",
+                        id);
+                }
+                else
+                {
+                    this._logger.LogDebug(
                         "Aucun style trouvé pour l'identifiant {IdStyle} dans le repository base de données.",
                         id);
                 }
@@ -115,7 +121,7 @@ namespace Webzine.Repository.Db
                     ex,
                     "Erreur lors de la recherche du style {IdStyle} dans le repository base de données.",
                     id);
-                throw;
+                throw new Exception($"Impossible de rechercher le style avec l'ID {id} en base de données.", ex);
             }
         }
 
@@ -137,7 +143,7 @@ namespace Webzine.Repository.Db
                 this._logger.LogError(
                     ex,
                     "Erreur lors de la récupération de tous les styles depuis le repository base de données.");
-                throw;
+                throw new Exception("Impossible de récupérer tous les styles de la base de données.", ex);
             }
         }
 
@@ -166,7 +172,7 @@ namespace Webzine.Repository.Db
                     ex,
                     "Erreur lors de la modification du style {IdStyle} dans le repository base de données.",
                     style.IdStyle);
-                throw;
+                throw new Exception($"Impossible de mettre à jour le style {style.IdStyle} en base de données.", ex);
             }
         }
 
@@ -175,12 +181,15 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                return this._context.Styles.Count();
+                this._logger.LogDebug("Comptage des styles en base de données.");
+                var count = this._context.Styles.Count();
+                this._logger.LogDebug("Comptage des styles: {Count}.", count);
+                return count;
             }
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors du comptage des styles en base de données.");
-                throw;
+                throw new Exception("Impossible de compter les styles en base de données.", ex);
             }
         }
     }
