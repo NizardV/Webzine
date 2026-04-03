@@ -14,8 +14,8 @@ using Webzine.WebApplication.Middleware;
 using Webzine.WebApplication.Filters;
 
 var logger = LogManager.Setup()
-    .LoadConfigurationFromAppSettings()
-    .GetCurrentClassLogger();
+  .LoadConfigurationFromAppSettings()
+  .GetCurrentClassLogger();
 
 try
 {
@@ -33,26 +33,17 @@ try
     var dataSource = config["Seeder"];
     var deezerApiBaseUrl = config["DeezerApi"];
 
-    logger.Info("Configuration chargée - Environnement: {Environment}, Repository: {RepoMode}, Seeder: {DataSource}", 
-        environment, repoMode, dataSource);
+    logger.Info("Configuration chargée - Environnement: {Environment}, Repository: {RepoMode}, Seeder: {DataSource}", environment, repoMode, dataSource);
 
     if (repoMode == "Local")
     {
-        logger.Info("Mode de persistance sélectionné : Local.");
 
-        var data = dataSource == "Factories"
-            ? SeedDataLocal.Initialize()
-            //TODO Remplacer par spotify au jalon 3
-            : SeedDataLocal.Initialize();
-
-        logger.Info(
-            "Initialisation des données locales terminée avec la source {DataSource}.",
-            string.IsNullOrWhiteSpace(dataSource) ? "par défaut" : dataSource);
+        var data = SeedDataLocal.Initialize();
 
         //Ajout du singleton pour les données locales
         builder.Services.AddSingleton(data);
 
-        //Injecter les repo locaux
+        // Injecter les repo locaux
         builder.Services.AddScoped<IDashboardService, DashboardService>();
         builder.Services.AddScoped<ITitreRepository, LocalTitreRepository>();
         builder.Services.AddScoped<IArtisteRepository, LocalArtisteRepository>();
@@ -62,22 +53,20 @@ try
     }
     else if (repoMode == "Database")
     {
-        logger.Info("Mode de persistance sélectionné : Database.");
-
-        //En fonction de l'environnement on ajoute un dbContext différent
+        // En fonction de l'environnement on ajoute un dbContext différent
         if (environment == "Development")
         {
             builder.Services.AddDbContext<WebzineDbContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+              options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
 
             logger.Info("WebzineDbContext configuré avec SQLite pour l'environnement Development.");
         }
         else if (environment == "Production")
         {
             builder.Services.AddDbContext<WebzineDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+              options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
 
-            logger.Info("WebzineDbContext configuré avec SQLite pour l'environnement Development.");
+            logger.Info("WebzineDbContext configuré avec PostgreSQL pour l'environnement Prod.");
         }
 
         // Injection des repos DB
@@ -90,7 +79,8 @@ try
     if (dataSource == "Deezer")
     {
         builder.Services.AddScoped<IDeezerRepository, DeezerRepository>();
-        builder.Services.AddHttpClient<IDeezerRepository, DeezerRepository>(client => {
+        builder.Services.AddHttpClient<IDeezerRepository, DeezerRepository>(client =>
+        {
             client.BaseAddress = new Uri(deezerApiBaseUrl);
         });
         builder.Services.AddScoped<IDeezerService, DeezerService>();
@@ -98,15 +88,15 @@ try
     // Ajoute les services n�cessaires pour permettfre l'utilisation des
     // controllers avec des vues.
     builder.Services.AddControllersWithViews()
-        // Ajoute la compilation des vues lors de l'exécution de l'application.
-        // Cela nous évite de recompiler l'application à chaque modification de vue.
-        // Nécessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
-        .AddRazorRuntimeCompilation()
-        // Enregistre le filtre d'exception global
-        .AddMvcOptions(options =>
-        {
-            options.Filters.Add<ExceptionFilter>();
-        });
+      // Ajoute la compilation des vues lors de l'exécution de l'application.
+      // Cela nous évite de recompiler l'application à chaque modification de vue.
+      // Nécessite le package Nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.
+      .AddRazorRuntimeCompilation()
+      // Enregistre le filtre d'exception global
+      .AddMvcOptions(options =>
+      {
+          options.Filters.Add<ExceptionFilter>();
+      });
 
     // Enregistre le filtre comme service pour l'injection de dépendances
     builder.Services.AddScoped<ExceptionFilter>();
@@ -121,15 +111,15 @@ try
     builder.Services.AddRateLimiter(options =>
     {
         options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-            RateLimitPartition.GetFixedWindowLimiter(
-                partitionKey: httpContext.Request.Path.ToString(),
-                factory: partition => new FixedWindowRateLimiterOptions
-                {
-                    PermitLimit = 100,
-                    Window = TimeSpan.FromMinutes(1),
-                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                    QueueLimit = 2
-                }));
+          RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Request.Path.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 2
+            }));
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     });
 
@@ -144,82 +134,94 @@ try
 
     if (repoMode == "Database")
     {
-        logger.Info("Vérification de l'initialisation de la base de données.");
-
-
-        using var scope = app.Services.CreateScope();
+        using
+        var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<WebzineDbContext>();
-        if (environment == "Development")
-        {
-            logger.Warn("Suppression et recréation de la base en environnement Development avant seeding.");
 
+        var hasData = context.Titres.Any() || context.Artistes.Any() || context.Styles.Any() || context.Commentaires.Any();
+
+        if (!hasData)
+        {
+            logger.Info("BDD vide. Recréation et seeding de la bdd");
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+            if (dataSource == "Factories")
+            {
+                SeedDataDb.Initialize(context);
+            }
+            else if (dataSource == "Deezer")
+            {
+                var deezerService = scope.ServiceProvider.GetRequiredService<IDeezerService>();
 
-            logger.Info("Base SQLite recréée et seedée avec les données Factories.");
+                SeedDataDbDeezer.Seed(deezerService, context, logger);
+            }
+        }
 
-        }
-        if (dataSource == "Factories")
-        {
-            SeedDataDb.Initialize(context);
-        }
-        else if (dataSource == "Deezer")
-        {
-            var deezerService = scope.ServiceProvider.GetRequiredService<IDeezerService>();
+        // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
+        app.UseStaticFiles();
 
-            SeedDataDbDeezer.Seed(deezerService, context, logger);
-        }
+        // Enregistre les middlewares dans le pipeline
+        app.UseRateLimiter();
+        app.UseHsts();
+        app.UseHttpsRedirection();
+        app.UseMiddleware<SecurityHeadersMiddleware>();
+        app.UseMiddleware<LoggingMiddleware>();
+
+        app.UseRouting();
+
+        app.MapAreaControllerRoute(
+          name: "admin_titres_list",
+          areaName: "Administration",
+          pattern: "administration/titres",
+          defaults: new
+          {
+              controller = "Titre",
+              action = "Index"
+          });
+
+        app.MapAreaControllerRoute(
+          name: "admin_styles_list",
+          areaName: "Administration",
+          pattern: "administration/styles",
+          defaults: new
+          {
+              controller = "Style",
+              action = "Index"
+          });
+
+        app.MapAreaControllerRoute(
+          name: "admin_artistes_list",
+          areaName: "Administration",
+          pattern: "administration/artistes",
+          defaults: new
+          {
+              controller = "Artiste",
+              action = "Index"
+          });
+
+        app.MapAreaControllerRoute(
+          name: "admin_commentaires_list",
+          areaName: "Administration",
+          pattern: "administration/commentaires",
+          defaults: new
+          {
+              controller = "Commentaire",
+              action = "Index"
+          });
+
+        // Configure le routage pour les zones (areas)
+        app.MapControllerRoute(
+          name: "areas",
+          pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+        // Configure le routage par défaut
+        app.MapControllerRoute(
+          name: "default",
+          pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        logger.Info("Application prête. Lancement du serveur.");
+        app.Run();
     }
-
-
-    // Ajoute les fichiers statiques (Bootstrap, CSS, JS)
-    app.UseStaticFiles();
-
-    // Enregistre les middlewares dans le pipeline
-    app.UseRateLimiter();
-    app.UseHsts();
-    app.UseHttpsRedirection();
-    app.UseMiddleware<SecurityHeadersMiddleware>();
-    app.UseMiddleware<LoggingMiddleware>();
-
-    app.UseRouting();
-
-    app.MapAreaControllerRoute(
-    name: "admin_titres_list",
-    areaName: "Administration",
-    pattern: "administration/titres",
-    defaults: new { controller = "Titre", action = "Index" });
-
-    app.MapAreaControllerRoute(
-    name: "admin_styles_list",
-    areaName: "Administration",
-    pattern: "administration/styles",
-    defaults: new { controller = "Style", action = "Index" });
-
-    app.MapAreaControllerRoute(
-    name: "admin_artistes_list",
-    areaName: "Administration",
-    pattern: "administration/artistes",
-    defaults: new { controller = "Artiste", action = "Index" });
-
-    app.MapAreaControllerRoute(
-    name: "admin_commentaires_list",
-    areaName: "Administration",
-    pattern: "administration/commentaires",
-    defaults: new { controller = "Commentaire", action = "Index" });
-
-    // Configure le routage pour les zones (areas)
-    app.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-    // Configure le routage par défaut
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-
-    logger.Info("Application prête. Lancement du serveur.");
-    app.Run();
 }
 catch (Exception ex)
 {

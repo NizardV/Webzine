@@ -15,7 +15,7 @@ namespace Webzine.Repository.Deezer
         }
         public async Task<PlaylistDto> GetPlaylistAsync(long playlistId)
         {
-            var response = await _httpClient.GetAsync($"/playlist/{playlistId}");
+            var response = await _httpClient.GetAsync($"playlist/{playlistId}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

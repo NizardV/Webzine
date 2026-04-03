@@ -110,6 +110,7 @@ namespace Webzine.Repository.Db
                 this.logger.LogDebug("Récupération de tous les artistes en base.");
 
                 return this.context.Artistes
+                    .OrderBy(a => a.Nom)
                     .Include(a => a.Titres)
                     .ToList();
             }
@@ -132,6 +133,7 @@ namespace Webzine.Repository.Db
                 }
 
                 var artiste = this.context.Artistes
+                    .OrderBy(a => a.Nom)
                     .Include(a => a.Titres)
                     .FirstOrDefault(a => a.Nom.ToLower() == nom.ToLower());
                 this.logger.LogDebug("Recherche artiste en base par nom {Nom}. Trouvé: {Found}.", nom, artiste != null);
