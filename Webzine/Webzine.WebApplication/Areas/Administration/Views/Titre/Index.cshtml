@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Webzine.Entity.Titre>
+﻿@model Webzine.WebApplication.Areas.Administration.ViewModel.AdminTitreIndexViewModel
 
 <div class="mt-4">
     <h2>Titres</h2>
@@ -26,11 +26,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var titre in Model)
+                @* On boucle uniquement sur les titres de la page courante *@
+                @foreach (var titre in Model.PagedTitres)
                 {
                     <tr>
                         <td class="align-middle">
-                            @(titre.Artiste?.Nom ?? $"Artiste #{titre.IdArtiste}")
+                            <a asp-area="" asp-controller="Artiste" asp-action="DetailsArtiste" asp-route-id="@titre.Artiste.Nom" class="text-decoration-none">
+                                @titre.Artiste.Nom
+                            </a>
                         </td>
                         <td class="align-middle">@titre.Libelle</td>
                         <td class="align-middle">
@@ -68,5 +71,34 @@
                 }
             </tbody>
         </table>
+    </div>
+
+    @* --- Contrôles de pagination --- *@
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            @if (Model.CurrentPage > 0)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-area="Administration"
+                   asp-controller="Titre"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage - 1)">« Page précédente</a>
+            }
+        </div>
+        
+        <div>
+            <span class="text-muted fw-bold">Page @(Model.CurrentPage + 1) sur @(Model.MaxPage + 1)</span>
+        </div>
+        
+        <div>
+            @if (Model.CurrentPage < Model.MaxPage)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-area="Administration"
+                   asp-controller="Titre"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage + 1)">Page suivante »</a>
+            }
+        </div>
     </div>
 </div>

@@ -96,7 +96,7 @@ namespace Webzine.Repository.Db
         {
             try
             {
-                var titres = this._context.Titres.Skip(offset).Take(limit).OrderBy(t => t.Libelle);
+                var titres = this._context.Titres.OrderBy(t => t.Libelle).Skip(offset).Take(limit).Include( t=> t.Artiste).ToList();
                 this._logger.LogDebug("Récupération des titres avec offset {offset} et limit {limit} - {nbTitres} résultats trouvés", offset, limit, titres.Count());
 
                 return titres;
@@ -113,6 +113,8 @@ namespace Webzine.Repository.Db
             {
                 this._logger.LogDebug("Récupération de tous les titres");
                 var titres = this._context.Titres
+                    .OrderBy(t => t.Libelle)
+                    .ThenBy(t => t.Artiste.Nom)
                     .Include(t => t.Artiste)
                     .Include(t => t.Styles)
                     .Include(t => t.Commentaires);

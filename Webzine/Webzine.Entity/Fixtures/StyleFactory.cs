@@ -18,7 +18,6 @@ namespace Webzine.Entity.Fixtures
         public static List<Style> CreerStyles(int nombreDeStyles)
         {
             var styles = new Faker<Style>()
-                .RuleFor(s => s.IdStyle, f => f.IndexFaker + 1)
                 .RuleFor(s => s.Libelle, f => f.Music.Genre())
                 .Generate(nombreDeStyles)
                 .DistinctBy(s => s.Libelle)

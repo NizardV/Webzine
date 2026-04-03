@@ -4,6 +4,7 @@
     using Webzine.Entity;
     using Webzine.Business.Contracts.Services;
     using Webzine.Repository.Contracts;
+    using Webzine.WebApplication.Areas.Administration.ViewModel;
 
     [Area("administration")]
     /// <summary>
@@ -29,10 +30,24 @@
         /// Retourne la vue qui affiche la liste de tous les titres disponibles.
         /// </summary>
         /// <returns>Une vue.</returns>
-        public IActionResult Index()
+        public IActionResult Index(int page = 0)
         {
-            var titres = this._titreRepository.FindAll();
-            return this.View(titres);
+            int limite = 50;
+            var totalTitres = this._titreRepository.Count();
+            var maxPage = (int)Math.Ceiling(totalTitres / (double)limite) - 1;
+            
+            if (page < 0) page = 0;
+            if (page > maxPage && maxPage >= 0) page = maxPage;
+
+
+            var titres = this._titreRepository.FindTitres(page * limite, limite);
+            var viewModel = new AdminTitreIndexViewModel
+            {
+                PagedTitres = titres,
+                CurrentPage = page,
+                MaxPage = maxPage
+            };
+            return this.View(viewModel);
         }
 
         public IActionResult Create()
