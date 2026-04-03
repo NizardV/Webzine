@@ -192,6 +192,12 @@ try
     pattern: "titre/{id}",
     defaults: new { controller = "Titre", action = "Details" });
 
+    // Route publique pour filtrer les titres par style
+    app.MapControllerRoute(
+        name: "public_titres_style",
+        pattern: "titre/style/{libelle}",
+        defaults: new { controller = "Titre", action = "Style" });
+
     // route publique qui va intercepter artiste/nom pour afficher les détails d'un artiste
     app.MapControllerRoute(
     name: "public_artiste_details",

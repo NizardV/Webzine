@@ -37,9 +37,7 @@ namespace Webzine.WebApplication.Controllers
                 return this.NotFound();
             }
 
-            var titres = this._titreRepository.FindAll().Where(t => t.IdArtiste == artiste.IdArtiste);
-
-            var model = new ArtisteModel { Artiste = artiste, Titres = titres };
+            var model = new ArtisteModel { Artiste = artiste, Titres = artiste.Titres };
 
             // Titres regroupés par nom d'album et URL de jaquette
             model.Albums = model.Titres
