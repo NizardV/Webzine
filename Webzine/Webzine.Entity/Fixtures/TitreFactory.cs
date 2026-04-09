@@ -46,5 +46,21 @@ namespace Webzine.Entity.Fixtures
             titres = faker.Generate(nombreDeTitres > 0 ? nombreDeTitres : 50);
             return titres;
         }
+
+        public static List<Titre> AssignerStylesATitres(List<Titre> titres, List<Style> styles)
+        {
+            var random = new Random();
+            foreach (var titre in titres)
+            {
+                int nbStyles = random.Next(1, 3);
+                var selectedStyles = styles.OrderBy(s => random.Next()).Take(nbStyles).ToList();
+                titre.Styles = selectedStyles;
+                foreach (var style in selectedStyles)
+                {
+                    style.Titres.Add(titre);
+                }
+            }
+            return titres;
+        }
     }
 }

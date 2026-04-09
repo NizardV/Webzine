@@ -1,4 +1,6 @@
-﻿using Webzine.Entity;
+﻿using Microsoft.Extensions.Logging;
+using NLog;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 using Webzine.Repository.Contracts;
 
@@ -16,15 +18,17 @@ namespace Webzine.Repository.Local
     {
 
         private readonly WebzineData _data;
+        private readonly ILogger<LocalCommentaireRepository> _logger;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe LocalCommentaireRepository à l'aide de la source de données
         /// spécifiée.
         /// </summary>
         /// <param name="data">La source de données WebzineData utilisée pour accéder aux commentaires. Ne peut pas être null.</param>
-        public LocalCommentaireRepository(WebzineData data)
+        public LocalCommentaireRepository(WebzineData data, ILogger<LocalCommentaireRepository> logger)
         {
-            _data = data;
+            this._logger = logger;
+            this._data = data;
         }
 
         /// <summary>
@@ -33,7 +37,17 @@ namespace Webzine.Repository.Local
         /// <param name="commentaire">The comment to add to the collection. Cannot be null.</param>
         public void Add(Commentaire commentaire)
         {
-            _data.commentaires.Add(commentaire);
+            try
+            {
+                this._logger.LogDebug("Tentative d'ajout d'un commentaire au repository local.");
+                this._data.commentaires.Add(commentaire);
+                this._logger.LogDebug("Commentaire ajouté avec succès au repository local.");
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de l'ajout d'un commentaire au repository local.");
+                throw new Exception("Impossible d'ajouter le commentaire au repository local.", ex);
+            }
         }
 
         /// <summary>
@@ -45,12 +59,9 @@ namespace Webzine.Repository.Local
         /// son identifiant unique.</param>
         public void Delete(Commentaire commentaire)
         {
-            var elementASupprimer = _data.commentaires.FirstOrDefault(c => c.IdCommentaire == commentaire.IdCommentaire);
-
-            if (elementASupprimer != null)
-            {
-                _data.commentaires.Remove(elementASupprimer);
-            }
+            this._logger.LogWarning(
+                "Tentative de suppression du commentaire {IdCommentaire} du repository local. Opération non supportée sur les données en mémoire.",
+                commentaire.IdCommentaire);
         }
 
         /// <summary>
@@ -60,10 +71,40 @@ namespace Webzine.Repository.Local
         /// <returns>Le commentaire correspondant à l'identifiant spécifié, ou null si aucun commentaire n'est trouvé.</returns>
         public Commentaire Find(int id)
         {
-            return _data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
+            try
+            {
+                this._logger.LogDebug(
+                    "Recherche du commentaire d'identifiant {IdCommentaire} dans le repository local.",
+                    id);
+
+                var commentaire = this._data.commentaires.FirstOrDefault(c => c.IdCommentaire == id);
+
+                if (commentaire != null)
+                {
+                    this._logger.LogDebug(
+                        "Commentaire {IdCommentaire} trouvé.",
+                        id);
+                }
+                else
+                {
+                    this._logger.LogDebug(
+                        "Aucun commentaire trouvé dans le repository local pour l'identifiant {IdCommentaire}.",
+                        id);
+                }
+
+                return commentaire;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la recherche du commentaire {IdCommentaire} dans le repository local.",
+                    id);
+                throw new Exception($"Impossible de rechercher le commentaire avec l'ID {id} dans le repository local.", ex);
+            }
         }
 
-       
+
         /// <summary>
         /// Returns a collection containing all available comments.
         /// </summary>
@@ -71,7 +112,62 @@ namespace Webzine.Repository.Local
         /// be empty if no comments are available.</returns>
         public IEnumerable<Commentaire> FindAll()
         {
-            return _data.commentaires;
+            try
+            {
+                this._logger.LogDebug(
+                    "Récupération de tous les commentaires depuis le repository local.");
+
+                return this._data.commentaires.ToList();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la récupération de tous les commentaires depuis le repository local.");
+                throw new Exception("Impossible de récupérer tous les commentaires du repository local.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing comment in the local collection.
+        /// </summary>
+        /// <remarks>This method updates the properties of an existing comment in memory. If the comment
+        /// does not exist, no changes are made.</remarks>
+        /// <param name="commentaire">The comment containing the updated data. Cannot be null.</param>
+        public void Update(Commentaire commentaire)
+        {
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de mise à jour du commentaire {IdCommentaire} dans le repository local.",
+                    commentaire.IdCommentaire);
+
+                var existingCommentaire = _data.commentaires.FirstOrDefault(c => c.IdCommentaire == commentaire.IdCommentaire);
+                if (existingCommentaire != null)
+                {
+                    existingCommentaire.Auteur = commentaire.Auteur;
+                    existingCommentaire.Contenu = commentaire.Contenu;
+                    existingCommentaire.IdTitre = commentaire.IdTitre;
+                    existingCommentaire.DateCreation = commentaire.DateCreation;
+                    this._logger.LogDebug(
+                        "Commentaire {IdCommentaire} mis à jour avec succès dans le repository local.",
+                        commentaire.IdCommentaire);
+                }
+                else
+                {
+                    this._logger.LogWarning(
+                        "Commentaire {IdCommentaire} non trouvé dans le repository local.",
+                        commentaire.IdCommentaire);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la mise à jour du commentaire {IdCommentaire} dans le repository local.",
+                    commentaire.IdCommentaire);
+                throw new Exception($"Impossible de mettre à jour le commentaire {commentaire.IdCommentaire} dans le repository local.", ex);
+            }
         }
     }
 }

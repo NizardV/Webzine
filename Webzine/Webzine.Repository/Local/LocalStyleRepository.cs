@@ -7,6 +7,7 @@ using Webzine.Repository.Contracts;
 
 namespace Webzine.Repository.Local
 {
+    /// <inheritdoc/>
     public class LocalStyleRepository : IStyleRepository
     {
         /// <summary>
@@ -24,8 +25,8 @@ namespace Webzine.Repository.Local
         /// <param name="data"></param>
         public LocalStyleRepository(WebzineData data, ILogger<LocalStyleRepository> logger)
         {
-            _data = data;
-            _logger = logger;
+            this._data = data;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -34,11 +35,26 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Add(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative d'ajout d'un style dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative d'ajout du style {Libelle} dans le repository local.",
+                    style.Libelle);
 
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas d'ajouter un style.");
+                _data.styles.Add(style);
+
+                this._logger.LogDebug(
+                    "Style {Libelle} ajouté avec succès au repository local.",
+                    style.Libelle);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de l'ajout du style {Libelle} au repository local.",
+                    style.Libelle);
+                throw new Exception($"Impossible d'ajouter le style '{style.Libelle}' au repository local.", ex);
+            }
         }
 
         /// <summary>
@@ -47,12 +63,29 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Delete(Style style)
         {
-            this._logger.LogWarning(
-                "Tentative de suppression du style {IdStyle} dans le repository local. Opération non supportée.",
-                style.IdStyle);
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de suppression du style {IdStyle} du repository local.",
+                    style.IdStyle);
 
-            throw new NotSupportedException(
-                "Le mode de persistance local ne permet pas de supprimer un style.");
+                var styleASupprimer = _data.styles.FirstOrDefault(s => s.IdStyle == style.IdStyle);
+                if (styleASupprimer != null)
+                {
+                    _data.styles.Remove(styleASupprimer);
+                    this._logger.LogDebug(
+                        "Style {IdStyle} supprimé avec succès du repository local.",
+                        style.IdStyle);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la suppression du style {IdStyle} du repository local.",
+                    style.IdStyle);
+                throw new Exception($"Impossible de supprimer le style {style.IdStyle} du repository local.", ex);
+            }
         }
 
         /// <summary>
@@ -65,13 +98,21 @@ namespace Webzine.Repository.Local
             try
             {
                 this._logger.LogDebug(
-                    $"Recherche du style d'identifiant {id} dans le repository local.");
+                    "Recherche du style d'identifiant {IdStyle} dans le repository local.",
+                    id);
 
-                var style = _data.styles.FirstOrDefault(s => s.IdStyle == id);
+                var style = this._data.styles.FirstOrDefault(s => s.IdStyle == id);
 
-                if (style == null)
+                if (style != null)
                 {
-                    this._logger.LogWarning(
+                    this._logger.LogDebug(
+                        "Style {IdStyle} - {Libelle} trouvé.",
+                        id,
+                        style.Libelle);
+                }
+                else
+                {
+                    this._logger.LogDebug(
                         "Aucun style trouvé dans le repository local pour l'identifiant {IdStyle}.",
                         id);
                 }
@@ -84,7 +125,7 @@ namespace Webzine.Repository.Local
                     ex,
                     "Erreur lors de la recherche du style {IdStyle} dans le repository local.",
                     id);
-                throw;
+                throw new Exception($"Impossible de rechercher le style avec l'ID {id} dans le repository local.", ex);
             }
         }
 
@@ -99,14 +140,14 @@ namespace Webzine.Repository.Local
                 this._logger.LogDebug(
                     "Récupération de tous les styles depuis le repository local.");
 
-                return _data.styles.ToList();
+                return this._data.styles.ToList();
             }
             catch (Exception ex)
             {
                 this._logger.LogError(
                     ex,
                     "Erreur lors de la récupération de tous les styles depuis le repository local.");
-                throw;
+                throw new Exception("Impossible de récupérer tous les styles du repository local.", ex);
             }
         }
 
@@ -116,8 +157,47 @@ namespace Webzine.Repository.Local
         /// <param name="style"></param>
         public void Update(Style style)
         {
-            this._logger.LogWarning(
-                $"Tentative de modification du style {style.IdStyle} dans le repository local. Opération non supportée.");
+            try
+            {
+                this._logger.LogDebug(
+                    "Tentative de modification du style {IdStyle} dans le repository local.",
+                    style.IdStyle);
+
+                var styleExistant = _data.styles.FirstOrDefault(s => s.IdStyle == style.IdStyle);
+                if (styleExistant != null)
+                {
+                    styleExistant.Libelle = style.Libelle;
+                    this._logger.LogDebug(
+                        "Style {IdStyle} modifié avec succès dans le repository local.",
+                        style.IdStyle);
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors de la modification du style {IdStyle} dans le repository local.",
+                    style.IdStyle);
+                throw new Exception($"Impossible de mettre à jour le style {style.IdStyle} dans le repository local.", ex);
+            }
+        }
+
+        public int Count()
+        {
+            try
+            {
+                this._logger.LogDebug("Comptage des styles dans le repository local.");
+                var count = this._data.styles.Count();
+                this._logger.LogDebug("Comptage des styles: {Count}.", count);
+                return count;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(
+                    ex,
+                    "Erreur lors du comptage des styles dans le repository local.");
+                throw new Exception("Impossible de compter les styles dans le repository local.", ex);
+            }
         }
     }
 }

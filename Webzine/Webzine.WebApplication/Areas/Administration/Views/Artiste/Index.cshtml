@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Webzine.Entity.Artiste>
+﻿@model Webzine.WebApplication.Areas.Administration.ViewModel.Artiste.AdminArtisteIndexViewModel
 
 @{
     ViewData["Title"] = "Artistes";
@@ -11,7 +11,7 @@
 
     <div class="mb-3">
         <a asp-area="Administration" asp-controller="Artiste" asp-action="Create" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i> Ajouter un nouvel artiste
+            <i class="bi bi-plus"></i> Ajouter un nouvel artiste
         </a>
     </div>
 
@@ -23,18 +23,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var artiste in Model)
+            @* Modification ici : On itère sur la propriété PagedArtistes du ViewModel *@
+            @foreach (var artiste in Model.PagedArtistes)
             {
                 <tr>
                     <td>
-                        <a asp-area="Administration" asp-controller="Artiste" asp-action="Details" asp-route-id="@artiste.IdArtiste" class="text-decoration-none">
+                        <a asp-area="Administration" asp-controller="Artiste" asp-action="Edit" asp-route-id="@artiste.IdArtiste" class="text-decoration-none">
                             @artiste.Nom
                         </a>
                     </td>
                     <td class="text-center">
-                        <a asp-area="Administration" asp-controller="Artiste" asp-action="Details" asp-route-id="@artiste.IdArtiste" class="text-primary text-decoration-none me-3" title="Consulter">
-                            <i class="bi bi-eye"></i>
-                        </a>
                         <a asp-area="Administration" asp-controller="Artiste" asp-action="Edit" asp-route-id="@artiste.IdArtiste" class="text-primary text-decoration-none me-3" title="Éditer">
                             <i class="bi bi-pencil-square"></i>
                         </a>
@@ -47,4 +45,33 @@
             }
         </tbody>
     </table>
+
+    @* --- Contrôles de pagination --- *@
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            @if (Model.CurrentPage > 0)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-area="Administration"
+                   asp-controller="Artiste"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage - 1)">« Page précédente</a>
+            }
+        </div>
+        
+        <div>
+            <span class="text-muted fw-bold">Page @(Model.CurrentPage + 1) sur @(Model.MaxPage + 1)</span>
+        </div>
+        
+        <div>
+            @if (Model.CurrentPage < Model.MaxPage)
+            {
+                <a class="btn btn-secondary btn-sm"
+                   asp-area="Administration"
+                   asp-controller="Artiste"
+                   asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage + 1)">Page suivante »</a>
+            }
+        </div>
+    </div>
 </div>

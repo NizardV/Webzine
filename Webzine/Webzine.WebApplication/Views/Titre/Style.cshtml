@@ -1,25 +1,24 @@
-﻿@model IEnumerable<Webzine.Entity.Titre>
-
+﻿@model Webzine.WebApplication.ViewModels.TitresParStyleViewModel
 @{
     // On change le titre de l'onglet du navigateur dynamiquement
-    ViewData["Title"] = $"Titres {ViewBag.NomDuStyle}";
+    ViewData["Title"] = $"Titres {Model.NomDuStyle}";
 }
 
 <div class="mb-4">
 
-    <h1 class="mb-4">Titres ayant le style @ViewBag.NomDuStyle</h1>
+    <h1 class="mb-4">Titres ayant le style @Model.NomDuStyle</h1>
 
     <hr class="mb-4" />
 
     <div class="d-flex flex-column gap-4 mt-4">
 
-        @if (!Model.Any())
+        @if (!Model.Titres.Any())
         {
             <p class="text-muted">Aucun titre n'a été trouvé pour ce style de musique.</p>
         }
         else
         {
-            @foreach (var titre in Model)
+            @foreach (var titre in Model.Titres)
             {
                 <div class="d-flex align-items-center">
 

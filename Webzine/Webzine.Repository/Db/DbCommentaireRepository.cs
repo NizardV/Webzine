@@ -53,7 +53,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de l'ajout du commentaire (Auteur: {Auteur}, TitreID: {IdTitre}).", commentaire.Auteur, commentaire.IdTitre);
-                throw;
+                throw new Exception($"Impossible d'ajouter le commentaire de l'auteur '{commentaire.Auteur}' pour le titre {commentaire.IdTitre} en base de données.", ex);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la suppression du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
-                throw;
+                throw new Exception($"Impossible de supprimer le commentaire {commentaire.IdCommentaire} de la base de données.", ex);
             }
         }
 
@@ -95,25 +95,25 @@ namespace Webzine.Repository.Db
 
             try
             {
-                this._logger.LogDebug("Recherche du commentaire avec l'ID {Id} dans la base de données...", id);
+                this._logger.LogDebug("Recherche du commentaire avec l'ID {IdCommentaire} dans la base de données.", id);
 
                 var commentaire = this._context.Commentaires.Include(c => c.Titre).FirstOrDefault(c => c.IdCommentaire == id);
 
-                if (commentaire == null)
+                if (commentaire != null)
                 {
-                    this._logger.LogWarning("Aucun commentaire trouvé avec l'ID {Id}.", id);
+                    this._logger.LogDebug("Commentaire {IdCommentaire} récupéré avec succès.", id);
                 }
                 else
                 {
-                    this._logger.LogDebug("Commentaire ID {Id} récupéré avec succès.", id);
+                    this._logger.LogDebug("Aucun commentaire trouvé avec l'ID {IdCommentaire}.", id);
                 }
 
                 return commentaire;
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, "Erreur lors de la recherche du commentaire avec l'ID {Id}.", id);
-                throw;
+                this._logger.LogError(ex, "Erreur lors de la recherche du commentaire avec l'ID {IdCommentaire}.", id);
+                throw new Exception($"Impossible de rechercher le commentaire avec l'ID {id} en base de données.", ex);
             }
         }
 
@@ -139,7 +139,31 @@ namespace Webzine.Repository.Db
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Erreur lors de la récupération de tous les commentaires depuis la base de données.");
-                throw;
+                throw new Exception("Impossible de récupérer tous les commentaires de la base de données.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Met à jour un commentaire existant dans la base de données.
+        /// </summary>
+        /// <remarks>Cette méthode enregistre les modifications apportées à un commentaire existant dans
+        /// la base de données. Le commentaire est identifié par son identifiant unique.</remarks>
+        /// <param name="commentaire">Le commentaire contenant les données mises à jour. Ne peut pas être null.</param>
+        public void Update(Commentaire commentaire)
+        {
+            try
+            {
+                this._logger.LogDebug("Tentative de mise à jour du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+
+                this._context.Commentaires.Update(commentaire);
+                this._context.SaveChanges();
+
+                this._logger.LogDebug("Commentaire ID {IdCommentaire} mis à jour avec succès.", commentaire.IdCommentaire);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Erreur lors de la mise à jour du commentaire ID {IdCommentaire}.", commentaire.IdCommentaire);
+                throw new Exception($"Impossible de mettre à jour le commentaire {commentaire.IdCommentaire} en base de données.", ex);
             }
         }
     }

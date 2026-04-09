@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Webzine.Entity;
 using Webzine.Entity.Fixtures;
 using Webzine.Repository.Contracts;
 using Webzine.WebApplication.Areas.Administration.ViewModel.Commentaire;
@@ -12,11 +13,9 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
    /// confirmation de suppression et supprimer un commentaire. Toutes les actions sont accessibles via des routes
    /// spécifiques à la zone d'administration. L'accès à ce contrôleur peut nécessiter des autorisations
    /// d'administration selon la configuration de l'application.</remarks>
-    [Area("Administration")]
-    [Route("administration")]
+    [Area("administration")]
     public class CommentaireController : Controller
     {
-
         private readonly ICommentaireRepository _commentaireRepository;
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="commentaireRepository">Le référentiel utilisé pour accéder et gérer les entités de commentaires. Ne peut pas être null.</param>
         public CommentaireController(ICommentaireRepository commentaireRepository)
         {
-            _commentaireRepository = commentaireRepository;
+            this._commentaireRepository = commentaireRepository;
         }
 
         /// <summary>
@@ -35,11 +34,10 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <remarks>Utilisez cette action pour consulter et gérer tous les commentaires existants dans
         /// l'interface d'administration.</remarks>
         /// <returns>Un objet <see cref="IActionResult"/> qui rend la vue contenant les commentaires à des fins d'administration.</returns>
-        [Route("commentaires")]
-        public IActionResult Commentaires()
+        public IActionResult Index()
         {
-            var commentaires = _commentaireRepository.FindAll().ToList();
-            return View(commentaires);
+            var commentaires = this._commentaireRepository.FindAll().ToList();
+            return this.View(commentaires);
         }
 
         /// <summary>
@@ -51,18 +49,16 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <param name="id">L'identifiant unique du commentaire à supprimer.</param>
         /// <returns>Un objet View affichant la confirmation de suppression si le commentaire existe ; sinon, un résultat
         /// NotFound si aucun commentaire correspondant n'est trouvé.</returns>
-        [HttpGet]
-        [Route("commentaire/delete/{id}")]
-        public IActionResult Supprimer(int id)
+        public IActionResult Delete(int id)
         {
-            var commentaire = _commentaireRepository.Find(id);
+            var commentaire = this._commentaireRepository.Find(id);
             if (commentaire is not null)
             {
-                return View(commentaire);
+                return this.View(commentaire);
             }
             else
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -73,22 +69,16 @@ namespace Webzine.WebApplication.Areas.Administration.Controllers
         /// <returns>A redirect to the comment list if the deletion is successful; otherwise, a NotFound result if the comment
         /// does not exist.</returns>
         [HttpPost]
-        [Route("commentaire/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
-
-            var commentaire = _commentaireRepository.Find(id);
+            var commentaire = this._commentaireRepository.Find(id);
             if (commentaire is not null)
             {
-                _commentaireRepository.Delete(commentaire);
+                this._commentaireRepository.Delete(commentaire);
 
                 // On redirige vers l'action qui liste les commentaires
-                return RedirectToAction(nameof(Commentaires));
-            }
-            else
-            {
-                return NotFound();
-            }
+            };
+            return RedirectToAction(nameof(Index));
         }
     }
 }

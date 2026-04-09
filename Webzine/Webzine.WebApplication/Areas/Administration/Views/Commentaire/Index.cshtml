@@ -1,0 +1,63 @@
+﻿@using Webzine.Entity
+@model List<Commentaire>
+
+@{
+    ViewData["Title"] = "Commentaires";
+}
+
+<div class="mt-4">
+    <h2>Commentaires</h2>
+    <hr class="mb-3" />
+    <table class="table table-striped table-hover align-middle border">
+        <thead class="table-light">
+            <tr>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Contenu</th>
+                <th>Date de création</th>
+                <th class="text-center" style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var commentaire in Model)
+            {
+                <tr>
+                    <td>
+                        @if (commentaire.Titre != null)
+                        {
+                            <a asp-area="Administration" asp-controller="Titre" asp-action="Edit" asp-route-id="@commentaire.Titre.IdTitre" class="text-decoration-none">
+                                @commentaire.Titre.Libelle
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Titre supprimé</span>
+                        }
+                    </td>
+                    <td>@commentaire.Auteur</td>
+                    <td>
+                        @{
+                            string contenu = commentaire.Contenu?.Length > 50 
+                                ? commentaire.Contenu.Substring(0, 50) + "..." 
+                                : commentaire.Contenu;
+                        }
+                        @contenu
+                    </td>
+                    <td>@commentaire.DateCreation.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-center">
+                        <a asp-area="Administration" asp-controller="Commentaire" asp-action="Delete" asp-route-id="@commentaire.IdCommentaire" class="text-primary text-decoration-none" title="Supprimer">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Aucun commentaire pour le moment.
+        </div>
+    }
+</div>

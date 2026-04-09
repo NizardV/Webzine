@@ -15,18 +15,18 @@
 
         public HomeController(ITitreRepository titreRepository)
         {
-            _titreRepository = titreRepository;
+            this._titreRepository = titreRepository;
         }
+
         /// <summary>{
         /// Retourne la vue principale de l'application.
         /// </summary>
         /// <returns>Un objet IActionResult qui rend la vue associée à la page d'accueil.</returns>
-        [HttpGet]
         public IActionResult Index(int page = 0)
         {
             const int pageSize = 3;
 
-            var titres = _titreRepository.FindAll();
+            var titres = this._titreRepository.FindAll();
             var totalItems = titres.Count();
             var maxPage = totalItems == 0 ? 0 : (int)Math.Ceiling(totalItems / (double)pageSize) - 1;
             var currentPage = Math.Clamp(page, 0, maxPage);
