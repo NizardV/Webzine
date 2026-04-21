@@ -423,3 +423,6 @@ FodyWeavers.xsd
 /Webzine/Webzine.WebApplication/appsettings.json
 /Webzine/Webzine.WebApplication/appsettings.Development.json
 /Webzine/Webzine.WebApplication/appsettings.Prod.json
+rag/chroma_db/
+rag/__pycache__/
+rag/.venv/
