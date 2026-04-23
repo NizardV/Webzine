@@ -1,0 +1,22 @@
+# Kanye West
+
+## Artiste
+Nom: Kanye West
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/230
+
+## Top Titres
+1. Flashing Lights (Album: Graduation)
+2. Runaway (Album: My Beautiful Dark Twisted Fantasy)
+3. ALL THE LOVE (feat. Andre Troutman) (Album: BULLY)
+4. Stronger (Album: Stronger)
+5. FourFiveSeconds (Album: FourFiveSeconds)
+
+## Albums Récents
+- BULLY (2026)
+- VULTURES 1 (2024)
+- Donda (2021)
+- Donda (Deluxe) (2021)
+- JESUS IS KING (2019)
+

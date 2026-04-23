@@ -23,7 +23,7 @@ namespace Webzine.Entity.Fixtures
                 .RuleFor(t => t.UrlJaquette, f => f.Image.PicsumUrl())
                 .RuleFor(t => t.UrlEcoute, f => $"https://www.youtube.com/embed/{f.Random.String2(11, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")}")
                 .RuleFor(t => t.DateCreation, f => f.Date.Past())
-                .RuleFor(t => t.DateSortie, (f, t) => f.Date.Between(t.DateCreation, DateTime.Now))
+                .RuleFor(t => t.DateSortie, (f, t) => f.Date.Between(t.DateCreation, DateTime.UtcNow))
                 .RuleFor(t => t.Duree, (f, t) => TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(f.Random.Int(120, 420))))
                 .RuleFor(t => t.Artiste, f => f.PickRandom(artistes))
                 .RuleFor(t => t.IdArtiste, (f, t) => t.Artiste.IdArtiste)

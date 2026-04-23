@@ -1,0 +1,22 @@
+# Pink Floyd
+
+## Artiste
+Nom: Pink Floyd
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/d62a818a5de6455f17b6a992cf22b32f/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/860
+
+## Top Titres
+1. Another Brick in the Wall, Pt. 2 (Album: The Wall)
+2. Wish You Were Here (Album: Wish You Were Here)
+3. Comfortably Numb (Album: The Wall)
+4. Money (Album: The Dark Side of the Moon)
+5. Shine On You Crazy Diamond (Pts. 1-5) (Album: Wish You Were Here)
+
+## Albums Récents
+- Wish You Were Here 50 (2025)
+- The Dark Side Of The Moon (Live at Wembley 1974) [2023 Master] (2023)
+- Live at Knebworth 1990 (2021)
+- The Later Years 1987-2019 (2019)
+- The Later Years (2019)
+

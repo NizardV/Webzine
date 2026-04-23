@@ -1,0 +1,22 @@
+# Daft Punk
+
+## Artiste
+Nom: Daft Punk
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/638e69b9caaf9f9f3f8826febea7b543/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/27
+
+## Top Titres
+1. Instant Crush (feat. Julian Casablancas) (Album: Random Access Memories)
+2. Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers) (Album: Get Lucky (Radio Edit - feat. Pharrell Williams and Nile Rodgers))
+3. Veridis Quo (Album: Discovery)
+4. One More Time (Album: Discovery)
+5. Get Lucky (feat. Pharrell Williams and Nile Rodgers) (Album: Random Access Memories)
+
+## Albums Récents
+- Random Access Memories (Drumless Edition) (2023)
+- Homework (25th Anniversary Edition) (1997)
+- Random Access Memories (2013)
+- Random Access Memories (10th Anniversary Edition) (2023)
+- TRON: Legacy Reconfigured (2011)
+

@@ -2,11 +2,17 @@
 using NLog.Web;
 using Webzine.WebApplication.Extensions;
 
-var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+// Configure NLog with environment-specific config
+var environment = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+var nlogConfigFile = environment == "Development" ? "nlog.development.config" : "nlog.config";
+
+var logger = LogManager.Setup()
+    .LoadConfigurationFromFile(nlogConfigFile)
+    .GetCurrentClassLogger();
 
 try
 {
-    logger.Info("Démarrage de l'application Webzine.");
+    logger.Info("Démarrage de l'application Webzine (Environnement: {Environment}).", environment);
     var builder = WebApplication.CreateBuilder(args);
 
     // --- 1. CONFIGURATION ---
@@ -14,16 +20,15 @@ try
     builder.Host.UseNLog();
 
     var config = builder.Configuration.GetSection("AppConfig");
-    var environment = config["Environment"];
     var repoMode = config["Repository"];
     var dataSource = config["Seeder"];
     var deezerApiBaseUrl = config["DeezerApi"];
 
-    logger.Info("Configuration chargée - Env: {Environment}, Repo: {RepoMode}, Seeder: {DataSource}", environment, repoMode, dataSource);
+    logger.Info("Configuration chargée - Repo: {RepoMode}, Seeder: {DataSource}", repoMode, dataSource);
 
     // --- 2. INJECTION DES DÉPENDANCES (Nos méthodes d'extension) ---
     builder.Services.AddWebzineRepositories(builder.Configuration, repoMode, environment);
-    builder.Services.AddWebzineExternalServices(dataSource, deezerApiBaseUrl);
+    builder.Services.AddWebzineExternalServices(builder.Configuration, dataSource, deezerApiBaseUrl);
     builder.Services.AddWebzineWebConfigurations();
 
     // --- 3. CRÉATION DE L'APPLICATION ---
@@ -46,5 +51,18 @@ catch (Exception ex)
 }
 finally
 {
-    LogManager.Shutdown();
+    try
+    {
+        // Arrêter NLog avec un timeout court
+        LogManager.Flush(TimeSpan.FromSeconds(2));
+        LogManager.Shutdown();
+    }
+    catch (System.Threading.Tasks.TaskCanceledException)
+    {
+        System.Console.WriteLine("⚠️  NLog flush timeout");
+    }
+    catch (Exception ex)
+    {
+        System.Console.WriteLine($"❌ Erreur lors de l'arrêt de NLog: {ex.Message}");
+    }
 }

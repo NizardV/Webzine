@@ -1,0 +1,22 @@
+# Bruno Mars
+
+## Artiste
+Nom: Bruno Mars
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/90f0b5b11df4f87ee878f38569b5995b/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/429675
+
+## Top Titres
+1. I Just Might (Album: The Romantic)
+2. Risk It All (Album: The Romantic)
+3. Die With A Smile (Album: Die With A Smile)
+4. Locked out of Heaven (Album: Unorthodox Jukebox)
+5. Uptown Funk (feat. Bruno Mars) (Album: Uptown Special)
+
+## Albums Récents
+- The Romantic (2026)
+- An Evening With Silk Sonic (2021)
+- 24K Magic (2016)
+- Treasure Remix EP (2013)
+- Unorthodox Jukebox (2012)
+

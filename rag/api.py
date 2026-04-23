@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pipeline import query, build_index
+from pipeline_deezer import query_deezer, build_deezer_index
+import os
 
 app = FastAPI()
 
@@ -12,17 +14,107 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Variable globale pour tracker la source actuellement active
+current_source = "deezer"  # "wikipedia" ou "deezer"
+
 class Question(BaseModel):
     question: str
 
+class InitRequest(BaseModel):
+    source: str = "deezer"  # "wikipedia" ou "deezer"
+
 @app.on_event("startup")
 async def startup():
+    print("🚀 Démarrage du service RAG")
+    print(f"📍 Source initiale: {current_source}")
+
+    # Charger l'index Wikipedia par défaut
     build_index()
+
+    # Si les données Deezer existent, les charger aussi
+    if os.path.exists("./data_deezer"):
+        print("🎵 Chargement des données Deezer disponibles...")
+        try:
+            build_deezer_index()
+            print("✅ Index Deezer chargé avec succès")
+        except Exception as e:
+            print(f"⚠️  Impossible de charger les données Deezer: {e}")
 
 @app.post("/query")
 async def ask(q: Question):
-    answer, sources = query(q.question)
+    global current_source
+
+    try:
+        if current_source == "deezer":
+            answer, sources = query_deezer(q.question)
+        else:
+            answer, sources = query(q.question)
+
+        return {
+            "answer": answer,
+            "sources": [doc.metadata["source"] for doc in sources],
+            "source": current_source
+        }
+    except Exception as e:
+        return {
+            "answer": f"Erreur lors du traitement: {str(e)}",
+            "sources": [],
+            "source": current_source
+        }
+
+@app.post("/initialize")
+async def initialize(req: InitRequest):
+    global current_source
+
+    try:
+        if req.source == "deezer":
+            if not os.path.exists("./data_deezer"):
+                return {
+                    "success": False,
+                    "message": "Les données Deezer ne sont pas disponibles. Exécutez d'abord fetch_deezer_data.py"
+                }
+            build_deezer_index()
+            current_source = "deezer"
+            return {
+                "success": True,
+                "message": "Index Deezer initialisé avec succès",
+                "source": "deezer"
+            }
+        elif req.source == "wikipedia":
+            build_index()
+            current_source = "wikipedia"
+            return {
+                "success": True,
+                "message": "Index Wikipedia initialisé avec succès",
+                "source": "wikipedia"
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"Source inconnue: {req.source}"
+            }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Erreur: {str(e)}"
+        }
+
+@app.get("/status")
+async def status():
     return {
-        "answer": answer,
-        "sources": [doc.metadata["source"] for doc in sources]
+        "status": "running",
+        "current_source": current_source,
+        "wikipedia_available": os.path.exists("./data"),
+        "deezer_available": os.path.exists("./data_deezer")
     }
+
+
+@app.get("/health")
+async def health():
+    """Health check endpoint for Docker/Kubernetes"""
+    return {
+        "status": "healthy",
+        "service": "RAG API",
+        "current_source": current_source
+    }
+

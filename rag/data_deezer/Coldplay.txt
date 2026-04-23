@@ -1,0 +1,22 @@
+# Coldplay
+
+## Artiste
+Nom: Coldplay
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/3087954bca22f306324912e5ac8375c3/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/892
+
+## Top Titres
+1. Viva La Vida (Album: Viva La Vida or Death and All His Friends)
+2. The Scientist (Album: A Rush of Blood to the Head)
+3. Hymn for the Weekend (Album: A Head Full of Dreams)
+4. Yellow (Album: Parachutes)
+5. Paradise (Album: Mylo Xyloto)
+
+## Albums Récents
+- Moon Music (2024)
+- Moon Music (Full Moon Edition) (2024)
+- Music Of The Spheres (2021)
+- Everyday Life (2019)
+- Live in Buenos Aires (2018)
+

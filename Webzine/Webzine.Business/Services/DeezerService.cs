@@ -21,7 +21,7 @@ namespace Webzine.Business.Services
             var playlist = await this._deezerRepository.GetPlaylistAsync(playlistId);
             playlist.TrackList.Tracks.ForEach(track =>
             {
-                var date = this._faker.Date.Past();
+                var date = this._faker.Date.Past().ToUniversalTime();
                 var artiste = result.Artistes.FirstOrDefault(a => a.Nom == track.Artist.Name);
 
                 if (artiste == null)
@@ -34,7 +34,7 @@ namespace Webzine.Business.Services
                     };
                     result.Artistes.Add(artiste);
                 }
-                
+
                 if (track.Preview is null || track.Album.CoverUrl is null)
                     {
                         var x = playlistId;
@@ -46,7 +46,7 @@ namespace Webzine.Business.Services
                     UrlJaquette = track.Album.CoverUrl ?? this._faker.Image.PicsumUrl(),
                     UrlEcoute = track.Link.Remove(0, 23),
                     DateCreation = date,
-                    DateSortie = this._faker.Date.Between(date, date.AddDays(30)),
+                    DateSortie = this._faker.Date.Between(date, date.AddDays(30)).ToUniversalTime(),
                     Duree = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(track.Duration)),
                     NbLectures = this._faker.Random.Int(0, 10000),
                     NbLikes = this._faker.Random.Int(0, 5000),

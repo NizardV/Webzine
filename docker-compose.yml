@@ -1,0 +1,108 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: webzine_postgres
+    environment:
+      POSTGRES_DB: webzine
+      POSTGRES_USER: webzine
+      POSTGRES_PASSWORD: webzine_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - webzine_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webzine -d webzine"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Ollama LLM Service (optionnel, si Ollama en conteneur)
+  # Sinon, commentez cette section et assurez-vous qu'Ollama est accessible via localhost:11434
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: webzine_ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   networks:
+  #     - webzine_network
+  #   restart: unless-stopped
+
+  # RAG API Python Service
+  rag:
+    build:
+      context: .
+      dockerfile: ./rag/Dockerfile
+    container_name: webzine_rag
+    environment:
+      PYTHONUNBUFFERED: 1
+      OLLAMA_HOST: http://host.docker.internal:11434
+      # Si Ollama est en conteneur, utiliser: http://ollama:11434
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./rag/chroma_db:/app/chroma_db
+      - ./rag/chroma_db_deezer:/app/chroma_db_deezer
+      - ./rag/data_deezer:/app/data_deezer
+      - ./rag/cache:/app/cache
+    networks:
+      - webzine_network
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Webzine .NET Application
+  webzine:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: webzine_app
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:7110
+      RAG_API_URL: http://rag:8000
+      POSTGRES_CONNECTION_STRING: "Server=postgres;Port=5432;Database=webzine;User Id=webzine;Password=webzine_password;"
+    ports:
+      - "7110:7110"
+    volumes:
+      - webzine_data:/app/data
+    networks:
+      - webzine_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rag:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7110/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+networks:
+  webzine_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  webzine_data:
+    driver: local
+  # ollama_data:
+  #   driver: local

@@ -67,7 +67,7 @@ namespace Webzine.WebApplication.Extensions
         /// <param name="deezerApiBaseUrl"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IServiceCollection AddWebzineExternalServices(this IServiceCollection services, string dataSource, string deezerApiBaseUrl)
+        public static IServiceCollection AddWebzineExternalServices(this IServiceCollection services, IConfiguration config, string dataSource, string deezerApiBaseUrl)
         {
             if (dataSource == "Deezer")
             {
@@ -81,6 +81,17 @@ namespace Webzine.WebApplication.Extensions
                     client.BaseAddress = new Uri(deezerApiBaseUrl);
                 });
                 services.AddScoped<IDeezerService, DeezerService>();
+            }
+
+            // Configuration du RAG
+            var ragApiUrl = config.GetSection("AppConfig")["RagApi"];
+            if (!string.IsNullOrWhiteSpace(ragApiUrl))
+            {
+                services.AddHttpClient("RagClient", client =>
+                {
+                    client.BaseAddress = new Uri(ragApiUrl);
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                });
             }
 
             return services;

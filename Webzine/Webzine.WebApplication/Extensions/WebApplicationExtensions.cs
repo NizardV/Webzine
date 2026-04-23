@@ -2,6 +2,7 @@
 using Webzine.EntitiesContext.Seeders;
 using Webzine.Business.Contracts.Services;
 using Webzine.WebApplication.Middleware;
+using Microsoft.AspNetCore.Mvc;
 
 using AspNetApp = Microsoft.AspNetCore.Builder.WebApplication;
 
@@ -67,6 +68,20 @@ namespace Webzine.WebApplication.Extensions
         /// <param name="app"></param>
         public static void MapWebzineRoutes(this AspNetApp app)
         {
+            // Routes API Controllers
+            app.MapControllers();
+
+            // Health check routes (accessible depuis /health ou /api/health)
+            app.MapGet("/health", () =>
+            {
+                return Results.Ok(new
+                {
+                    status = "healthy",
+                    timestamp = DateTime.UtcNow,
+                    service = "Webzine"
+                });
+            });
+
             // Routes Publiques
             app.MapControllerRoute(name: "public_titre_details", pattern: "titre/{id}", defaults: new { controller = "Titre", action = "Details" });
             app.MapControllerRoute(name: "public_titres_style", pattern: "titre/style/{libelle}", defaults: new { controller = "Titre", action = "Style" });

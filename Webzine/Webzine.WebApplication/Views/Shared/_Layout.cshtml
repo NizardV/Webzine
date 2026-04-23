@@ -14,7 +14,7 @@
     <link rel="icon" type="image/x-icon" href="~/favicon/favicon.ico" />
 </head>
 <body class="d-flex flex-column min-vh-100">
-    
+
     <partial name="_Navbar" />
 
     <main class="container-fluid mt-4 flex-grow-1">
@@ -30,6 +30,10 @@
 
     <partial name="_Footer" />
 
+    <!-- Chat Widget -->
+    <partial name="_ChatWidget" />
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
- </body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>

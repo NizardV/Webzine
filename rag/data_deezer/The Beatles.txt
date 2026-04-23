@@ -1,0 +1,22 @@
+# The Beatles
+
+## Artiste
+Nom: The Beatles
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/fe9eb4463ea87452e84ed97e0c86b878/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/1
+
+## Top Titres
+1. Let It Be (Remastered 2009) (Album: Let It Be (Remastered))
+2. Here Comes The Sun (Remastered 2009) (Album: Abbey Road (Remastered))
+3. Hey Jude (Remastered 2015) (Album: 1 (Remastered))
+4. Come Together (Remastered 2009) (Album: Abbey Road (Remastered))
+5. Help! (Remastered 2015) (Album: 1 (Remastered))
+
+## Albums Récents
+- Anthology 4 (2025)
+- Anthology Collection (2025)
+- Get Back (Rooftop Performance) (2022)
+- On Air - Live At The BBC (Vol.2) (2018)
+- Love (2016)
+

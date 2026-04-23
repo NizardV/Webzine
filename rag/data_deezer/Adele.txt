@@ -1,0 +1,22 @@
+# Adele
+
+## Artiste
+Nom: Adele
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/e5fc443d2abc03b487234ba4de65a001/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/75798
+
+## Top Titres
+1. Set Fire to the Rain (Album: 21)
+2. Rolling in the Deep (Album: 21)
+3. Skyfall (Album: Skyfall)
+4. Love In The Dark (Album: 25)
+5. Hometown Glory (Album: 19)
+
+## Albums Récents
+- 30 (2021)
+- 25 (2015)
+- 21 (2011)
+- 19 (2008)
+- 19 (2008)
+

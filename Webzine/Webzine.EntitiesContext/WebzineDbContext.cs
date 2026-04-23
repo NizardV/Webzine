@@ -69,17 +69,46 @@ namespace Webzine.EntitiesContext
             modelBuilder.Entity<Artiste>()
                 .Property(a => a.Nom)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Artiste>()
+                .Property(a => a.Biographie)
+                .HasColumnType("TEXT");
 
             modelBuilder.Entity<Titre>()
                 .Property(t => t.Libelle)
                 .IsRequired()
                 .HasMaxLength(200);
 
+            modelBuilder.Entity<Titre>()
+                .Property(t => t.Album)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Titre>()
+                .Property(t => t.Chronique)
+                .IsRequired()
+                .HasMaxLength(4000);
+
+            modelBuilder.Entity<Titre>()
+                .Property(t => t.UrlJaquette)
+                .IsRequired()
+                .HasMaxLength(250);
+
+            modelBuilder.Entity<Titre>()
+                .Property(t => t.UrlEcoute)
+                .IsRequired()
+                .HasMaxLength(250);
+
             modelBuilder.Entity<Style>()
                 .Property(s => s.Libelle)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Commentaire>()
+                .Property(c => c.Auteur)
+                .IsRequired()
+                .HasMaxLength(30);
 
             modelBuilder.Entity<Commentaire>()
                 .Property(c => c.Contenu)

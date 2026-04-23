@@ -23,7 +23,7 @@ namespace Webzine.Entity
         /// </summary>
         [Required]
         [Display(Name = "Libellé")]
-        [MaxLength(50)]
+        [MaxLength(255)]
         [MinLength(2)]
         public string Libelle { get; set; } = string.Empty;
 

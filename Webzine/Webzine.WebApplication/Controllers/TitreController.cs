@@ -43,7 +43,7 @@ namespace Webzine.WebApplication.Controllers
             }
 
             this._titreRepository.IncrementNbLikes(titre);
-            
+
             TempData["nouvelleLecture"] = false;
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
@@ -144,7 +144,7 @@ namespace Webzine.WebApplication.Controllers
                 IdTitre = id,
                 Auteur = viewModel.Auteur,
                 Contenu = viewModel.Contenu,
-                DateCreation = DateTime.Now,
+                DateCreation = DateTime.UtcNow,
                 Titre = titreComm,
             };
             this._commentaireRepository.Add(nouveauCommentaire);

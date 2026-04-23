@@ -1,0 +1,134 @@
+version: '3.9'
+
+# Configuration Production avec limitation des ressources et sécurité renforcée
+# À utiliser: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: webzine_postgres_prod
+    environment:
+      POSTGRES_DB: webzine
+      POSTGRES_USER: webzine
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_production}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - webzine_network_prod
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webzine -d webzine"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  rag:
+    build:
+      context: .
+      dockerfile: ./rag/Dockerfile
+    container_name: webzine_rag_prod
+    environment:
+      PYTHONUNBUFFERED: 1
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./rag/chroma_db:/app/chroma_db:ro
+      - ./rag/chroma_db_deezer:/app/chroma_db_deezer:ro
+      - ./rag/data_deezer:/app/data_deezer:ro
+      - ./rag/cache:/app/cache
+    networks:
+      - webzine_network_prod
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 3G
+        reservations:
+          cpus: '1'
+          memory: 1.5G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  webzine:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: webzine_app_prod
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:7110
+      RAG_API_URL: http://rag:8000
+      POSTGRES_CONNECTION_STRING: "Server=postgres;Port=5432;Database=webzine;User Id=webzine;Password=${POSTGRES_PASSWORD:-change_me_in_production};"
+    ports:
+      - "7110:7110"
+    volumes:
+      - ./Webzine/appsettings.Production.json:/app/appsettings.Production.json:ro
+      - webzine_data_prod:/app/data
+    networks:
+      - webzine_network_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rag:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7110/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  webzine_network_prod:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
+    driver: local
+  webzine_data_prod:
+    driver: local

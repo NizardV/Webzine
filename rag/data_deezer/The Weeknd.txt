@@ -1,0 +1,22 @@
+# The Weeknd
+
+## Artiste
+Nom: The Weeknd
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/581693b4724a7fcfa754455101e13a44/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/4050205
+
+## Top Titres
+1. Blinding Lights (Album: After Hours)
+2. LA FAMA (Album: MOTOMAMI)
+3. Save Your Tears (Album: After Hours)
+4. Timeless (Album: Hurry Up Tomorrow)
+5. I Feel It Coming (Album: Starboy)
+
+## Albums Récents
+- Hurry Up Tomorrow (2025)
+- Live At SoFi Stadium (2023)
+- Dawn FM (2022)
+- Dawn FM (Alternate World) (2022)
+- The Highlights (2021)
+

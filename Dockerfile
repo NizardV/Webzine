@@ -1,36 +1,80 @@
-# --- ÉTAPE 1 : BUILD ---
+# Multi-stage build pour Webzine (.NET 10)
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# 1. On copie les fichiers de projets pour restaurer les dépendances
-# On recrée l'arborescence pour que le compilateur s'y retrouve
-COPY ["Webzine/Webzine.WebApplication/Webzine.WebApplication.csproj", "Webzine/Webzine.WebApplication/"]
-COPY ["Webzine/Webzine.Business/Webzine.Business.csproj", "Webzine/Webzine.Business/"]
-COPY ["Webzine/Webzine.Repository/Webzine.Repository.csproj", "Webzine/Webzine.Repository/"]
-COPY ["Webzine/Webzine.Entity/Webzine.Entity.csproj", "Webzine/Webzine.Entity/"]
-# Ajoute ici les autres .csproj si la compilation bloque sur une référence manquante
+# Copier fichiers solution et projets
+COPY ["Webzine/Webzine.WebApplication/Webzine.WebApplication.csproj", "Webzine.WebApplication/"]
+COPY ["Webzine/Webzine.Business/Webzine.Business.csproj", "Webzine.Business/"]
+COPY ["Webzine/Webzine.Business.Contracts/Webzine.Business.Contracts.csproj", "Webzine.Business.Contracts/"]
+COPY ["Webzine/Webzine.Entity/Webzine.Entity.csproj", "Webzine.Entity/"]
+COPY ["Webzine/Webzine.Entity.Tests/Webzine.Entity.Tests.csproj", "Webzine.Entity.Tests/"]
+COPY ["Webzine/Webzine.EntitiesContext/Webzine.EntitiesContext.csproj", "Webzine.EntitiesContext/"]
+COPY ["Webzine/Webzine.Repository/Webzine.Repository.csproj", "Webzine.Repository/"]
+COPY ["Webzine/Webzine.Repository.Contracts/Webzine.Repository.Contracts.csproj", "Webzine.Repository.Contracts/"]
+COPY ["Webzine/Webzine.Documentation/Webzine.Documentation.csproj", "Webzine.Documentation/"]
 
-RUN dotnet restore "Webzine/Webzine.WebApplication/Webzine.WebApplication.csproj"
+# Restaurer dépendances NuGet
+RUN dotnet restore "Webzine.WebApplication/Webzine.WebApplication.csproj"
 
-# 2. On copie tout le reste du code
-COPY . .
+# Copier tout le code source
+COPY Webzine/ .
 
-# 3. On compile spécifiquement l'application Web
-WORKDIR "/src/Webzine/Webzine.WebApplication"
-# Installation de l'outil LibMan
-RUN dotnet tool install --global Microsoft.Web.LibraryManager.Cli
-ENV PATH="$PATH:/root/.dotnet/tools"
+# Build en Release
+RUN dotnet build "Webzine.WebApplication/Webzine.WebApplication.csproj" -c Release -o /app/build
 
-# Restauration des bibliothèques (Bootstrap, etc.)
-RUN libman restore
-RUN dotnet publish "Webzine.WebApplication.csproj" -c Release -o /app/publish
+# Publier
+FROM build AS publish
+RUN dotnet publish "Webzine.WebApplication/Webzine.WebApplication.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# --- ÉTAPE 2 : RUNTIME ---
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
-USER $APP_UID
 
-COPY --from=build /app/publish .
+# Copier depuis publish stage
+COPY --from=publish /app/publish .
 
-EXPOSE 8080
+# Créer dossier pour données persistantes
+RUN mkdir -p /app/data
+
+# Variables d'environnement par défaut
+ENV ASPNETCORE_URLS=http://+:7110
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV RAG_API_URL=http://rag:8000
+ENV POSTGRES_CONNECTION_STRING=Server=postgres;Port=5432;Database=webzine;User Id=webzine;Password=webzine_password;
+
+EXPOSE 7110
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:7110/health || exit 1
+
+ENTRYPOINT ["dotnet", "Webzine.WebApplication.dll"]
+
+# Publier
+FROM build AS publish
+RUN dotnet publish "Webzine.WebApplication/Webzine.WebApplication.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+# Copier depuis publish stage
+COPY --from=publish /app/publish .
+
+# Créer dossier pour données persistantes
+RUN mkdir -p /app/data
+
+# Variables d'environnement par défaut
+ENV ASPNETCORE_URLS=http://+:7110
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV RAG_API_URL=http://rag:8000
+ENV POSTGRES_CONNECTION_STRING=Server=postgres;Port=5432;Database=webzine;User Id=webzine;Password=webzine_password;
+
+EXPOSE 7110
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:7110/health || exit 1
+
 ENTRYPOINT ["dotnet", "Webzine.WebApplication.dll"]

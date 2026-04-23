@@ -1,0 +1,22 @@
+# Prince
+
+## Artiste
+Nom: Prince
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/85eec086152fb01d873ccdb0810e2660/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/1878
+
+## Top Titres
+1. Purple Rain (2015 Paisley Park Remaster) (Album: Purple Rain (Deluxe Expanded Edition))
+2. Kiss (Album: Parade - Music from the Motion Picture Under the Cherry Moon)
+3. Purple Rain (7" Single Edit; 2017 Remaster) (Album: Purple Rain (Deluxe Expanded Edition))
+4. When Doves Cry (Album: Purple Rain)
+5. I Wanna Be Your Lover (Album: Prince)
+
+## Albums Récents
+- Live At Glam Slam (2023)
+- Welcome 2 America (2021)
+- Originals (2019)
+- The Greatest Romance Ever Sold (2019)
+- Piano & A Microphone 1983 (2018)
+

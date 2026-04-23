@@ -110,6 +110,7 @@
         /// Nom de l'album auquel appartient le titre.
         /// </summary>
         [Required]
+        [MaxLength(500)]
         public string Album { get; set; } = string.Empty;
 
         /// <summary>

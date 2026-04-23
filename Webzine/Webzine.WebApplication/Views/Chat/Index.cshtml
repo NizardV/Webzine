@@ -1,0 +1,234 @@
+@{
+    ViewData["Title"] = "Assistant RAG - Webzine";
+}
+
+<div class="chat-container">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-chat-dots"></i> Assistant Webzine
+            </h5>
+            <small class="text-light">Posez vos questions sur nos artistes et albums favoris</small>
+        </div>
+
+        <div class="card-body chat-body" id="chatMessages">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Bienvenue! Vous pouvez me poser des questions sur les artistes et albums de notre base de données.
+            </div>
+        </div>
+
+        <div class="card-footer bg-light">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="questionInput" 
+                    class="form-control" 
+                    placeholder="Posez votre question ici..."
+                    autocomplete="off"
+                />
+                <button 
+                    class="btn btn-primary" 
+                    id="sendBtn" 
+                    type="button">
+                    <i class="bi bi-send"></i> Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chat-container {
+        max-width: 900px;
+        margin: 0 auto;
+        min-height: 600px;
+    }
+
+    .chat-body {
+        height: 500px;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    .message {
+        margin-bottom: 1rem;
+        animation: slideIn 0.3s ease-in;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .user-message {
+        text-align: right;
+    }
+
+    .user-message .message-bubble {
+        background-color: #0d6efd;
+        color: white;
+        border-radius: 18px 18px 4px 18px;
+        padding: 0.75rem 1rem;
+        display: inline-block;
+        max-width: 70%;
+        word-wrap: break-word;
+    }
+
+    .assistant-message .message-bubble {
+        background-color: #e9ecef;
+        color: #212529;
+        border-radius: 18px 18px 18px 4px;
+        padding: 0.75rem 1rem;
+        display: inline-block;
+        max-width: 70%;
+        word-wrap: break-word;
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .loading {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+    }
+
+    .spinner-border {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.5rem;
+    }
+
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 0.25rem;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const questionInput = document.getElementById('questionInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function formatTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.textContent = text;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = formatTime();
+
+            messageDiv.appendChild(bubbleDiv);
+            messageDiv.appendChild(timeDiv);
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addLoadingMessage() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant-message';
+            messageDiv.id = 'loading-message';
+
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble loading';
+            bubbleDiv.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Traitement en cours...';
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = formatTime();
+
+            messageDiv.appendChild(bubbleDiv);
+            messageDiv.appendChild(timeDiv);
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingMessage() {
+            const loadingMsg = document.getElementById('loading-message');
+            if (loadingMsg) {
+                loadingMsg.remove();
+            }
+        }
+
+        async function sendQuestion() {
+            const question = questionInput.value.trim();
+            if (!question) return;
+
+            addMessage(question, true);
+            questionInput.value = '';
+            sendBtn.disabled = true;
+
+            addLoadingMessage();
+
+            try {
+                const response = await fetch('/Chat/Query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                removeLoadingMessage();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const answer = data.answer || data.response || JSON.stringify(data);
+                    addMessage(answer, false);
+                } else {
+                    const errorData = await response.json();
+                    const errorMsg = errorData.error || 'Une erreur est survenue';
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-danger error-message';
+                    errorDiv.innerHTML = `<i class="bi bi-exclamation-circle"></i> ${errorMsg}`;
+                    chatMessages.appendChild(errorDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            } catch (error) {
+                removeLoadingMessage();
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'alert alert-danger error-message';
+                errorDiv.innerHTML = `<i class="bi bi-exclamation-circle"></i> Erreur de communication: ${error.message}`;
+                chatMessages.appendChild(errorDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } finally {
+                sendBtn.disabled = false;
+                questionInput.focus();
+            }
+        }
+
+        sendBtn.addEventListener('click', sendQuestion);
+        questionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendQuestion();
+            }
+        });
+
+        // Focus sur l'input au chargement
+        questionInput.focus();
+    </script>
+}

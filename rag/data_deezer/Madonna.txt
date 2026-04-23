@@ -1,0 +1,22 @@
+# Madonna
+
+## Artiste
+Nom: Madonna
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/2498e1e0c6930809143a743b746958be/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/290
+
+## Top Titres
+1. I Feel So Free (Album: I Feel So Free)
+2. La Isla Bonita (Album: True Blue)
+3. Like a Prayer (Album: Like a Prayer)
+4. Hung Up (Album: Confessions on a Dance Floor)
+5. Vogue (Album: The Immaculate Collection)
+
+## Albums Récents
+- Bedtime Stories – The Untold Chapter (2025)
+- Veronica Electronica (2025)
+- Finally Enough Love: 50 Number Ones (2022)
+- Finally Enough Love (2022)
+- Madame X - Music From The Theater Xperience (Live) (2021)
+

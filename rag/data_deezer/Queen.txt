@@ -1,0 +1,22 @@
+# Queen
+
+## Artiste
+Nom: Queen
+Fans: 0
+Image: https://cdn-images.dzcdn.net/images/artist/71eeb9e2eeb375df35a3c0654a5a01ab/250x250-000000-80-0-0.jpg
+Lien Deezer: https://www.deezer.com/artist/412
+
+## Top Titres
+1. Bohemian Rhapsody (Remastered 2011) (Album: A Night At The Opera (2011 Remaster))
+2. Don't Stop Me Now (Remastered 2011) (Album: Jazz (2011 Remaster))
+3. Another One Bites The Dust (Remastered 2011) (Album: The Game (2011 Remaster))
+4. Under Pressure (Remastered 2011) (Album: Hot Space (Deluxe Edition 2011 Remaster))
+5. The Show Must Go On (Album: Bohemian Rhapsody (The Original Soundtrack))
+
+## Albums Récents
+- Acoustic (2025)
+- B-Sides (2025)
+- Rock N Roll (2025)
+- Slightly Mad (2025)
+- Ballads (2025)
+

@@ -1,0 +1,66 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+*.user
+*.suo
+
+# Build outputs
+bin/
+obj/
+dist/
+build/
+
+# Dependencies
+node_modules/
+packages/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Tests
+TestResults/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+docs/
+*.md
+
+# Development
+.env.local
+.env.development
+appsettings.Development.json
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.eslintcache
+
+# Data directories (will be created in container)
+data_deezer/
+chroma_db/
+chroma_db_deezer/
+postgres_data/
+ollama_data/
