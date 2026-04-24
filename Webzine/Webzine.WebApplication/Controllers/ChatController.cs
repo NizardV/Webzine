@@ -26,7 +26,7 @@
                 var httpClient = _httpClientFactory.CreateClient("RagClient");
                 var response = await httpClient.PostAsJsonAsync(
                     "/query",
-                    new { question = request.Question }).ConfigureAwait(false);
+                    new { question = request.Question, history = request.History }).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -103,6 +103,13 @@
     public class QuestionRequest
     {
         public string Question { get; set; } = string.Empty;
+        public List<HistoryMessage> History { get; set; } = new();
+    }
+
+    public class HistoryMessage
+    {
+        public string Role { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
     }
 
     public class SourceRequest

@@ -323,6 +323,7 @@
         const chatWidgetMessages = document.getElementById('chatWidgetMessages');
 
         let isOpen = false;
+        const conversationHistory = [];
 
         function formatTime() {
             const now = new Date();
@@ -404,7 +405,10 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ question: question })
+                    body: JSON.stringify({
+                        question: question,
+                        history: conversationHistory.slice(-8)
+                    })
                 });
 
                 removeLoadingMessage();
@@ -412,6 +416,8 @@
                 if (response.ok) {
                     const data = await response.json();
                     const answer = data.answer || data.response || JSON.stringify(data);
+                    conversationHistory.push({ role: 'user', content: question });
+                    conversationHistory.push({ role: 'assistant', content: answer });
                     addMessage(answer, false);
                 } else {
                     const errorData = await response.json();
