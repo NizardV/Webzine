@@ -23,10 +23,10 @@ for artist in artists:
         if len(bio) > 100:
             with open(f"data/{name.replace('/', '-')}.txt", "w", encoding="utf-8") as f:
                 f.write(f"Artiste : {name}\n\n{bio}")
-            print(f"✓ {name} ({len(bio)} caractères)")
+            print(f"{name} ({len(bio)} caractères)")
         else:
-            print(f"✗ {name} — bio trop courte")
+            print(f"{name} — bio trop courte")
     else:
-        print(f"✗ {artist} — erreur {r.status_code}")
+        print(f"{artist} — erreur {r.status_code}")
 
 print("Corpus prêt !")

@@ -35,19 +35,19 @@ def build_index():
 
     # Charger l'index existant si disponible et non vide
     if os.path.exists(CHROMA_DIR) and os.listdir(CHROMA_DIR):
-        print("📦 Chargement de l'index Wikipedia existant...")
+        print("Chargement de l'index Wikipedia existant...")
         candidate = Chroma(persist_directory=CHROMA_DIR, embedding_function=embeddings)
         if candidate._collection.count() > 0:
             _db = candidate
-            print(f"✅ Index Wikipedia chargé ({_db._collection.count()} chunks)")
+            print(f"Index Wikipedia chargé ({_db._collection.count()} chunks)")
             return _db
-        print("⚠️  Index existant vide — reconstruction depuis les fichiers source")
+        print("Index existant vide — reconstruction depuis les fichiers source")
 
     if not os.path.exists(DATA_DIR) or not os.listdir(DATA_DIR):
-        print(f"⚠️  Répertoire {DATA_DIR} vide ou introuvable — exécutez fetch_bios.py")
+        print(f"Répertoire {DATA_DIR} vide ou introuvable — exécutez fetch_bios.py")
         return None
 
-    print("📂 Chargement des biographies Wikipedia...")
+    print("Chargement des biographies Wikipedia...")
     loader = DirectoryLoader(
         DATA_DIR,
         glob="*.txt",
@@ -55,15 +55,15 @@ def build_index():
         loader_kwargs={"encoding": "utf-8"},
     )
     docs = loader.load()
-    print(f"✅ {len(docs)} fichiers chargés")
+    print(f"{len(docs)} fichiers chargés")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(docs)
-    print(f"✂️  {len(chunks)} chunks créés")
+    print(f"{len(chunks)} chunks créés")
 
-    print("🔢 Calcul des embeddings...")
+    print("Calcul des embeddings...")
     _db = Chroma.from_documents(chunks, embeddings, persist_directory=CHROMA_DIR)
-    print("✅ Index Wikipedia construit et sauvegardé")
+    print("Index Wikipedia construit et sauvegardé")
     return _db
 
 
@@ -104,7 +104,7 @@ Réponse en français:"""
             llm = Ollama(base_url=OLLAMA_HOST, model=MODEL_NAME)
             return llm.invoke(no_context_prompt), []
         except Exception as e:
-            print(f"⚠️  Ollama indisponible ({e})")
+            print(f"Ollama indisponible ({e})")
             return "Je n'ai pas trouvé d'informations sur ce sujet dans notre base Wikipedia.", []
 
     context = "\n\n".join(doc.page_content for doc in relevant_docs)
@@ -124,5 +124,5 @@ Réponse en français (concise et informative):"""
         llm = Ollama(base_url=OLLAMA_HOST, model=MODEL_NAME)
         return llm.invoke(prompt), relevant_docs
     except Exception as e:
-        print(f"⚠️  Ollama indisponible ({e}) — réponse basée sur le contexte brut")
+        print(f"Ollama indisponible ({e}) — réponse basée sur le contexte brut")
         return f"Voici les informations trouvées :\n\n{context}", relevant_docs

@@ -36,19 +36,19 @@ def build_deezer_index():
 
     # Charger l'index existant si disponible et non vide
     if os.path.exists(CHROMA_DIR) and os.listdir(CHROMA_DIR):
-        print("📦 Chargement de l'index Deezer existant...")
+        print("Chargement de l'index Deezer existant...")
         candidate = Chroma(persist_directory=CHROMA_DIR, embedding_function=embeddings)
         if candidate._collection.count() > 0:
             _db = candidate
-            print(f"✅ Index Deezer chargé ({_db._collection.count()} chunks)")
+            print(f"Index Deezer chargé ({_db._collection.count()} chunks)")
             return _db
-        print("⚠️  Index existant vide — reconstruction depuis les fichiers source")
+        print("Index existant vide — reconstruction depuis les fichiers source")
 
     if not os.path.exists(DATA_DIR) or not os.listdir(DATA_DIR):
-        print(f"⚠️  Répertoire {DATA_DIR} vide ou introuvable — exécutez fetch_deezer_data.py")
+        print(f"Répertoire {DATA_DIR} vide ou introuvable — exécutez fetch_deezer_data.py")
         return None
 
-    print("📂 Chargement des fichiers Deezer...")
+    print("Chargement des fichiers Deezer...")
     loader = DirectoryLoader(
         DATA_DIR,
         glob="*.txt",
@@ -56,15 +56,15 @@ def build_deezer_index():
         loader_kwargs={"encoding": "utf-8"},
     )
     docs = loader.load()
-    print(f"✅ {len(docs)} fichiers chargés")
+    print(f"{len(docs)} fichiers chargés")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(docs)
-    print(f"✂️  {len(chunks)} chunks créés")
+    print(f"{len(chunks)} chunks créés")
 
-    print("🔢 Calcul des embeddings (peut prendre quelques minutes au premier démarrage)...")
+    print("Calcul des embeddings (peut prendre quelques minutes au premier démarrage)...")
     _db = Chroma.from_documents(chunks, embeddings, persist_directory=CHROMA_DIR)
-    print("✅ Index Deezer construit et sauvegardé")
+    print("Index Deezer construit et sauvegardé")
     return _db
 
 
@@ -109,7 +109,7 @@ Réponse en français:"""
             llm = Ollama(base_url=OLLAMA_HOST, model=MODEL_NAME)
             return llm.invoke(no_context_prompt), []
         except Exception as e:
-            print(f"⚠️  Ollama indisponible ({e})")
+            print(f"Ollama indisponible ({e})")
             return "Je n'ai pas trouvé d'informations sur ce sujet dans notre base Deezer.", []
 
     context = "\n\n".join(doc.page_content for doc in relevant_docs)
@@ -129,7 +129,7 @@ Réponse en français (concise et informative):"""
         llm = Ollama(base_url=OLLAMA_HOST, model=MODEL_NAME)
         return llm.invoke(prompt), relevant_docs
     except Exception as e:
-        print(f"⚠️  Ollama indisponible ({e}) — réponse basée sur le contexte brut")
+        print(f"Ollama indisponible ({e}) — réponse basée sur le contexte brut")
         return f"Voici les informations trouvées :\n\n{context}", relevant_docs
 
 
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     db = build_deezer_index()
     if db:
         question = "Qui sont les artistes les plus populaires?"
-        print(f"\n❓ Question: {question}")
+        print(f"\n Question: {question}")
         answer, sources = query_deezer(question)
-        print(f"💬 Réponse: {answer}")
-        print(f"📚 Sources: {[doc.metadata.get('source', 'N/A') for doc in sources]}")
+        print(f"Réponse: {answer}")
+        print(f"Sources: {[doc.metadata.get('source', 'N/A') for doc in sources]}")

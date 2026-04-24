@@ -13,7 +13,7 @@ CACHE_FILE = "./deezer_cache.json"
 # Liste des artistes à récupérer (à adapter selon vos besoins)
 ARTISTS_TO_FETCH = [
     "The Beatles",
-    "Pink Floyd", 
+    "Pink Floyd",
     "Radiohead",
     "Nirvana",
     "Queen",
@@ -56,7 +56,7 @@ def fetch_artist_info(artist_name):
 
         data = search_response.json()
         if not data.get("data"):
-            print(f"  ⚠️  Aucun artiste trouvé pour '{artist_name}'")
+            print(f"Aucun artiste trouvé pour '{artist_name}'")
             return None
 
         artist = data["data"][0]
@@ -94,7 +94,7 @@ def fetch_artist_info(artist_name):
             "albums": albums.get("data", [])
         }
     except Exception as e:
-        print(f"  ❌ Erreur pour '{artist_name}': {str(e)}")
+        print(f"Erreur pour '{artist_name}': {str(e)}")
         return None
 
 def save_artist_data(artist_name, data):
@@ -135,12 +135,12 @@ def save_artist_data(artist_name, data):
                     f.write(f"({album.get('release_date', 'N/A')[:4]})\n")
                 f.write("\n")
 
-        print(f"  ✅ Données sauvegardées pour '{artist_name}'")
+        print(f"Données sauvegardées pour '{artist_name}'")
     except Exception as e:
-        print(f"  ❌ Erreur lors de la sauvegarde pour '{artist_name}': {str(e)}")
+        print(f"Erreur lors de la sauvegarde pour '{artist_name}': {str(e)}")
 
 def main():
-    print("🎵 Récupération des données Deezer pour le RAG\n")
+    print("Récupération des données Deezer pour le RAG\n")
     print(f"Répertoire de destination: {DATA_DIR_DEEZER}\n")
 
     create_deezer_data_directory()
@@ -155,8 +155,8 @@ def main():
             save_artist_data(artist_name, data)
             success_count += 1
 
-    print(f"\n✨ Succès: {success_count}/{len(ARTISTS_TO_FETCH)} artistes traités")
-    print(f"📁 Les fichiers sont disponibles dans: {DATA_DIR_DEEZER}/")
+    print(f"\nSuccès: {success_count}/{len(ARTISTS_TO_FETCH)} artistes traités")
+    print(f"Les fichiers sont disponibles dans: {DATA_DIR_DEEZER}/")
 
 if __name__ == "__main__":
     main()
