@@ -97,10 +97,9 @@ def query_deezer(question: str, history: list = None):
 
     if not relevant_docs:
         # Question hors-sujet ou artiste inconnu : répondre sans forcer le contexte
-        no_context_prompt = f"""{history_text}Tu es un assistant musical de la plateforme Webzine.
-La question de l'utilisateur ne correspond à aucune information disponible dans notre base de données musicales.
-Réponds honnêtement que tu ne trouves pas d'informations sur ce sujet dans ta base.
-Si c'est une salutation ou une question générale, réponds naturellement.
+        no_context_prompt = f"""{history_text}Tu es un assistant musical spécialisé dans les artistes présents sur Deezer.
+Utilise uniquement le contexte ci-dessous pour répondre à la question.
+Si le contexte ne contient pas l'information demandée, dis-le honnêtement.
 
 Question: {question}
 

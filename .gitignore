@@ -426,3 +426,5 @@ FodyWeavers.xsd
 rag/chroma_db/
 rag/__pycache__/
 rag/.venv/
+rag/chroma_db_deezer/
+rag/chroma_db_deezer/chroma.sqlite3
