@@ -1,139 +1,184 @@
-# 📚 WEBZINE - Docker Stack Deployment Documentation
+# Webzine
 
-**Complete project documentation and deployment guides for Webzine with Docker**
+> Webzine musical avec chatbot RAG intégré / Music webzine with integrated RAG chatbot
 
----
+[![C#](https://img.shields.io/badge/C%23-12-512BD4?style=flat&logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp)
+[![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET%20Core-MVC-512BD4?style=flat&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/mvc)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![LangChain](https://img.shields.io/badge/LangChain-latest-1C3C3C?style=flat)](https://www.langchain.com)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-vector--db-E18A32?style=flat)](https://www.trychroma.com)
+[![Ollama](https://img.shields.io/badge/Ollama-LLM-000000?style=flat)](https://ollama.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com)
 
-## 🚀 Quick Navigation
+## 🇫🇷 Français | 🇬🇧 English
 
-### 🐳 **DOCKER DEPLOYMENT** (👈 Start Here!)
-
-| Document                                                   | Purpose                                 | Read Time |
-| ---------------------------------------------------------- | --------------------------------------- | --------- |
-| **[DOCKER_README.md](DOCKER_README.md)**                   | 👈 **Quick Start & Commands Reference** | 5 min     |
-| **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)**           | Complete Deployment Guide               | 15 min    |
-| **[DOCKER_QUICK_REFERENCE.md](DOCKER_QUICK_REFERENCE.md)** | Command Cheat Sheet                     | 2 min     |
-| **[DOCKER_CONSOLIDATION.md](DOCKER_CONSOLIDATION.md)**     | Documentation Organization Guide        | 5 min     |
-
-### 🔧 **Tools & Scripts**
-
-| Tool                      | Purpose                          |
-| ------------------------- | -------------------------------- |
-| **`validate-docker.ps1`** | Windows PowerShell diagnostics   |
-| **`validate-docker.sh`**  | Linux/macOS Bash diagnostics     |
-| **`Makefile`**            | Make targets for common commands |
+[Voir en français](#-présentation) | [View in English](#-overview)
 
 ---
 
-## 📖 Getting Started
+## 🇫🇷 Présentation
 
-### 1️⃣ Read the Quick Start
+Webzine est un webzine musical développé en ASP.NET Core MVC, enrichi d'un chatbot RAG (Retrieval-Augmented Generation) intégré. Le pipeline RAG est développé en Python avec LangChain, ChromaDB et Ollama pour répondre à des questions sur les artistes à partir des données Deezer. Projet P4 DIIAGE.
 
-👉 **[DOCKER_README.md](DOCKER_README.md)** - 5 minute overview with commands
+## Stack technique
 
-### 2️⃣ Set Up Environment
+| Composant | Technologies |
+|-----------|-------------|
+| Application web | C#, ASP.NET Core MVC, PostgreSQL, NLog, cache mémoire |
+| Pipeline RAG | Python, LangChain, ChromaDB, Ollama, FastAPI |
+| Données | API Deezer (ingestion), PostgreSQL |
+| Infrastructure | Docker, Docker Compose |
 
-```bash
-cp Webzine/.env.example .env
+## Architecture
+
+```
+Webzine/
+├── Webzine/                    # Solution ASP.NET Core MVC (couches)
+│   ├── Webzine.Entity/         # Entités du domaine
+│   ├── Webzine.Repository/     # Accès aux données (PostgreSQL)
+│   ├── Webzine.Business/       # Logique métier, cache mémoire
+│   └── Webzine.WebApplication/ # Controllers MVC, vues Razor, NLog
+└── rag/                        # Pipeline RAG (Python)
+    ├── api.py                  # API FastAPI (endpoint /query)
+    ├── pipeline_deezer.py      # Pipeline RAG sur les données Deezer
+    └── fetch_deezer_data.py    # Ingestion des données Deezer
 ```
 
-### 3️⃣ Deploy
+> Déploiement Docker : [README-DOCKER.md](./README-DOCKER.md) · [Webzine/README.md](./Webzine/README.md)
+
+## Fonctionnalités principales
+
+- CRUD artistes, titres, styles musicaux et commentaires
+- Intégration API Deezer (récupération de données musicales)
+- Chatbot RAG sur les artistes (questions/réponses en langage naturel)
+- Cache mémoire côté application
+- Logging structuré avec NLog
+- Déploiement Docker multi-services (web + RAG + PostgreSQL + Ollama)
+
+## Lancer en local
+
+### Prérequis
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) v24.0+
+- [Ollama](https://ollama.com) installé et lancé sur la machine hôte
+- 4 Go de RAM disponibles, 3 Go d'espace disque
+
+### Avec Docker Compose
 
 ```bash
-docker-compose build && docker-compose up -d
+git clone https://github.com/NizardV/Webzine
+cd Webzine
+cp Webzine/.env.example .env   # éditer les variables si nécessaire
+docker compose build
+docker compose up -d
 ```
 
-### 4️⃣ Verify
+Services accessibles :
+- **Webzine** : http://localhost:7110
+- **API RAG** : http://localhost:8000/docs
+- **Base de données** : localhost:5432
+
+### Vérifier les services
 
 ```bash
-docker-compose ps
-.\validate-docker.ps1  # Windows
-bash validate-docker.sh  # Linux/macOS
+docker compose ps
+docker compose logs -f
 ```
 
-### Access Services
+> Pour les commandes avancées (Makefile, scripts de validation, production) : voir [README-DOCKER.md](./README-DOCKER.md)
 
+## Équipe
+
+Projet P4 DIIAGE — 4 contributeurs
+
+| Rôle | Nom |
+|------|-----|
+| Développeur | [À COMPLÉTER] |
+| Développeur | [À COMPLÉTER] |
+| Développeur | [À COMPLÉTER] |
+| Développeur | [À COMPLÉTER] |
+
+---
+
+## 🇬🇧 Overview
+
+Webzine is a music webzine built with ASP.NET Core MVC, enhanced with an integrated RAG (Retrieval-Augmented Generation) chatbot. The RAG pipeline is written in Python using LangChain, ChromaDB, and Ollama to answer questions about artists using Deezer data. P4 DIIAGE project.
+
+## Tech stack
+
+| Component | Technologies |
+|-----------|-------------|
+| Web application | C#, ASP.NET Core MVC, PostgreSQL, NLog, memory cache |
+| RAG pipeline | Python, LangChain, ChromaDB, Ollama, FastAPI |
+| Data | Deezer API (ingestion), PostgreSQL |
+| Infrastructure | Docker, Docker Compose |
+
+## Architecture
+
+```
+Webzine/
+├── Webzine/                    # ASP.NET Core MVC solution (layered)
+│   ├── Webzine.Entity/         # Domain entities
+│   ├── Webzine.Repository/     # Data access (PostgreSQL)
+│   ├── Webzine.Business/       # Business logic, memory cache
+│   └── Webzine.WebApplication/ # MVC controllers, Razor views, NLog
+└── rag/                        # RAG pipeline (Python)
+    ├── api.py                  # FastAPI endpoint (/query)
+    ├── pipeline_deezer.py      # RAG pipeline over Deezer data
+    └── fetch_deezer_data.py    # Deezer data ingestion
+```
+
+> Docker deployment: [README-DOCKER.md](./README-DOCKER.md) · [Webzine/README.md](./Webzine/README.md)
+
+## Key features
+
+- CRUD for artists, tracks, musical styles, and comments
+- Deezer API integration (music data retrieval)
+- RAG chatbot for artists (natural language Q&A)
+- Application-level memory cache
+- Structured logging with NLog
+- Multi-service Docker deployment (web + RAG + PostgreSQL + Ollama)
+
+## Run locally
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) v24.0+
+- [Ollama](https://ollama.com) installed and running on the host machine
+- 4 GB available RAM, 3 GB disk space
+
+### With Docker Compose
+
+```bash
+git clone https://github.com/NizardV/Webzine
+cd Webzine
+cp Webzine/.env.example .env   # edit variables if needed
+docker compose build
+docker compose up -d
+```
+
+Services available at:
 - **Webzine**: http://localhost:7110
 - **RAG API**: http://localhost:8000/docs
 - **Database**: localhost:5432
 
----
-
-## 🏗️ Stack Architecture
-
-```
-Webzine (.NET)  →  RAG API (Python)  →  PostgreSQL Database
-    :7110              :8000               :5432
-                         ↓
-                    Ollama LLM
-                   (on host)
-```
-
----
-
-## 💡 Quick Commands
+### Check services
 
 ```bash
-docker-compose up -d       # Start
-docker-compose down        # Stop
-docker-compose logs -f     # Logs
-docker-compose ps          # Status
-make help                  # Make targets (Linux/macOS)
+docker compose ps
+docker compose logs -f
 ```
 
----
+> For advanced commands (Makefile, validation scripts, production): see [README-DOCKER.md](./README-DOCKER.md)
 
-## ⚙️ Prerequisites
+## Team
 
-- **Docker Desktop** v24.0+
-- **Ollama** (download: https://ollama.ai)
-- 4GB+ RAM, 3GB+ disk space
+P4 DIIAGE project — 4 contributors
 
----
-
-## 📚 Documentation Index
-
-**Docker & Deployment**:
-
-- [DOCKER_README.md](DOCKER_README.md) - Quick start
-- [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) - Complete guide
-- [DOCKER_QUICK_REFERENCE.md](DOCKER_QUICK_REFERENCE.md) - Cheat sheet
-- [DOCKER_CONSOLIDATION.md](DOCKER_CONSOLIDATION.md) - Organization guide
-
-**Configuration**:
-
-- [docker-compose.yml](docker-compose.yml)
-- [docker-compose.prod.yml](docker-compose.prod.yml)
-- [.env.example](.env.example)
-
-**Architecture**:
-
-- [Webzine/ARCHITECTURE.md](Webzine/ARCHITECTURE.md)
-
----
-
-## 🆘 Troubleshooting
-
-```bash
-# View logs
-docker-compose logs -f
-
-# Full diagnostics
-.\validate-docker.ps1           # Windows
-bash validate-docker.sh         # Linux/macOS
-
-# Rebuild
-docker-compose build --no-cache
-```
-
-See
-[DOCKER_DEPLOYMENT.md → Troubleshooting](DOCKER_DEPLOYMENT.md#-troubleshooting)
-for detailed help.
-
----
-
-## ✨ Status
-
-✅ **Production Ready** | 📖 **Well Documented** | 🔧 **Easy to Deploy**
-
-👉 **Start here**: [DOCKER_README.md](DOCKER_README.md)
+| Role | Name |
+|------|------|
+| Developer | [TO COMPLETE] |
+| Developer | [TO COMPLETE] |
+| Developer | [TO COMPLETE] |
+| Developer | [TO COMPLETE] |
