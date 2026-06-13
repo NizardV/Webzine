@@ -428,3 +428,5 @@ rag/__pycache__/
 rag/.venv/
 rag/chroma_db_deezer/
 rag/chroma_db_deezer/chroma.sqlite3
+rag/cache/
+rag/chroma_db_deezer/
